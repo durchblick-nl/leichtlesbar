@@ -37,69 +37,189 @@ export function countSyllables(word: string): number {
  * Liste von deutschen Abkürzungen die nicht als Satzende zählen
  */
 const ABBREVIATIONS: Record<string, string> = {
+  // Häufige Abkürzungen
   'z.B.': 'zum Beispiel',
   'z. B.': 'zum Beispiel',
+  'z.b.': 'zum beispiel',
+  'z. b.': 'zum beispiel',
   'd.h.': 'das heisst',
   'd. h.': 'das heisst',
   'u.a.': 'unter anderem',
   'u. a.': 'unter anderem',
+  'u.A.': 'unter Anderem',
   'usw.': 'und so weiter',
   'etc.': 'et cetera',
+  'u.U.': 'unter Umständen',
+  'u. U.': 'unter Umständen',
+  'z.T.': 'zum Teil',
+  'z. T.': 'zum Teil',
+  'z.z.': 'zur zeit',
+  'z. z.': 'zur zeit',
+  'z.Z.': 'zur Zeit',
+  'z. Z.': 'zur Zeit',
+  'i.d.R.': 'in der Regel',
+  'i. d. R.': 'in der Regel',
+  'o.g.': 'oben genannt',
+  'o. g.': 'oben genannt',
+  'o.ä.': 'oder ähnlich',
+  'o. ä.': 'oder ähnlich',
+  'u.v.m.': 'und vieles mehr',
+  's.o.': 'siehe oben',
+  's. o.': 'siehe oben',
+  's.u.': 'siehe unten',
+  's. u.': 'siehe unten',
+  'v.a.': 'vor allem',
+
+  // Titel und Anreden
   'Dr.': 'Doktor',
+  'dr.': 'doktor',
   'Prof.': 'Professor',
+  'prof.': 'professor',
+  'Hr.': 'Herr',
+  'Fr.': 'Frau',
+  'Dipl.': 'Diplomiert',
+  'dipl.': 'diplomiert',
+
+  // Allgemeine Abkürzungen
   'Nr.': 'Nummer',
   'ca.': 'circa',
   'bzw.': 'beziehungsweise',
   'ggf.': 'gegebenenfalls',
   'evtl.': 'eventuell',
+  'ev.': 'eventuell',
   'inkl.': 'inklusive',
   'exkl.': 'exklusive',
   'max.': 'maximal',
   'min.': 'minimal',
-  'v.a.': 'vor allem',
-  'o.ä.': 'oder ähnlich',
-  'o. ä.': 'oder ähnlich',
-  'u.v.m.': 'und vieles mehr',
-  'z.T.': 'zum Teil',
-  'z. T.': 'zum Teil',
-  'i.d.R.': 'in der Regel',
-  'i. d. R.': 'in der Regel',
-  'o.g.': 'oben genannt',
-  'o. g.': 'oben genannt',
-  'u.U.': 'unter Umständen',
-  'u. U.': 'unter Umständen',
-  's.o.': 'siehe oben',
-  's. o.': 'siehe oben',
-  's.u.': 'siehe unten',
-  's. u.': 'siehe unten',
+  'vgl.': 'vergleiche',
+  'sog.': 'sogenannt',
+  'bes.': 'besonders',
+  'allg.': 'allgemein',
+  'eigentl.': 'eigentlich',
+  'ehem.': 'ehemalig',
+  'entspr.': 'entsprechend',
+  'etw.': 'etwas',
+  'spez.': 'spezial',
+
+  // Orte und Richtungen
+  'St.': 'Sankt',
+  'st.': 'sankt',
+  'Sta.': 'Santa',
+  'Str.': 'Strasse',
+
+  // Masseinheiten und Zahlen
   'Mio.': 'Millionen',
   'Mrd.': 'Milliarden',
   'Tsd.': 'Tausend',
+  't.': 'tonne',
+  'c.': 'cent',
+
+  // Kommunikation
   'Tel.': 'Telefon',
-  'Str.': 'Strasse',
-  'Hr.': 'Herr',
-  'Fr.': 'Frau',
-  'St.': 'Sankt',
-  'Jh.': 'Jahrhundert',
-  'hl.': 'heilig',
-  'sog.': 'sogenannt',
-  'vgl.': 'vergleiche',
-  'Abb.': 'Abbildung',
+  'Fax.': 'Fax',
+  'Fa.': 'Firma',
+  'fa.': 'firma',
+
+  // Akademisch
   'Abs.': 'Absatz',
+  'Abb.': 'Abbildung',
+  'Abk.': 'Abkürzung',
+  'abk.': 'abkurzung',
   'Anm.': 'Anmerkung',
+  'anm.': 'anmerkung',
   'Art.': 'Artikel',
   'Aufl.': 'Auflage',
   'Bd.': 'Band',
   'Bsp.': 'Beispiel',
   'bzgl.': 'bezüglich',
+  'Kap.': 'Kapitel',
+  'S.': 'Seite',
+  's.': 'seite',
+  'Sp.': 'Spalte',
+  'sp.': 'spalte',
+  'f.': 'folgend',
+  'ff.': 'fortfolgend',
+
+  // Sprachen und Herkunft
+  'dt.': 'deutsch',
+  'lat.': 'lateinisch',
+  'franz.': 'französisch',
+  'ital.': 'italienisch',
+  'amer.': 'amerikanisch',
+  'europ.': 'europäisch',
+  'schweiz.': 'schweizerisch',
+  'eidg.': 'eidgenössisch',
+
+  // Wissenschaft
+  'med.': 'medizinisch',
+  'Med.': 'Medizin',
+  'phil.': 'philosophisch',
+  'iur.': 'iuris',
+  'jur.': 'juris',
+  'stud.': 'studiosus',
+  'h.c.': 'honoris causa',
+
+  // Religion und Zeit
   'Chr.': 'Christus',
-  'entspr.': 'entsprechend',
+  'hl.': 'heilig',
+  'Jh.': 'Jahrhundert',
   'geb.': 'geboren',
   'gest.': 'gestorben',
-  'Kap.': 'Kapitel',
-  'lat.': 'lateinisch',
-  'S.': 'Seite',
+  'Fam.': 'Familie',
+  'fam.': 'familie',
+
+  // Internationale
+  'U.S.': 'United States',
+  'L.P.': 'Limited Partnership',
+
+  // Einbuchstabige mit Punkt (Vorsicht!)
+  ' a.': ' am',
+  ' b.': ' bei',
+  ' d.': ' dies',
+  ' e.': ' ein',
+  ' f.': ' folgend',
+  ' g.': ' gegen',
+  ' i.': ' in',
+  ' l.': ' links',
+  ' m.': ' mit',
+  ' n.': ' nicht',
+  ' o.': ' oder',
+  ' p.': ' per',
+  ' q.': ' quod',
+  ' r.': ' rechts',
+  ' s.': ' sieh',
+  ' t.': ' tonne',
+  ' u.': ' und',
+  ' v.': ' von',
+  ' w.': ' wie',
+  ' z.': ' zu',
+  'od.': 'oder',
+  'gg.': 'gegen',
+  'ggs.': 'gegensatz',
 };
+
+/**
+ * Ersetzt Zahlen mit Punkten (z.B. "1." oder ".5") um sie vor Satz-Splitting zu schützen
+ */
+export function protectNumbers(text: string): string {
+  // Schütze Dezimalzahlen (z.B. "3.14")
+  let result = text.replace(/(\d)\.(\d)/g, '$1###DECIMAL###$2');
+  // Schütze Ordinalzahlen (z.B. "1." am Anfang)
+  result = result.replace(/(\d)\./g, '$1###ORDINAL###');
+  // Schütze Punkte vor Zahlen (z.B. ".5")
+  result = result.replace(/\.(\d)/g, '###DOTNUM###$1');
+  return result;
+}
+
+/**
+ * Stellt Zahlen mit Punkten wieder her
+ */
+export function restoreNumbers(text: string): string {
+  return text
+    .replace(/###DECIMAL###/g, '.')
+    .replace(/###ORDINAL###/g, '.')
+    .replace(/###DOTNUM###/g, '.');
+}
 
 /**
  * Schützt Abkürzungen vor Satz-Splitting durch Ersetzen der Punkte
@@ -150,15 +270,25 @@ export function countSentences(text: string): number {
 }
 
 /**
- * Teilt Text in Sätze auf, unter Berücksichtigung von Abkürzungen
+ * Teilt Text in Sätze auf, unter Berücksichtigung von Abkürzungen und Zahlen
  */
 export function splitIntoSentences(text: string): string[] {
-  // Schütze Abkürzungen vor dem Splitting
-  const protected_text = protectAbbreviations(text);
+  // Schütze Abkürzungen und Zahlen vor dem Splitting
+  let protected_text = protectAbbreviations(text);
+  protected_text = protectNumbers(protected_text);
+  // Schütze auch "..." (Ellipsis)
+  protected_text = protected_text.replace(/\.\.\./g, '###ELLIPSIS###');
+
   // Teile an Satzenden
   const sentences = protected_text.split(/(?<=[.!?])\s+/).filter(s => s.trim().length > 0);
-  // Stelle Abkürzungen wieder her
-  return sentences.map(s => restoreAbbreviations(s));
+
+  // Stelle alles wieder her
+  return sentences.map(s => {
+    let restored = restoreAbbreviations(s);
+    restored = restoreNumbers(restored);
+    restored = restored.replace(/###ELLIPSIS###/g, '...');
+    return restored;
+  });
 }
 
 /**
