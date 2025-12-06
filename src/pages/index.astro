@@ -1,427 +1,247 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import FleschAnalyzer from '../components/FleschAnalyzer.astro';
+import { LANGUAGES } from '../i18n/index';
 ---
 
-<Layout title="Lesbarkeit testen">
-  <!-- Hero Section with animated illustration -->
-  <section class="mb-12 text-center">
-    <div class="mb-6 flex justify-center">
-      <!-- Animated reading illustration -->
-      <div class="relative">
-        <svg viewBox="0 0 200 160" class="h-32 w-40 md:h-40 md:w-48" aria-hidden="true">
-          <!-- Book -->
-          <rect x="40" y="80" width="120" height="70" rx="4" fill="#e0e7ff" class="dark:fill-blue-900/50" />
-          <path d="M100 80 L100 150" stroke="#6366f1" stroke-width="2" class="dark:stroke-blue-400" />
-          <rect x="45" y="85" width="50" height="4" rx="2" fill="#a5b4fc" class="dark:fill-blue-700">
-            <animate attributeName="width" values="50;45;50" dur="2s" repeatCount="indefinite" />
-          </rect>
-          <rect x="45" y="95" width="45" height="4" rx="2" fill="#a5b4fc" class="dark:fill-blue-700">
-            <animate attributeName="width" values="45;50;45" dur="2.5s" repeatCount="indefinite" />
-          </rect>
-          <rect x="45" y="105" width="48" height="4" rx="2" fill="#a5b4fc" class="dark:fill-blue-700">
-            <animate attributeName="width" values="48;42;48" dur="1.8s" repeatCount="indefinite" />
-          </rect>
-          <rect x="105" y="85" width="50" height="4" rx="2" fill="#a5b4fc" class="dark:fill-blue-700">
-            <animate attributeName="width" values="50;47;50" dur="2.2s" repeatCount="indefinite" />
-          </rect>
-          <rect x="105" y="95" width="45" height="4" rx="2" fill="#a5b4fc" class="dark:fill-blue-700">
-            <animate attributeName="width" values="45;48;45" dur="1.9s" repeatCount="indefinite" />
-          </rect>
-          <rect x="105" y="105" width="48" height="4" rx="2" fill="#a5b4fc" class="dark:fill-blue-700">
-            <animate attributeName="width" values="48;44;48" dur="2.3s" repeatCount="indefinite" />
-          </rect>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Readability.ch – Readability Test for Multiple Languages</title>
+    <meta name="description" content="Free readability test for texts in German, English, French, Italian, Spanish, and Dutch. Analyze your texts with Flesch formula and other readability indexes." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://readability.ch" />
 
-          <!-- Magnifying glass -->
-          <g class="origin-center">
-            <animateTransform attributeName="transform" type="translate" values="0,0; 5,-3; 0,0" dur="3s" repeatCount="indefinite" />
-            <circle cx="140" cy="50" r="25" fill="none" stroke="#2563eb" stroke-width="4" class="dark:stroke-blue-400" />
-            <line x1="158" y1="68" x2="175" y2="85" stroke="#2563eb" stroke-width="6" stroke-linecap="round" class="dark:stroke-blue-400" />
-            <!-- Check mark inside magnifier -->
-            <path d="M128 50 L138 60 L155 40" fill="none" stroke="#22c55e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-              <animate attributeName="stroke-dasharray" values="0,50;50,0" dur="1.5s" repeatCount="indefinite" />
-            </path>
-          </g>
+    <!-- Hreflang -->
+    <link rel="alternate" hreflang="x-default" href="https://readability.ch/" />
+    <link rel="alternate" hreflang="de" href="https://readability.ch/de/" />
+    <link rel="alternate" hreflang="en" href="https://readability.ch/en/" />
+    <link rel="alternate" hreflang="fr" href="https://readability.ch/fr/" />
+    <link rel="alternate" hreflang="it" href="https://readability.ch/it/" />
+    <link rel="alternate" hreflang="es" href="https://readability.ch/es/" />
+    <link rel="alternate" hreflang="nl" href="https://readability.ch/nl/" />
 
-          <!-- Floating sparkles -->
-          <circle cx="30" cy="40" r="3" fill="#fbbf24">
-            <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" />
-          </circle>
-          <circle cx="170" cy="30" r="2" fill="#fbbf24">
-            <animate attributeName="opacity" values="0;1;0" dur="2.5s" repeatCount="indefinite" begin="0.5s" />
-          </circle>
-          <circle cx="50" cy="25" r="2.5" fill="#fbbf24">
-            <animate attributeName="opacity" values="0;1;0" dur="1.8s" repeatCount="indefinite" begin="1s" />
-          </circle>
-        </svg>
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://readability.ch" />
+    <meta property="og:title" content="Readability.ch – Multilingual Readability Test" />
+    <meta property="og:description" content="Free readability test for texts in 6 languages. Privacy-friendly – everything runs in your browser." />
+    <meta property="og:image" content="https://readability.ch/og-image.svg" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1e40af" media="(prefers-color-scheme: dark)" />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: system-ui, -apple-system, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+        padding: 2rem;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        body {
+          background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+          color: #f1f5f9;
+        }
+      }
+
+      .container {
+        max-width: 600px;
+        text-align: center;
+      }
+
+      .logo {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 1.5rem;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #1e3a8a;
+        margin-bottom: 0.5rem;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        h1 {
+          color: #93c5fd;
+        }
+      }
+
+      .tagline {
+        font-size: 1.125rem;
+        color: #64748b;
+        margin-bottom: 2.5rem;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .tagline {
+          color: #94a3b8;
+        }
+      }
+
+      .choose-label {
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #94a3b8;
+        margin-bottom: 1rem;
+      }
+
+      .languages {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      @media (min-width: 480px) {
+        .languages {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      .lang-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1.25rem 1rem;
+        background: white;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        text-decoration: none;
+        color: #334155;
+        transition: all 0.2s;
+        cursor: pointer;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .lang-btn {
+          background: #1e293b;
+          border-color: #334155;
+          color: #e2e8f0;
+        }
+      }
+
+      .lang-btn:hover {
+        border-color: #3b82f6;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+      }
+
+      .lang-btn:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+      }
+
+      .flag {
+        font-size: 2rem;
+      }
+
+      .lang-name {
+        font-weight: 500;
+      }
+
+      .detected {
+        margin-top: 1.5rem;
+        padding: 1rem;
+        background: #dbeafe;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        color: #1e40af;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .detected {
+          background: #1e3a5f;
+          color: #93c5fd;
+        }
+      }
+
+      .detected a {
+        color: inherit;
+        font-weight: 600;
+      }
+
+      footer {
+        margin-top: 3rem;
+        font-size: 0.875rem;
+        color: #94a3b8;
+      }
+
+      footer a {
+        color: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <img src="/favicon.svg" alt="Readability.ch Logo" class="logo" />
+
+      <h1>Readability.ch</h1>
+      <p class="tagline">Free readability test for multiple languages</p>
+
+      <p class="choose-label">Choose your language</p>
+
+      <div class="languages">
+        {Object.entries(LANGUAGES).map(([code, { nativeName, flag }]) => (
+          <a href={`/${code}/`} class="lang-btn">
+            <span class="flag">{flag}</span>
+            <span class="lang-name">{nativeName}</span>
+          </a>
+        ))}
       </div>
+
+      <div class="detected" id="detected-language" style="display: none;">
+        Based on your browser: <a href="/" id="detected-link">Language</a>
+      </div>
+
+      <footer>
+        <p>© 2003–{new Date().getFullYear()} Readability.ch</p>
+        <p>A project by Christian Bachmann and Roger Gösele</p>
+      </footer>
     </div>
 
-    <h1 class="mb-4 text-3xl font-bold md:text-4xl lg:text-5xl">
-      Testen Sie die <span class="text-blue-600 dark:text-blue-400">Lesbarkeit</span> Ihrer Texte
-    </h1>
-    <p class="mx-auto max-w-2xl text-lg text-gray-600 dark:text-gray-300">
-      Analysieren Sie Ihre Texte mit der Flesch-Formel und weiteren Lesbarkeitsindizes.
-      <span class="font-medium text-green-600 dark:text-green-400">100% kostenlos und datenschutzfreundlich</span> – alles läuft in Ihrem Browser.
-    </p>
-  </section>
+    <script is:inline>
+      // Detect browser language and suggest
+      const browserLang = navigator.language.split('-')[0].toLowerCase();
+      const supportedLangs = ['de', 'en', 'fr', 'it', 'es', 'nl'];
+      const langNames = {
+        de: 'Deutsch',
+        en: 'English',
+        fr: 'Français',
+        it: 'Italiano',
+        es: 'Español',
+        nl: 'Nederlands'
+      };
 
-  <section class="mb-16">
-    <FleschAnalyzer />
-  </section>
-
-  <section id="formel" class="mb-12 scroll-mt-20">
-    <h2 class="mb-4 text-2xl font-bold">Die Lesbarkeitsformeln</h2>
-    <div class="space-y-4">
-      <!-- Flesch Original -->
-      <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-        <h3 class="mb-3 text-lg font-semibold dark:text-white">Flesch Reading Ease (Original)</h3>
-        <p class="mb-3 text-sm text-gray-500 dark:text-gray-400">Entwickelt von Rudolf Flesch (1948) für englische Texte</p>
-        <div class="mb-4 rounded-lg bg-gray-100 p-4 font-mono text-sm dark:bg-gray-700 dark:text-gray-200">
-          FRE = 206.835 - (1.015 × Wörter/Sätze) - (84.6 × Silben/Wörter)
-        </div>
-      </div>
-
-      <!-- Amstad Deutsche Formel -->
-      <div class="rounded-xl border border-blue-200 bg-blue-50 p-6 shadow-sm dark:border-blue-800 dark:bg-blue-900/20">
-        <div class="mb-2 flex items-center gap-2">
-          <h3 class="text-lg font-semibold text-blue-900 dark:text-blue-100">Flesch-Index nach Amstad (Deutsch)</h3>
-          <span class="rounded bg-blue-200 px-2 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-800 dark:text-blue-200">Empfohlen</span>
-        </div>
-        <p class="mb-3 text-sm text-blue-700 dark:text-blue-300">Angepasst von Toni Amstad (1978) für deutsche Texte</p>
-        <div class="mb-4 rounded-lg bg-white p-4 font-mono text-sm dark:bg-gray-800 dark:text-gray-200">
-          FRE<sub>deutsch</sub> = 180 - Wörter/Sätze - (58.5 × Silben/Wörter)
-        </div>
-        <p class="text-sm text-blue-800 dark:text-blue-200">
-          Diese Formel berücksichtigt, dass deutsche Wörter im Schnitt länger sind als englische.
-        </p>
-      </div>
-
-      <!-- Weitere Formeln -->
-      <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-        <h3 class="mb-4 text-lg font-semibold dark:text-white">Weitere Indizes</h3>
-        <div class="grid gap-4 md:grid-cols-2">
-          <div>
-            <h4 class="font-medium dark:text-white">Wiener Sachtextformel</h4>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Richard Bamberger & Erich Vanecek – speziell für deutsche Sachtexte</p>
-          </div>
-          <div>
-            <h4 class="font-medium dark:text-white">Flesch-Kincaid Grade Level</h4>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Gibt die benötigten Schuljahre an</p>
-          </div>
-          <div>
-            <h4 class="font-medium dark:text-white">Gunning-Fog-Index</h4>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Robert Gunning (1952) – basiert auf komplexen Wörtern</p>
-          </div>
-          <div>
-            <h4 class="font-medium dark:text-white">LIX Lesbarkeitsindex</h4>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Schwedische Formel, sprachübergreifend einsetzbar</p>
-          </div>
-        </div>
-      </div>
-
-      <p class="text-sm text-gray-500 dark:text-gray-400">
-        Mehr zu Lesbarkeitsindizes auf <a href="https://de.wikipedia.org/wiki/Lesbarkeitsindex" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline dark:text-blue-400">Wikipedia</a>.
-      </p>
-    </div>
-  </section>
-
-  <section id="vorteile" class="mb-12 scroll-mt-20">
-    <h2 class="mb-4 text-2xl font-bold">Vorteile</h2>
-    <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-      <ul class="list-inside list-disc space-y-2 dark:text-gray-300">
-        <li>Einfache und schnelle Berechnung</li>
-        <li>Objektiver Massstab für Textverständlichkeit</li>
-        <li>Hilft beim Schreiben klarer, verständlicher Texte</li>
-        <li>Wissenschaftlich fundiert und weit verbreitet</li>
-        <li>Nützlich für Redakteure, Texter und Übersetzer</li>
-      </ul>
-    </div>
-  </section>
-
-  <section id="nachteile" class="mb-12 scroll-mt-20">
-    <h2 class="mb-4 text-2xl font-bold">Nachteile</h2>
-    <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-      <ul class="list-inside list-disc space-y-2 dark:text-gray-300">
-        <li>Berücksichtigt nicht den Inhalt oder Kontext des Textes</li>
-        <li>Fachbegriffe werden nicht speziell bewertet</li>
-        <li>Kurze Texte können unzuverlässige Ergebnisse liefern</li>
-        <li>Die Formel wurde ursprünglich für Englisch entwickelt</li>
-        <li>Kein Ersatz für menschliches Lektorat</li>
-      </ul>
-    </div>
-  </section>
-
-  <section class="mb-12">
-    <h2 class="mb-4 text-2xl font-bold">Interpretationstabelle</h2>
-    <div class="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
-      <table class="w-full">
-        <thead class="bg-gray-50 dark:bg-gray-700">
-          <tr>
-            <th class="px-4 py-3 text-left dark:text-gray-200">Flesch-Wert</th>
-            <th class="px-4 py-3 text-left dark:text-gray-200">Schwierigkeit</th>
-            <th class="px-4 py-3 text-left dark:text-gray-200">Zielgruppe</th>
-            <th class="px-4 py-3 text-left dark:text-gray-200">Beispiel</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-          <tr>
-            <td class="px-4 py-3 dark:text-gray-300">0-30</td>
-            <td class="px-4 py-3 font-medium text-red-600 dark:text-red-400">Sehr schwer</td>
-            <td class="px-4 py-3 text-gray-600 dark:text-gray-400">Akademiker</td>
-            <td class="px-4 py-3 text-gray-600 dark:text-gray-400">Wissenschaftliche Arbeiten</td>
-          </tr>
-          <tr>
-            <td class="px-4 py-3 dark:text-gray-300">30-50</td>
-            <td class="px-4 py-3 font-medium text-orange-600 dark:text-orange-400">Schwer</td>
-            <td class="px-4 py-3 text-gray-600 dark:text-gray-400">Studium / Matura</td>
-            <td class="px-4 py-3 text-gray-600 dark:text-gray-400">Fachbücher</td>
-          </tr>
-          <tr>
-            <td class="px-4 py-3 dark:text-gray-300">50-60</td>
-            <td class="px-4 py-3 font-medium text-yellow-600 dark:text-yellow-400">Mittelschwer</td>
-            <td class="px-4 py-3 text-gray-600 dark:text-gray-400">16+ Jahre</td>
-            <td class="px-4 py-3 text-gray-600 dark:text-gray-400">Qualitätszeitungen</td>
-          </tr>
-          <tr>
-            <td class="px-4 py-3 dark:text-gray-300">60-70</td>
-            <td class="px-4 py-3 font-medium text-lime-600 dark:text-lime-400">Mittel</td>
-            <td class="px-4 py-3 text-gray-600 dark:text-gray-400">13-15 Jahre</td>
-            <td class="px-4 py-3 text-gray-600 dark:text-gray-400">Boulevardzeitungen</td>
-          </tr>
-          <tr>
-            <td class="px-4 py-3 dark:text-gray-300">70-80</td>
-            <td class="px-4 py-3 font-medium text-green-600 dark:text-green-400">Leicht</td>
-            <td class="px-4 py-3 text-gray-600 dark:text-gray-400">12 Jahre</td>
-            <td class="px-4 py-3 text-gray-600 dark:text-gray-400">Werbetexte</td>
-          </tr>
-          <tr>
-            <td class="px-4 py-3 dark:text-gray-300">80-90</td>
-            <td class="px-4 py-3 font-medium text-emerald-600 dark:text-emerald-400">Sehr leicht</td>
-            <td class="px-4 py-3 text-gray-600 dark:text-gray-400">11 Jahre</td>
-            <td class="px-4 py-3 text-gray-600 dark:text-gray-400">Comics, Unterhaltung</td>
-          </tr>
-          <tr>
-            <td class="px-4 py-3 dark:text-gray-300">90-100</td>
-            <td class="px-4 py-3 font-medium text-teal-600 dark:text-teal-400">Extrem leicht</td>
-            <td class="px-4 py-3 text-gray-600 dark:text-gray-400">10 Jahre</td>
-            <td class="px-4 py-3 text-gray-600 dark:text-gray-400">Grundschulniveau</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- FAQ Section -->
-  <section id="faq" class="mb-12 scroll-mt-20">
-    <h2 class="mb-4 text-2xl font-bold">Häufige Fragen</h2>
-    <div class="space-y-4">
-      <details class="group rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
-        <summary class="flex cursor-pointer items-center justify-between p-5 font-medium dark:text-white">
-          Was ist der Flesch-Index?
-          <svg class="h-5 w-5 shrink-0 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
-        </summary>
-        <div class="px-5 pb-5 text-gray-600 dark:text-gray-300">
-          Der Flesch-Index (auch Flesch Reading Ease) ist ein Lesbarkeitsindex, der die Verständlichkeit eines Textes misst. Er wurde 1948 von Rudolf Flesch entwickelt und basiert auf der durchschnittlichen Satzlänge und der durchschnittlichen Silbenanzahl pro Wort. Je höher der Wert (0-100), desto leichter ist der Text zu lesen.
-        </div>
-      </details>
-
-      <details class="group rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
-        <summary class="flex cursor-pointer items-center justify-between p-5 font-medium dark:text-white">
-          Welche Formel wird für deutsche Texte verwendet?
-          <svg class="h-5 w-5 shrink-0 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
-        </summary>
-        <div class="px-5 pb-5 text-gray-600 dark:text-gray-300">
-          <p class="mb-2">Für deutsche Texte wird die angepasste Formel nach Toni Amstad (1978) verwendet:</p>
-          <code class="block rounded bg-gray-100 p-2 font-mono text-sm dark:bg-gray-700">FRE = 180 - ASL - (58.5 × ASW)</code>
-          <p class="mt-2">Diese Formel berücksichtigt, dass deutsche Wörter im Durchschnitt länger sind als englische und mehr Silben haben.</p>
-        </div>
-      </details>
-
-      <details class="group rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
-        <summary class="flex cursor-pointer items-center justify-between p-5 font-medium dark:text-white">
-          Werden meine Texte gespeichert?
-          <svg class="h-5 w-5 shrink-0 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
-        </summary>
-        <div class="px-5 pb-5 text-gray-600 dark:text-gray-300">
-          <strong class="text-green-600 dark:text-green-400">Nein, niemals!</strong> Alle Berechnungen finden direkt in Ihrem Browser statt. Ihre Texte werden zu keinem Zeitpunkt an einen Server übertragen oder gespeichert. Die Analyse funktioniert sogar offline, nachdem die Seite einmal geladen wurde.
-        </div>
-      </details>
-
-      <details class="group rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
-        <summary class="flex cursor-pointer items-center justify-between p-5 font-medium dark:text-white">
-          Welcher Flesch-Wert ist optimal?
-          <svg class="h-5 w-5 shrink-0 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
-        </summary>
-        <div class="px-5 pb-5 text-gray-600 dark:text-gray-300">
-          <p>Das hängt von Ihrer Zielgruppe ab:</p>
-          <ul class="mt-2 list-inside list-disc space-y-1">
-            <li><strong>Allgemeine Texte:</strong> 60-70 (Mittel)</li>
-            <li><strong>Werbetexte, Newsletter:</strong> 70-80 (Leicht)</li>
-            <li><strong>Wissenschaftliche Texte:</strong> 30-50 (Schwer)</li>
-            <li><strong>Kindertexte:</strong> 80+ (Sehr leicht)</li>
-          </ul>
-        </div>
-      </details>
-
-      <details class="group rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
-        <summary class="flex cursor-pointer items-center justify-between p-5 font-medium dark:text-white">
-          Warum werden mehrere Indizes angezeigt?
-          <svg class="h-5 w-5 shrink-0 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
-        </summary>
-        <div class="px-5 pb-5 text-gray-600 dark:text-gray-300">
-          Verschiedene Lesbarkeitsindizes messen unterschiedliche Aspekte. Die Wiener Sachtextformel ist speziell für deutsche Sachtexte optimiert, der LIX funktioniert sprachübergreifend, und der Gunning-Fog-Index fokussiert auf komplexe Wörter. Die Kombination mehrerer Indizes gibt ein vollständigeres Bild der Textverständlichkeit.
-        </div>
-      </details>
-
-      <details class="group rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
-        <summary class="flex cursor-pointer items-center justify-between p-5 font-medium dark:text-white">
-          Kann ich einen Link zu einer Analyse teilen?
-          <svg class="h-5 w-5 shrink-0 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
-        </summary>
-        <div class="px-5 pb-5 text-gray-600 dark:text-gray-300">
-          Ja! Sie können Text über die URL übergeben. Fügen Sie einfach <code class="rounded bg-gray-100 px-1.5 py-0.5 font-mono text-sm dark:bg-gray-700">?text=Ihr+Text+hier</code> an die URL an. Kurze Texte lassen sich so direkt verlinken. Beispiel: <code class="rounded bg-gray-100 px-1.5 py-0.5 font-mono text-sm dark:bg-gray-700">readability.ch/?text=Hallo+Welt</code>
-        </div>
-      </details>
-    </div>
-  </section>
-
-  <section id="tipps" class="mb-12 scroll-mt-20">
-    <h2 class="mb-4 text-2xl font-bold">Tipps für verständliche Texte</h2>
-    <div class="space-y-4">
-      <!-- Tipp 1: Kurze Sätze -->
-      <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-        <div class="flex gap-4">
-          <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-600 dark:bg-blue-900 dark:text-blue-400">1</div>
-          <div>
-            <h3 class="mb-2 font-semibold dark:text-white">Kurze Sätze schreiben</h3>
-            <p class="text-gray-600 dark:text-gray-300">Halten Sie Ihre Sätze kurz. Idealerweise nicht mehr als 15-20 Wörter pro Satz. Ein Gedanke pro Satz reicht.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tipp 2: Einfache Wörter -->
-      <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-        <div class="flex gap-4">
-          <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-600 dark:bg-blue-900 dark:text-blue-400">2</div>
-          <div>
-            <h3 class="mb-2 font-semibold dark:text-white">Einfache Wörter wählen</h3>
-            <p class="text-gray-600 dark:text-gray-300">Verwenden Sie kurze, bekannte Wörter. Statt «Implementierung» schreiben Sie «Umsetzung». Statt «eruieren» einfach «herausfinden».</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tipp 3: Aktiv statt Passiv -->
-      <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-        <div class="flex gap-4">
-          <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-600 dark:bg-blue-900 dark:text-blue-400">3</div>
-          <div>
-            <h3 class="mb-2 font-semibold dark:text-white">Aktiv statt Passiv</h3>
-            <p class="text-gray-600 dark:text-gray-300">Schreiben Sie aktiv. Statt «Der Bericht wurde geschrieben» besser «Wir schrieben den Bericht». Das ist direkter und lebendiger.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tipp 4: Verben statt Substantive -->
-      <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-        <div class="flex gap-4">
-          <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-600 dark:bg-blue-900 dark:text-blue-400">4</div>
-          <div>
-            <h3 class="mb-2 font-semibold dark:text-white">Verben statt Substantive</h3>
-            <p class="text-gray-600 dark:text-gray-300">Vermeiden Sie Substantivierungen. Statt «Die Durchführung der Analyse» besser «Wir analysieren». Verben machen Texte lebendig.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tipp 5: Fremdwörter vermeiden -->
-      <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-        <div class="flex gap-4">
-          <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-600 dark:bg-blue-900 dark:text-blue-400">5</div>
-          <div>
-            <h3 class="mb-2 font-semibold dark:text-white">Fremdwörter erklären oder ersetzen</h3>
-            <p class="text-gray-600 dark:text-gray-300">Wenn Sie Fachbegriffe brauchen, erklären Sie diese kurz. Oder finden Sie ein einfacheres deutsches Wort dafür.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tipp 6: Absätze -->
-      <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-        <div class="flex gap-4">
-          <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-600 dark:bg-blue-900 dark:text-blue-400">6</div>
-          <div>
-            <h3 class="mb-2 font-semibold dark:text-white">Kurze Absätze machen</h3>
-            <p class="text-gray-600 dark:text-gray-300">Gliedern Sie Ihren Text in kurze Absätze. Ein Absatz sollte nur einen Aspekt behandeln. Das erleichtert das Lesen.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tipp 7: Füllwörter -->
-      <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-        <div class="flex gap-4">
-          <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-600 dark:bg-blue-900 dark:text-blue-400">7</div>
-          <div>
-            <h3 class="mb-2 font-semibold dark:text-white">Füllwörter streichen</h3>
-            <p class="text-gray-600 dark:text-gray-300">Streichen Sie unnötige Wörter wie «eigentlich», «gewissermassen», «sozusagen» oder «im Grunde genommen». Sie blähen den Text auf.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tipp 8: Laut lesen -->
-      <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-        <div class="flex gap-4">
-          <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-600 dark:bg-blue-900 dark:text-blue-400">8</div>
-          <div>
-            <h3 class="mb-2 font-semibold dark:text-white">Laut lesen</h3>
-            <p class="text-gray-600 dark:text-gray-300">Lesen Sie Ihren Text laut vor. Wo Sie stocken oder Luft holen müssen, ist der Satz zu lang. Dort können Sie kürzen oder teilen.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="datenschutz" class="mb-12 scroll-mt-20">
-    <h2 class="mb-4 text-2xl font-bold">Datenschutz</h2>
-    <div class="rounded-xl border border-green-200 bg-green-50 p-6 shadow-sm dark:border-green-800 dark:bg-green-900/20">
-      <div class="mb-4 flex items-center gap-3">
-        <div class="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 dark:bg-green-800">
-          <svg class="h-5 w-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-          </svg>
-        </div>
-        <h3 class="text-lg font-semibold text-green-800 dark:text-green-200">Ihre Daten bleiben bei Ihnen</h3>
-      </div>
-      <div class="space-y-4 text-green-900 dark:text-green-100">
-        <p>
-          Die gesamte Textanalyse findet <strong>direkt in Ihrem Browser</strong> statt.
-          Ihr Text wird zu keinem Zeitpunkt an einen Server gesendet oder anderweitig übertragen.
-        </p>
-        <p>
-          Das bedeutet konkret:
-        </p>
-        <ul class="ml-4 list-inside list-disc space-y-1">
-          <li>Keine Datenübertragung ins Internet</li>
-          <li>Keine Speicherung auf externen Servern</li>
-          <li>Keine Cookies oder Tracking</li>
-          <li>Vollständig offline nutzbar (nach dem ersten Laden)</li>
-        </ul>
-        <p>
-          Sie können bedenkenlos auch <strong>vertrauliche Texte</strong> oder Dokumente mit
-          personenbezogenen Daten analysieren. Die Verarbeitung erfolgt ausschliesslich lokal
-          auf Ihrem Gerät.
-        </p>
-      </div>
-    </div>
-  </section>
-</Layout>
+      if (supportedLangs.includes(browserLang)) {
+        const detected = document.getElementById('detected-language');
+        const link = document.getElementById('detected-link');
+        if (detected && link) {
+          link.href = `/${browserLang}/`;
+          link.textContent = langNames[browserLang];
+          detected.style.display = 'block';
+        }
+      }
+    </script>
+  </body>
+</html>
