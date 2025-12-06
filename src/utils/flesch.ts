@@ -71,7 +71,6 @@ export function normalizeAbbreviations(text: string): string {
  */
 export function countSentences(text: string): number {
   const normalized = normalizeAbbreviations(text);
-  // Satzzeichen die einen Satz beenden
   const sentences = normalized.split(/[.!?]+/).filter(s => s.trim().length > 0);
   return Math.max(1, sentences.length);
 }
@@ -86,6 +85,31 @@ export function getWords(text: string): string[] {
     .filter(word => word.length > 0);
 }
 
+/**
+ * Zählt Wörter mit mehr als 6 Buchstaben (für Wiener Sachtextformel)
+ */
+export function countLongWords(words: string[]): number {
+  return words.filter(word => word.replace(/[^a-zäöüßA-ZÄÖÜ]/g, '').length > 6).length;
+}
+
+/**
+ * Zählt Wörter mit 3+ Silben (für Gunning-Fog)
+ */
+export function countComplexWords(words: string[]): number {
+  return words.filter(word => countSyllables(word) >= 3).length;
+}
+
+export type Difficulty = 'sehr-schwer' | 'schwer' | 'mittelschwer' | 'mittel' | 'leicht' | 'sehr-leicht' | 'extrem-leicht';
+
+export interface SentenceAnalysis {
+  text: string;
+  wordCount: number;
+  syllableCount: number;
+  avgSyllablesPerWord: number;
+  score: number;
+  difficulty: Difficulty;
+}
+
 export interface FleschResult {
   score: number;
   wordCount: number;
@@ -95,15 +119,41 @@ export interface FleschResult {
   avgSyllablesPerWord: number;
   uniqueWords: number;
   interpretation: string;
-  difficulty: 'sehr-schwer' | 'schwer' | 'mittelschwer' | 'mittel' | 'leicht' | 'sehr-leicht' | 'extrem-leicht';
+  difficulty: Difficulty;
+}
+
+export interface WienerResult {
+  score: number;
+  schoolYear: number;
+  interpretation: string;
+}
+
+export interface GunningFogResult {
+  score: number;
+  schoolYears: number;
+  interpretation: string;
+}
+
+export interface LixResult {
+  score: number;
+  interpretation: string;
+  difficulty: Difficulty;
+}
+
+export interface FullAnalysisResult {
+  flesch: FleschResult;
+  wiener: WienerResult;
+  gunningFog: GunningFogResult;
+  lix: LixResult;
+  sentences: SentenceAnalysis[];
 }
 
 /**
  * Interpretiert den Flesch-Wert
  */
-export function interpretFleschScore(score: number): { interpretation: string; difficulty: FleschResult['difficulty'] } {
+export function interpretFleschScore(score: number): { interpretation: string; difficulty: Difficulty } {
   if (score < 30) {
-    return { interpretation: 'Sehr schwer - Akademische Texte, schwer verständlich', difficulty: 'sehr-schwer' };
+    return { interpretation: 'Sehr schwer - Akademische Texte', difficulty: 'sehr-schwer' };
   } else if (score < 50) {
     return { interpretation: 'Schwer - Wissenschaftliche Texte', difficulty: 'schwer' };
   } else if (score < 60) {
@@ -111,9 +161,9 @@ export function interpretFleschScore(score: number): { interpretation: string; d
   } else if (score < 70) {
     return { interpretation: 'Mittel - Boulevardzeitungen', difficulty: 'mittel' };
   } else if (score < 80) {
-    return { interpretation: 'Leicht - Werbetexte, gut verständlich', difficulty: 'leicht' };
+    return { interpretation: 'Leicht - Werbetexte', difficulty: 'leicht' };
   } else if (score < 90) {
-    return { interpretation: 'Sehr leicht - Comics, sehr gut verständlich', difficulty: 'sehr-leicht' };
+    return { interpretation: 'Sehr leicht - Comics', difficulty: 'sehr-leicht' };
   } else {
     return { interpretation: 'Extrem leicht - Grundschulniveau', difficulty: 'extrem-leicht' };
   }
@@ -121,9 +171,6 @@ export function interpretFleschScore(score: number): { interpretation: string; d
 
 /**
  * Berechnet den Flesch-Lesbarkeitsindex für deutschen Text
- * Formel: 206.835 - (1.015 × ASL) - (84.6 × ASW)
- * ASL = Average Sentence Length (Wörter pro Satz)
- * ASW = Average Syllables per Word (Silben pro Wort)
  */
 export function calculateFlesch(text: string): FleschResult {
   const normalizedText = normalizeAbbreviations(text);
@@ -157,5 +204,197 @@ export function calculateFlesch(text: string): FleschResult {
     uniqueWords: uniqueWordsSet.size,
     interpretation,
     difficulty,
+  };
+}
+
+/**
+ * Wiener Sachtextformel (WSTF) - speziell für deutsche Texte
+ * Formel: 0.1935 × MS + 0.1672 × SL + 0.1297 × IW - 0.0327 × ES - 0.875
+ * MS = Prozent Wörter mit 3+ Silben
+ * SL = durchschnittliche Satzlänge
+ * IW = Prozent Wörter mit 6+ Buchstaben
+ * ES = Prozent einsilbige Wörter
+ */
+export function calculateWiener(text: string): WienerResult {
+  const normalizedText = normalizeAbbreviations(text);
+  const words = getWords(normalizedText);
+  const wordCount = words.length;
+  const sentenceCount = countSentences(text);
+
+  if (wordCount === 0) {
+    return { score: 0, schoolYear: 1, interpretation: 'Zu wenig Text' };
+  }
+
+  const threeOrMoreSyllables = words.filter(w => countSyllables(w) >= 3).length;
+  const sixOrMoreLetters = countLongWords(words);
+  const oneSyllable = words.filter(w => countSyllables(w) === 1).length;
+
+  const MS = (threeOrMoreSyllables / wordCount) * 100;
+  const SL = wordCount / sentenceCount;
+  const IW = (sixOrMoreLetters / wordCount) * 100;
+  const ES = (oneSyllable / wordCount) * 100;
+
+  const score = 0.1935 * MS + 0.1672 * SL + 0.1297 * IW - 0.0327 * ES - 0.875;
+  const schoolYear = Math.max(1, Math.min(13, Math.round(score)));
+
+  let interpretation: string;
+  if (schoolYear <= 4) {
+    interpretation = `Grundschule (${schoolYear}. Klasse)`;
+  } else if (schoolYear <= 6) {
+    interpretation = `Unterstufe (${schoolYear}. Klasse)`;
+  } else if (schoolYear <= 9) {
+    interpretation = `Mittelstufe (${schoolYear}. Klasse)`;
+  } else if (schoolYear <= 12) {
+    interpretation = `Oberstufe (${schoolYear}. Klasse)`;
+  } else {
+    interpretation = 'Akademisches Niveau';
+  }
+
+  return {
+    score: Math.round(score * 10) / 10,
+    schoolYear,
+    interpretation,
+  };
+}
+
+/**
+ * Gunning-Fog-Index
+ * Formel: 0.4 × (ASL + PHW)
+ * ASL = durchschnittliche Satzlänge
+ * PHW = Prozent "harter" Wörter (3+ Silben)
+ */
+export function calculateGunningFog(text: string): GunningFogResult {
+  const normalizedText = normalizeAbbreviations(text);
+  const words = getWords(normalizedText);
+  const wordCount = words.length;
+  const sentenceCount = countSentences(text);
+
+  if (wordCount === 0) {
+    return { score: 0, schoolYears: 0, interpretation: 'Zu wenig Text' };
+  }
+
+  const complexWords = countComplexWords(words);
+  const ASL = wordCount / sentenceCount;
+  const PHW = (complexWords / wordCount) * 100;
+
+  const score = 0.4 * (ASL + PHW);
+  const schoolYears = Math.round(score);
+
+  let interpretation: string;
+  if (score < 6) {
+    interpretation = 'Sehr einfach - für jeden verständlich';
+  } else if (score < 8) {
+    interpretation = 'Einfach - Alltagssprache';
+  } else if (score < 10) {
+    interpretation = 'Standard - Zeitungsniveau';
+  } else if (score < 12) {
+    interpretation = 'Anspruchsvoll - Fachliteratur';
+  } else if (score < 14) {
+    interpretation = 'Schwierig - Wissenschaftliche Texte';
+  } else {
+    interpretation = 'Sehr schwierig - Expertenniveau';
+  }
+
+  return {
+    score: Math.round(score * 10) / 10,
+    schoolYears,
+    interpretation,
+  };
+}
+
+/**
+ * LIX Lesbarkeitsindex (schwedische Formel, gut für viele Sprachen)
+ * Formel: (Wörter / Sätze) + (lange Wörter × 100 / Wörter)
+ */
+export function calculateLix(text: string): LixResult {
+  const normalizedText = normalizeAbbreviations(text);
+  const words = getWords(normalizedText);
+  const wordCount = words.length;
+  const sentenceCount = countSentences(text);
+
+  if (wordCount === 0) {
+    return { score: 0, interpretation: 'Zu wenig Text', difficulty: 'mittel' };
+  }
+
+  const longWords = countLongWords(words);
+  const score = (wordCount / sentenceCount) + (longWords * 100 / wordCount);
+
+  let interpretation: string;
+  let difficulty: Difficulty;
+
+  if (score < 25) {
+    interpretation = 'Sehr einfach - Kinderbücher';
+    difficulty = 'extrem-leicht';
+  } else if (score < 35) {
+    interpretation = 'Einfach - Belletristik';
+    difficulty = 'sehr-leicht';
+  } else if (score < 45) {
+    interpretation = 'Mittel - Zeitungen';
+    difficulty = 'leicht';
+  } else if (score < 55) {
+    interpretation = 'Schwierig - Fachliteratur';
+    difficulty = 'mittelschwer';
+  } else if (score < 65) {
+    interpretation = 'Sehr schwierig - Wissenschaft';
+    difficulty = 'schwer';
+  } else {
+    interpretation = 'Extrem schwierig - Bürokratie';
+    difficulty = 'sehr-schwer';
+  }
+
+  return {
+    score: Math.round(score * 10) / 10,
+    interpretation,
+    difficulty,
+  };
+}
+
+/**
+ * Extrahiert und analysiert einzelne Sätze
+ */
+export function analyzeSentences(text: string): SentenceAnalysis[] {
+  const normalized = normalizeAbbreviations(text);
+  // Sätze aufteilen, aber Satzzeichen für Anzeige behalten
+  const sentenceTexts = text.split(/(?<=[.!?])\s+/).filter(s => s.trim().length > 0);
+
+  return sentenceTexts.map(sentenceText => {
+    const normalizedSentence = normalizeAbbreviations(sentenceText);
+    const words = getWords(normalizedSentence);
+    const wordCount = words.length;
+
+    let syllableCount = 0;
+    for (const word of words) {
+      syllableCount += countSyllables(word);
+    }
+
+    const avgSyllablesPerWord = wordCount > 0 ? syllableCount / wordCount : 0;
+
+    // Mini-Flesch für einzelnen Satz (vereinfacht)
+    // Basiert hauptsächlich auf Wortlänge und Silben
+    const score = 206.835 - (1.015 * wordCount) - (84.6 * avgSyllablesPerWord);
+
+    const { difficulty } = interpretFleschScore(score);
+
+    return {
+      text: sentenceText,
+      wordCount,
+      syllableCount,
+      avgSyllablesPerWord: Math.round(avgSyllablesPerWord * 100) / 100,
+      score: Math.round(score * 10) / 10,
+      difficulty,
+    };
+  });
+}
+
+/**
+ * Vollständige Textanalyse mit allen Metriken
+ */
+export function analyzeText(text: string): FullAnalysisResult {
+  return {
+    flesch: calculateFlesch(text),
+    wiener: calculateWiener(text),
+    gunningFog: calculateGunningFog(text),
+    lix: calculateLix(text),
+    sentences: analyzeSentences(text),
   };
 }
