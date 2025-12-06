@@ -1,13 +1,14 @@
 /**
- * Zählt die Silben in einem deutschen Wort
+ * Zählt die Silben in einem Wort
+ * Unterstützt alle europäischen Sprachen (DE, EN, FR, IT, ES, NL)
  */
 export function countSyllables(word: string): number {
-  const cleanWord = word.toLowerCase().replace(/[^a-zäöüß]/g, '');
+  const cleanWord = word.toLowerCase().replace(/[^a-zäöüßàâéèêëïîôùûüÿçáíóúñìò]/g, '');
   if (cleanWord.length === 0) return 0;
   if (cleanWord.length <= 3) return 1;
 
-  // Deutsche Vokale inkl. Umlaute
-  const vowels = /[aeiouyäöü]/gi;
+  // Vokale inkl. Umlaute und Akzente (alle europäischen Sprachen)
+  const vowels = /[aeiouyäöüàâéèêëïîôùûÿáíóúìò]/gi;
   const matches = cleanWord.match(vowels);
 
   if (!matches) return 1;
@@ -15,17 +16,17 @@ export function countSyllables(word: string): number {
   let syllables = matches.length;
 
   // Doppelvokale zählen als eine Silbe
-  const diphthongs = /[aeiouäöü]{2,}/gi;
+  const diphthongs = /[aeiouyäöüàâéèêëïîôùûÿáíóúìò]{2,}/gi;
   const diphthongMatches = cleanWord.match(diphthongs);
   if (diphthongMatches) {
     syllables -= diphthongMatches.length;
     syllables += diphthongMatches.length; // Jeder Doppelvokal = 1 Silbe
   }
 
-  // Stummes 'e' am Ende
+  // Stummes 'e' am Ende (für Deutsch und Französisch)
   if (cleanWord.endsWith('e') && cleanWord.length > 2) {
     const beforeE = cleanWord.charAt(cleanWord.length - 2);
-    if (!/[aeiouäöü]/.test(beforeE)) {
+    if (!/[aeiouyäöüàâéèêëïîôùûÿáíóúìò]/.test(beforeE)) {
       // Behalte Silbe für -le, -ne, -re etc.
     }
   }
@@ -293,19 +294,21 @@ export function splitIntoSentences(text: string): string[] {
 
 /**
  * Extrahiert Wörter aus dem Text
+ * Unterstützt alle europäischen Sprachen (DE, EN, FR, IT, ES, NL)
  */
 export function getWords(text: string): string[] {
   return text
-    .replace(/[^\wäöüÄÖÜß\s-]/g, ' ')
+    .replace(/[^\wäöüÄÖÜßàâäéèêëïîôùûüÿçÀÂÄÉÈÊËÏÎÔÙÛÜŸÇáéíóúñÁÉÍÓÚÑìòÌÒ\s-]/g, ' ')
     .split(/\s+/)
     .filter(word => word.length > 0);
 }
 
 /**
  * Zählt Wörter mit mehr als 6 Buchstaben (für Wiener Sachtextformel)
+ * Unterstützt alle europäischen Sprachen
  */
 export function countLongWords(words: string[]): number {
-  return words.filter(word => word.replace(/[^a-zäöüßA-ZÄÖÜ]/g, '').length > 6).length;
+  return words.filter(word => word.replace(/[^a-zäöüßA-ZÄÖÜàâéèêëïîôùûüÿçÀÂÉÈÊËÏÎÔÙÛÜŸÇáéíóúñÁÉÍÓÚÑìòÌÒ]/g, '').length > 6).length;
 }
 
 /**
@@ -316,6 +319,283 @@ export function countComplexWords(words: string[]): number {
 }
 
 export type Difficulty = 'sehr-schwer' | 'schwer' | 'mittelschwer' | 'mittel' | 'leicht' | 'sehr-leicht' | 'extrem-leicht';
+
+export type SupportedLanguage = 'de' | 'en' | 'fr' | 'it' | 'es' | 'nl';
+
+/**
+ * Übersetzungen für alle unterstützten Sprachen
+ */
+const translations: Record<SupportedLanguage, {
+  tooLittleText: string;
+  preschool: string;
+  elementary: (grade: number) => string;
+  middleSchool: (grade: number) => string;
+  highSchool: (grade: number) => string;
+  university: string;
+  academic: string;
+  lowerGrades: (grade: number) => string;
+  // Flesch interpretations
+  fleschVeryHard: string;
+  fleschHard: string;
+  fleschFairlyHard: string;
+  fleschMedium: string;
+  fleschEasy: string;
+  fleschVeryEasy: string;
+  fleschExtremelyEasy: string;
+  // Amstad interpretations
+  amstadExtremelyHard: string;
+  amstadVeryHard: string;
+  amstadHard: string;
+  amstadFairlyHard: string;
+  amstadMedium: string;
+  amstadEasy: string;
+  amstadVeryEasy: string;
+  amstadExtremelyEasy: string;
+  // Gunning Fog interpretations
+  fogVerySimple: string;
+  fogSimple: string;
+  fogStandard: string;
+  fogDemanding: string;
+  fogDifficult: string;
+  fogVeryDifficult: string;
+  // LIX interpretations
+  lixVerySimple: string;
+  lixSimple: string;
+  lixMedium: string;
+  lixDifficult: string;
+  lixVeryDifficult: string;
+  lixExtremelyDifficult: string;
+}> = {
+  de: {
+    tooLittleText: 'Zu wenig Text',
+    preschool: 'Vorschule',
+    elementary: (grade) => `Grundschule (${grade}. Klasse)`,
+    middleSchool: (grade) => `Mittelstufe (${grade}. Klasse)`,
+    highSchool: (grade) => `Oberstufe (${grade}. Klasse)`,
+    university: 'Universitätsniveau',
+    academic: 'Akademisches Niveau',
+    lowerGrades: (grade) => `Unterstufe (${grade}. Klasse)`,
+    fleschVeryHard: 'Sehr schwer - Akademiker',
+    fleschHard: 'Schwer - Studium',
+    fleschFairlyHard: 'Mittelschwer - 16+ Jahre',
+    fleschMedium: 'Mittel - 13-15 Jahre',
+    fleschEasy: 'Leicht - 12 Jahre',
+    fleschVeryEasy: 'Sehr leicht - 11 Jahre',
+    fleschExtremelyEasy: 'Extrem leicht - 10 Jahre',
+    amstadExtremelyHard: 'Extrem schwer - Akademiker',
+    amstadVeryHard: 'Sehr schwer - Studium',
+    amstadHard: 'Schwer - Matura/Abitur',
+    amstadFairlyHard: 'Mittelschwer - 16+ Jahre',
+    amstadMedium: 'Mittel - 13-15 Jahre',
+    amstadEasy: 'Leicht - 12 Jahre',
+    amstadVeryEasy: 'Sehr leicht - 11 Jahre',
+    amstadExtremelyEasy: 'Extrem leicht - 10 Jahre',
+    fogVerySimple: 'Sehr einfach - für jeden verständlich',
+    fogSimple: 'Einfach - Alltagssprache',
+    fogStandard: 'Standard - Zeitungsniveau',
+    fogDemanding: 'Anspruchsvoll - Fachliteratur',
+    fogDifficult: 'Schwierig - Wissenschaftliche Texte',
+    fogVeryDifficult: 'Sehr schwierig - Expertenniveau',
+    lixVerySimple: 'Sehr einfach - Kinderbücher',
+    lixSimple: 'Einfach - Belletristik',
+    lixMedium: 'Mittel - Zeitungen',
+    lixDifficult: 'Schwierig - Fachliteratur',
+    lixVeryDifficult: 'Sehr schwierig - Wissenschaft',
+    lixExtremelyDifficult: 'Extrem schwierig - Bürokratie',
+  },
+  en: {
+    tooLittleText: 'Too little text',
+    preschool: 'Preschool',
+    elementary: (grade) => `Elementary school (Grade ${grade})`,
+    middleSchool: (grade) => `Middle school (Grade ${grade})`,
+    highSchool: (grade) => `High school (Grade ${grade})`,
+    university: 'University level',
+    academic: 'Academic level',
+    lowerGrades: (grade) => `Lower grades (Grade ${grade})`,
+    fleschVeryHard: 'Very hard - Academic',
+    fleschHard: 'Hard - University',
+    fleschFairlyHard: 'Fairly hard - 16+ years',
+    fleschMedium: 'Medium - 13-15 years',
+    fleschEasy: 'Easy - 12 years',
+    fleschVeryEasy: 'Very easy - 11 years',
+    fleschExtremelyEasy: 'Extremely easy - 10 years',
+    amstadExtremelyHard: 'Extremely hard - Academic',
+    amstadVeryHard: 'Very hard - University',
+    amstadHard: 'Hard - High school diploma',
+    amstadFairlyHard: 'Fairly hard - 16+ years',
+    amstadMedium: 'Medium - 13-15 years',
+    amstadEasy: 'Easy - 12 years',
+    amstadVeryEasy: 'Very easy - 11 years',
+    amstadExtremelyEasy: 'Extremely easy - 10 years',
+    fogVerySimple: 'Very simple - Understandable by everyone',
+    fogSimple: 'Simple - Everyday language',
+    fogStandard: 'Standard - Newspaper level',
+    fogDemanding: 'Demanding - Technical literature',
+    fogDifficult: 'Difficult - Scientific texts',
+    fogVeryDifficult: 'Very difficult - Expert level',
+    lixVerySimple: 'Very simple - Children\'s books',
+    lixSimple: 'Simple - Fiction',
+    lixMedium: 'Medium - Newspapers',
+    lixDifficult: 'Difficult - Technical literature',
+    lixVeryDifficult: 'Very difficult - Scientific',
+    lixExtremelyDifficult: 'Extremely difficult - Bureaucracy',
+  },
+  fr: {
+    tooLittleText: 'Texte trop court',
+    preschool: 'Préscolaire',
+    elementary: (grade) => `École primaire (${grade}e année)`,
+    middleSchool: (grade) => `Collège (${grade}e année)`,
+    highSchool: (grade) => `Lycée (${grade}e année)`,
+    university: 'Niveau universitaire',
+    academic: 'Niveau académique',
+    lowerGrades: (grade) => `Cycle primaire (${grade}e année)`,
+    fleschVeryHard: 'Très difficile - Académique',
+    fleschHard: 'Difficile - Université',
+    fleschFairlyHard: 'Assez difficile - 16+ ans',
+    fleschMedium: 'Moyen - 13-15 ans',
+    fleschEasy: 'Facile - 12 ans',
+    fleschVeryEasy: 'Très facile - 11 ans',
+    fleschExtremelyEasy: 'Extrêmement facile - 10 ans',
+    amstadExtremelyHard: 'Extrêmement difficile - Académique',
+    amstadVeryHard: 'Très difficile - Université',
+    amstadHard: 'Difficile - Baccalauréat',
+    amstadFairlyHard: 'Assez difficile - 16+ ans',
+    amstadMedium: 'Moyen - 13-15 ans',
+    amstadEasy: 'Facile - 12 ans',
+    amstadVeryEasy: 'Très facile - 11 ans',
+    amstadExtremelyEasy: 'Extrêmement facile - 10 ans',
+    fogVerySimple: 'Très simple - Compréhensible par tous',
+    fogSimple: 'Simple - Langage courant',
+    fogStandard: 'Standard - Niveau journal',
+    fogDemanding: 'Exigeant - Littérature technique',
+    fogDifficult: 'Difficile - Textes scientifiques',
+    fogVeryDifficult: 'Très difficile - Niveau expert',
+    lixVerySimple: 'Très simple - Livres pour enfants',
+    lixSimple: 'Simple - Fiction',
+    lixMedium: 'Moyen - Journaux',
+    lixDifficult: 'Difficile - Littérature technique',
+    lixVeryDifficult: 'Très difficile - Scientifique',
+    lixExtremelyDifficult: 'Extrêmement difficile - Bureaucratie',
+  },
+  it: {
+    tooLittleText: 'Testo troppo breve',
+    preschool: 'Prescolare',
+    elementary: (grade) => `Scuola elementare (${grade}° anno)`,
+    middleSchool: (grade) => `Scuola media (${grade}° anno)`,
+    highSchool: (grade) => `Scuola superiore (${grade}° anno)`,
+    university: 'Livello universitario',
+    academic: 'Livello accademico',
+    lowerGrades: (grade) => `Ciclo primario (${grade}° anno)`,
+    fleschVeryHard: 'Molto difficile - Accademico',
+    fleschHard: 'Difficile - Università',
+    fleschFairlyHard: 'Abbastanza difficile - 16+ anni',
+    fleschMedium: 'Medio - 13-15 anni',
+    fleschEasy: 'Facile - 12 anni',
+    fleschVeryEasy: 'Molto facile - 11 anni',
+    fleschExtremelyEasy: 'Estremamente facile - 10 anni',
+    amstadExtremelyHard: 'Estremamente difficile - Accademico',
+    amstadVeryHard: 'Molto difficile - Università',
+    amstadHard: 'Difficile - Diploma superiore',
+    amstadFairlyHard: 'Abbastanza difficile - 16+ anni',
+    amstadMedium: 'Medio - 13-15 anni',
+    amstadEasy: 'Facile - 12 anni',
+    amstadVeryEasy: 'Molto facile - 11 anni',
+    amstadExtremelyEasy: 'Estremamente facile - 10 anni',
+    fogVerySimple: 'Molto semplice - Comprensibile a tutti',
+    fogSimple: 'Semplice - Linguaggio quotidiano',
+    fogStandard: 'Standard - Livello giornale',
+    fogDemanding: 'Impegnativo - Letteratura tecnica',
+    fogDifficult: 'Difficile - Testi scientifici',
+    fogVeryDifficult: 'Molto difficile - Livello esperto',
+    lixVerySimple: 'Molto semplice - Libri per bambini',
+    lixSimple: 'Semplice - Narrativa',
+    lixMedium: 'Medio - Giornali',
+    lixDifficult: 'Difficile - Letteratura tecnica',
+    lixVeryDifficult: 'Molto difficile - Scientifico',
+    lixExtremelyDifficult: 'Estremamente difficile - Burocrazia',
+  },
+  es: {
+    tooLittleText: 'Texto demasiado corto',
+    preschool: 'Preescolar',
+    elementary: (grade) => `Escuela primaria (${grade}° grado)`,
+    middleSchool: (grade) => `Secundaria (${grade}° grado)`,
+    highSchool: (grade) => `Bachillerato (${grade}° grado)`,
+    university: 'Nivel universitario',
+    academic: 'Nivel académico',
+    lowerGrades: (grade) => `Ciclo primario (${grade}° grado)`,
+    fleschVeryHard: 'Muy difícil - Académico',
+    fleschHard: 'Difícil - Universidad',
+    fleschFairlyHard: 'Bastante difícil - 16+ años',
+    fleschMedium: 'Medio - 13-15 años',
+    fleschEasy: 'Fácil - 12 años',
+    fleschVeryEasy: 'Muy fácil - 11 años',
+    fleschExtremelyEasy: 'Extremadamente fácil - 10 años',
+    amstadExtremelyHard: 'Extremadamente difícil - Académico',
+    amstadVeryHard: 'Muy difícil - Universidad',
+    amstadHard: 'Difícil - Bachillerato',
+    amstadFairlyHard: 'Bastante difícil - 16+ años',
+    amstadMedium: 'Medio - 13-15 años',
+    amstadEasy: 'Fácil - 12 años',
+    amstadVeryEasy: 'Muy fácil - 11 años',
+    amstadExtremelyEasy: 'Extremadamente fácil - 10 años',
+    fogVerySimple: 'Muy simple - Comprensible por todos',
+    fogSimple: 'Simple - Lenguaje cotidiano',
+    fogStandard: 'Estándar - Nivel periódico',
+    fogDemanding: 'Exigente - Literatura técnica',
+    fogDifficult: 'Difícil - Textos científicos',
+    fogVeryDifficult: 'Muy difícil - Nivel experto',
+    lixVerySimple: 'Muy simple - Libros infantiles',
+    lixSimple: 'Simple - Ficción',
+    lixMedium: 'Medio - Periódicos',
+    lixDifficult: 'Difícil - Literatura técnica',
+    lixVeryDifficult: 'Muy difícil - Científico',
+    lixExtremelyDifficult: 'Extremadamente difícil - Burocracia',
+  },
+  nl: {
+    tooLittleText: 'Te weinig tekst',
+    preschool: 'Kleuterschool',
+    elementary: (grade) => `Basisschool (groep ${grade})`,
+    middleSchool: (grade) => `Middelbare school (klas ${grade})`,
+    highSchool: (grade) => `Bovenbouw (klas ${grade})`,
+    university: 'Universitair niveau',
+    academic: 'Academisch niveau',
+    lowerGrades: (grade) => `Onderbouw (groep ${grade})`,
+    fleschVeryHard: 'Zeer moeilijk - Academisch',
+    fleschHard: 'Moeilijk - Universiteit',
+    fleschFairlyHard: 'Vrij moeilijk - 16+ jaar',
+    fleschMedium: 'Gemiddeld - 13-15 jaar',
+    fleschEasy: 'Makkelijk - 12 jaar',
+    fleschVeryEasy: 'Zeer makkelijk - 11 jaar',
+    fleschExtremelyEasy: 'Extreem makkelijk - 10 jaar',
+    amstadExtremelyHard: 'Extreem moeilijk - Academisch',
+    amstadVeryHard: 'Zeer moeilijk - Universiteit',
+    amstadHard: 'Moeilijk - VWO/Gymnasium',
+    amstadFairlyHard: 'Vrij moeilijk - 16+ jaar',
+    amstadMedium: 'Gemiddeld - 13-15 jaar',
+    amstadEasy: 'Makkelijk - 12 jaar',
+    amstadVeryEasy: 'Zeer makkelijk - 11 jaar',
+    amstadExtremelyEasy: 'Extreem makkelijk - 10 jaar',
+    fogVerySimple: 'Zeer eenvoudig - Begrijpelijk voor iedereen',
+    fogSimple: 'Eenvoudig - Alledaagse taal',
+    fogStandard: 'Standaard - Krantenniveau',
+    fogDemanding: 'Veeleisend - Vakliteratuur',
+    fogDifficult: 'Moeilijk - Wetenschappelijke teksten',
+    fogVeryDifficult: 'Zeer moeilijk - Expertniveau',
+    lixVerySimple: 'Zeer eenvoudig - Kinderboeken',
+    lixSimple: 'Eenvoudig - Fictie',
+    lixMedium: 'Gemiddeld - Kranten',
+    lixDifficult: 'Moeilijk - Vakliteratuur',
+    lixVeryDifficult: 'Zeer moeilijk - Wetenschappelijk',
+    lixExtremelyDifficult: 'Extreem moeilijk - Bureaucratie',
+  },
+};
+
+/**
+ * Holt Übersetzungen für eine Sprache
+ */
+export function getTranslations(lang: SupportedLanguage) {
+  return translations[lang] || translations.de;
+}
 
 export interface SentenceAnalysis {
   text: string;
@@ -377,21 +657,22 @@ export interface FullAnalysisResult {
 /**
  * Interpretiert den Flesch-Wert (englische Skala)
  */
-export function interpretFleschScore(score: number): { interpretation: string; difficulty: Difficulty } {
+export function interpretFleschScore(score: number, lang: SupportedLanguage = 'de'): { interpretation: string; difficulty: Difficulty } {
+  const t = getTranslations(lang);
   if (score < 30) {
-    return { interpretation: 'Sehr schwer - Akademiker', difficulty: 'sehr-schwer' };
+    return { interpretation: t.fleschVeryHard, difficulty: 'sehr-schwer' };
   } else if (score < 50) {
-    return { interpretation: 'Schwer - Studium', difficulty: 'schwer' };
+    return { interpretation: t.fleschHard, difficulty: 'schwer' };
   } else if (score < 60) {
-    return { interpretation: 'Mittelschwer - 16+ Jahre', difficulty: 'mittelschwer' };
+    return { interpretation: t.fleschFairlyHard, difficulty: 'mittelschwer' };
   } else if (score < 70) {
-    return { interpretation: 'Mittel - 13-15 Jahre', difficulty: 'mittel' };
+    return { interpretation: t.fleschMedium, difficulty: 'mittel' };
   } else if (score < 80) {
-    return { interpretation: 'Leicht - 12 Jahre', difficulty: 'leicht' };
+    return { interpretation: t.fleschEasy, difficulty: 'leicht' };
   } else if (score < 90) {
-    return { interpretation: 'Sehr leicht - 11 Jahre', difficulty: 'sehr-leicht' };
+    return { interpretation: t.fleschVeryEasy, difficulty: 'sehr-leicht' };
   } else {
-    return { interpretation: 'Extrem leicht - 10 Jahre', difficulty: 'extrem-leicht' };
+    return { interpretation: t.fleschExtremelyEasy, difficulty: 'extrem-leicht' };
   }
 }
 
@@ -399,23 +680,24 @@ export function interpretFleschScore(score: number): { interpretation: string; d
  * Interpretiert den Amstad-Wert (deutsche Skala)
  * Die Amstad-Formel liefert andere Werte als die englische Flesch-Formel
  */
-export function interpretAmstadScore(score: number): { interpretation: string; difficulty: Difficulty } {
+export function interpretAmstadScore(score: number, lang: SupportedLanguage = 'de'): { interpretation: string; difficulty: Difficulty } {
+  const t = getTranslations(lang);
   if (score < 0) {
-    return { interpretation: 'Extrem schwer - Akademiker', difficulty: 'sehr-schwer' };
+    return { interpretation: t.amstadExtremelyHard, difficulty: 'sehr-schwer' };
   } else if (score < 30) {
-    return { interpretation: 'Sehr schwer - Studium', difficulty: 'sehr-schwer' };
+    return { interpretation: t.amstadVeryHard, difficulty: 'sehr-schwer' };
   } else if (score < 50) {
-    return { interpretation: 'Schwer - Matura/Abitur', difficulty: 'schwer' };
+    return { interpretation: t.amstadHard, difficulty: 'schwer' };
   } else if (score < 60) {
-    return { interpretation: 'Mittelschwer - 16+ Jahre', difficulty: 'mittelschwer' };
+    return { interpretation: t.amstadFairlyHard, difficulty: 'mittelschwer' };
   } else if (score < 70) {
-    return { interpretation: 'Mittel - 13-15 Jahre', difficulty: 'mittel' };
+    return { interpretation: t.amstadMedium, difficulty: 'mittel' };
   } else if (score < 80) {
-    return { interpretation: 'Leicht - 12 Jahre', difficulty: 'leicht' };
+    return { interpretation: t.amstadEasy, difficulty: 'leicht' };
   } else if (score < 90) {
-    return { interpretation: 'Sehr leicht - 11 Jahre', difficulty: 'sehr-leicht' };
+    return { interpretation: t.amstadVeryEasy, difficulty: 'sehr-leicht' };
   } else {
-    return { interpretation: 'Extrem leicht - 10 Jahre', difficulty: 'extrem-leicht' };
+    return { interpretation: t.amstadExtremelyEasy, difficulty: 'extrem-leicht' };
   }
 }
 
@@ -423,7 +705,7 @@ export function interpretAmstadScore(score: number): { interpretation: string; d
  * Berechnet den Flesch-Lesbarkeitsindex
  * Enthält sowohl die englische Originalformel als auch die deutsche Amstad-Formel
  */
-export function calculateFlesch(text: string): FleschResult {
+export function calculateFlesch(text: string, lang: SupportedLanguage = 'de'): FleschResult {
   const normalizedText = normalizeAbbreviations(text);
   const words = getWords(normalizedText);
   const wordCount = words.length;
@@ -448,8 +730,8 @@ export function calculateFlesch(text: string): FleschResult {
   // FRE_deutsch = 180 - ASL - (58.5 × ASW)
   const scoreAmstad = 180 - avgWordsPerSentence - (58.5 * avgSyllablesPerWord);
 
-  const { interpretation, difficulty } = interpretFleschScore(score);
-  const { interpretation: interpretationAmstad, difficulty: difficultyAmstad } = interpretAmstadScore(scoreAmstad);
+  const { interpretation, difficulty } = interpretFleschScore(score, lang);
+  const { interpretation: interpretationAmstad, difficulty: difficultyAmstad } = interpretAmstadScore(scoreAmstad, lang);
 
   return {
     score: Math.round(score * 10) / 10,
@@ -472,14 +754,15 @@ export function calculateFlesch(text: string): FleschResult {
  * Gibt die benötigten Schuljahre an (US-System)
  * Formel: FKGL = (0.39 × ASL) + (11.8 × ASW) - 15.59
  */
-export function calculateFleschKincaid(text: string): FleschKincaidResult {
+export function calculateFleschKincaid(text: string, lang: SupportedLanguage = 'de'): FleschKincaidResult {
+  const t = getTranslations(lang);
   const normalizedText = normalizeAbbreviations(text);
   const words = getWords(normalizedText);
   const wordCount = words.length;
   const sentenceCount = countSentences(text);
 
   if (wordCount === 0) {
-    return { gradeLevel: 0, interpretation: 'Zu wenig Text' };
+    return { gradeLevel: 0, interpretation: t.tooLittleText };
   }
 
   let syllableCount = 0;
@@ -496,15 +779,15 @@ export function calculateFleschKincaid(text: string): FleschKincaidResult {
 
   let interpretation: string;
   if (gradeLevel < 1) {
-    interpretation = 'Vorschule';
+    interpretation = t.preschool;
   } else if (gradeLevel < 6) {
-    interpretation = `Grundschule (${Math.round(gradeLevel)}. Klasse)`;
+    interpretation = t.elementary(Math.round(gradeLevel));
   } else if (gradeLevel < 9) {
-    interpretation = `Mittelstufe (${Math.round(gradeLevel)}. Klasse)`;
+    interpretation = t.middleSchool(Math.round(gradeLevel));
   } else if (gradeLevel < 13) {
-    interpretation = `Oberstufe (${Math.round(gradeLevel)}. Klasse)`;
+    interpretation = t.highSchool(Math.round(gradeLevel));
   } else {
-    interpretation = 'Universitätsniveau';
+    interpretation = t.university;
   }
 
   return {
@@ -522,14 +805,15 @@ export function calculateFleschKincaid(text: string): FleschKincaidResult {
  * IW = Prozent Wörter mit 6+ Buchstaben
  * ES = Prozent einsilbige Wörter
  */
-export function calculateWiener(text: string): WienerResult {
+export function calculateWiener(text: string, lang: SupportedLanguage = 'de'): WienerResult {
+  const t = getTranslations(lang);
   const normalizedText = normalizeAbbreviations(text);
   const words = getWords(normalizedText);
   const wordCount = words.length;
   const sentenceCount = countSentences(text);
 
   if (wordCount === 0) {
-    return { score: 0, schoolYear: 1, interpretation: 'Zu wenig Text' };
+    return { score: 0, schoolYear: 1, interpretation: t.tooLittleText };
   }
 
   const threeOrMoreSyllables = words.filter(w => countSyllables(w) >= 3).length;
@@ -546,15 +830,15 @@ export function calculateWiener(text: string): WienerResult {
 
   let interpretation: string;
   if (schoolYear <= 4) {
-    interpretation = `Grundschule (${schoolYear}. Klasse)`;
+    interpretation = t.elementary(schoolYear);
   } else if (schoolYear <= 6) {
-    interpretation = `Unterstufe (${schoolYear}. Klasse)`;
+    interpretation = t.lowerGrades(schoolYear);
   } else if (schoolYear <= 9) {
-    interpretation = `Mittelstufe (${schoolYear}. Klasse)`;
+    interpretation = t.middleSchool(schoolYear);
   } else if (schoolYear <= 12) {
-    interpretation = `Oberstufe (${schoolYear}. Klasse)`;
+    interpretation = t.highSchool(schoolYear);
   } else {
-    interpretation = 'Akademisches Niveau';
+    interpretation = t.academic;
   }
 
   return {
@@ -571,14 +855,15 @@ export function calculateWiener(text: string): WienerResult {
  * ASL = durchschnittliche Satzlänge
  * PHW = Prozent "harter" Wörter (3+ Silben)
  */
-export function calculateGunningFog(text: string): GunningFogResult {
+export function calculateGunningFog(text: string, lang: SupportedLanguage = 'de'): GunningFogResult {
+  const t = getTranslations(lang);
   const normalizedText = normalizeAbbreviations(text);
   const words = getWords(normalizedText);
   const wordCount = words.length;
   const sentenceCount = countSentences(text);
 
   if (wordCount === 0) {
-    return { score: 0, schoolYears: 0, interpretation: 'Zu wenig Text' };
+    return { score: 0, schoolYears: 0, interpretation: t.tooLittleText };
   }
 
   const complexWords = countComplexWords(words);
@@ -590,17 +875,17 @@ export function calculateGunningFog(text: string): GunningFogResult {
 
   let interpretation: string;
   if (score < 6) {
-    interpretation = 'Sehr einfach - für jeden verständlich';
+    interpretation = t.fogVerySimple;
   } else if (score < 8) {
-    interpretation = 'Einfach - Alltagssprache';
+    interpretation = t.fogSimple;
   } else if (score < 10) {
-    interpretation = 'Standard - Zeitungsniveau';
+    interpretation = t.fogStandard;
   } else if (score < 12) {
-    interpretation = 'Anspruchsvoll - Fachliteratur';
+    interpretation = t.fogDemanding;
   } else if (score < 14) {
-    interpretation = 'Schwierig - Wissenschaftliche Texte';
+    interpretation = t.fogDifficult;
   } else {
-    interpretation = 'Sehr schwierig - Expertenniveau';
+    interpretation = t.fogVeryDifficult;
   }
 
   return {
@@ -614,14 +899,15 @@ export function calculateGunningFog(text: string): GunningFogResult {
  * LIX Lesbarkeitsindex (schwedische Formel, gut für viele Sprachen)
  * Formel: (Wörter / Sätze) + (lange Wörter × 100 / Wörter)
  */
-export function calculateLix(text: string): LixResult {
+export function calculateLix(text: string, lang: SupportedLanguage = 'de'): LixResult {
+  const t = getTranslations(lang);
   const normalizedText = normalizeAbbreviations(text);
   const words = getWords(normalizedText);
   const wordCount = words.length;
   const sentenceCount = countSentences(text);
 
   if (wordCount === 0) {
-    return { score: 0, interpretation: 'Zu wenig Text', difficulty: 'mittel' };
+    return { score: 0, interpretation: t.tooLittleText, difficulty: 'mittel' };
   }
 
   const longWords = countLongWords(words);
@@ -631,22 +917,22 @@ export function calculateLix(text: string): LixResult {
   let difficulty: Difficulty;
 
   if (score < 25) {
-    interpretation = 'Sehr einfach - Kinderbücher';
+    interpretation = t.lixVerySimple;
     difficulty = 'extrem-leicht';
   } else if (score < 35) {
-    interpretation = 'Einfach - Belletristik';
+    interpretation = t.lixSimple;
     difficulty = 'sehr-leicht';
   } else if (score < 45) {
-    interpretation = 'Mittel - Zeitungen';
+    interpretation = t.lixMedium;
     difficulty = 'leicht';
   } else if (score < 55) {
-    interpretation = 'Schwierig - Fachliteratur';
+    interpretation = t.lixDifficult;
     difficulty = 'mittelschwer';
   } else if (score < 65) {
-    interpretation = 'Sehr schwierig - Wissenschaft';
+    interpretation = t.lixVeryDifficult;
     difficulty = 'schwer';
   } else {
-    interpretation = 'Extrem schwierig - Bürokratie';
+    interpretation = t.lixExtremelyDifficult;
     difficulty = 'sehr-schwer';
   }
 
@@ -777,13 +1063,13 @@ export function analyzeByParagraphs(text: string): ParagraphAnalysis[] {
 /**
  * Vollständige Textanalyse mit allen Metriken
  */
-export function analyzeText(text: string): FullAnalysisResult {
+export function analyzeText(text: string, lang: SupportedLanguage = 'de'): FullAnalysisResult {
   return {
-    flesch: calculateFlesch(text),
-    fleschKincaid: calculateFleschKincaid(text),
-    wiener: calculateWiener(text),
-    gunningFog: calculateGunningFog(text),
-    lix: calculateLix(text),
+    flesch: calculateFlesch(text, lang),
+    fleschKincaid: calculateFleschKincaid(text, lang),
+    wiener: calculateWiener(text, lang),
+    gunningFog: calculateGunningFog(text, lang),
+    lix: calculateLix(text, lang),
     sentences: analyzeSentences(text),
     paragraphs: analyzeByParagraphs(text),
   };
