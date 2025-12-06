@@ -112,6 +112,7 @@ export interface SentenceAnalysis {
 
 export interface FleschResult {
   score: number;
+  scoreAmstad: number;
   wordCount: number;
   sentenceCount: number;
   syllableCount: number;
@@ -119,7 +120,14 @@ export interface FleschResult {
   avgSyllablesPerWord: number;
   uniqueWords: number;
   interpretation: string;
+  interpretationAmstad: string;
   difficulty: Difficulty;
+  difficultyAmstad: Difficulty;
+}
+
+export interface FleschKincaidResult {
+  gradeLevel: number;
+  interpretation: string;
 }
 
 export interface WienerResult {
@@ -142,6 +150,7 @@ export interface LixResult {
 
 export interface FullAnalysisResult {
   flesch: FleschResult;
+  fleschKincaid: FleschKincaidResult;
   wiener: WienerResult;
   gunningFog: GunningFogResult;
   lix: LixResult;
@@ -149,28 +158,53 @@ export interface FullAnalysisResult {
 }
 
 /**
- * Interpretiert den Flesch-Wert
+ * Interpretiert den Flesch-Wert (englische Skala)
  */
 export function interpretFleschScore(score: number): { interpretation: string; difficulty: Difficulty } {
   if (score < 30) {
-    return { interpretation: 'Sehr schwer - Akademische Texte', difficulty: 'sehr-schwer' };
+    return { interpretation: 'Sehr schwer - Akademiker', difficulty: 'sehr-schwer' };
   } else if (score < 50) {
-    return { interpretation: 'Schwer - Wissenschaftliche Texte', difficulty: 'schwer' };
+    return { interpretation: 'Schwer - Studium', difficulty: 'schwer' };
   } else if (score < 60) {
-    return { interpretation: 'Mittelschwer - Qualitätszeitungen', difficulty: 'mittelschwer' };
+    return { interpretation: 'Mittelschwer - 16+ Jahre', difficulty: 'mittelschwer' };
   } else if (score < 70) {
-    return { interpretation: 'Mittel - Boulevardzeitungen', difficulty: 'mittel' };
+    return { interpretation: 'Mittel - 13-15 Jahre', difficulty: 'mittel' };
   } else if (score < 80) {
-    return { interpretation: 'Leicht - Werbetexte', difficulty: 'leicht' };
+    return { interpretation: 'Leicht - 12 Jahre', difficulty: 'leicht' };
   } else if (score < 90) {
-    return { interpretation: 'Sehr leicht - Comics', difficulty: 'sehr-leicht' };
+    return { interpretation: 'Sehr leicht - 11 Jahre', difficulty: 'sehr-leicht' };
   } else {
-    return { interpretation: 'Extrem leicht - Grundschulniveau', difficulty: 'extrem-leicht' };
+    return { interpretation: 'Extrem leicht - 10 Jahre', difficulty: 'extrem-leicht' };
   }
 }
 
 /**
- * Berechnet den Flesch-Lesbarkeitsindex für deutschen Text
+ * Interpretiert den Amstad-Wert (deutsche Skala)
+ * Die Amstad-Formel liefert andere Werte als die englische Flesch-Formel
+ */
+export function interpretAmstadScore(score: number): { interpretation: string; difficulty: Difficulty } {
+  if (score < 0) {
+    return { interpretation: 'Extrem schwer - Akademiker', difficulty: 'sehr-schwer' };
+  } else if (score < 30) {
+    return { interpretation: 'Sehr schwer - Studium', difficulty: 'sehr-schwer' };
+  } else if (score < 50) {
+    return { interpretation: 'Schwer - Matura/Abitur', difficulty: 'schwer' };
+  } else if (score < 60) {
+    return { interpretation: 'Mittelschwer - 16+ Jahre', difficulty: 'mittelschwer' };
+  } else if (score < 70) {
+    return { interpretation: 'Mittel - 13-15 Jahre', difficulty: 'mittel' };
+  } else if (score < 80) {
+    return { interpretation: 'Leicht - 12 Jahre', difficulty: 'leicht' };
+  } else if (score < 90) {
+    return { interpretation: 'Sehr leicht - 11 Jahre', difficulty: 'sehr-leicht' };
+  } else {
+    return { interpretation: 'Extrem leicht - 10 Jahre', difficulty: 'extrem-leicht' };
+  }
+}
+
+/**
+ * Berechnet den Flesch-Lesbarkeitsindex
+ * Enthält sowohl die englische Originalformel als auch die deutsche Amstad-Formel
  */
 export function calculateFlesch(text: string): FleschResult {
   const normalizedText = normalizeAbbreviations(text);
@@ -189,13 +223,20 @@ export function calculateFlesch(text: string): FleschResult {
   const avgWordsPerSentence = wordCount / sentenceCount;
   const avgSyllablesPerWord = syllableCount / wordCount;
 
-  // Flesch-Formel (angepasst für Deutsch)
+  // Englische Flesch-Formel (Rudolf Flesch, 1948)
+  // FRE = 206.835 - (1.015 × ASL) - (84.6 × ASW)
   const score = 206.835 - (1.015 * avgWordsPerSentence) - (84.6 * avgSyllablesPerWord);
 
+  // Deutsche Amstad-Formel (Toni Amstad, 1978)
+  // FRE_deutsch = 180 - ASL - (58.5 × ASW)
+  const scoreAmstad = 180 - avgWordsPerSentence - (58.5 * avgSyllablesPerWord);
+
   const { interpretation, difficulty } = interpretFleschScore(score);
+  const { interpretation: interpretationAmstad, difficulty: difficultyAmstad } = interpretAmstadScore(scoreAmstad);
 
   return {
     score: Math.round(score * 10) / 10,
+    scoreAmstad: Math.round(scoreAmstad * 10) / 10,
     wordCount,
     sentenceCount,
     syllableCount,
@@ -203,12 +244,61 @@ export function calculateFlesch(text: string): FleschResult {
     avgSyllablesPerWord: Math.round(avgSyllablesPerWord * 100) / 100,
     uniqueWords: uniqueWordsSet.size,
     interpretation,
+    interpretationAmstad,
     difficulty,
+    difficultyAmstad,
+  };
+}
+
+/**
+ * Flesch-Kincaid Grade Level
+ * Gibt die benötigten Schuljahre an (US-System)
+ * Formel: FKGL = (0.39 × ASL) + (11.8 × ASW) - 15.59
+ */
+export function calculateFleschKincaid(text: string): FleschKincaidResult {
+  const normalizedText = normalizeAbbreviations(text);
+  const words = getWords(normalizedText);
+  const wordCount = words.length;
+  const sentenceCount = countSentences(text);
+
+  if (wordCount === 0) {
+    return { gradeLevel: 0, interpretation: 'Zu wenig Text' };
+  }
+
+  let syllableCount = 0;
+  for (const word of words) {
+    syllableCount += countSyllables(word);
+  }
+
+  const avgWordsPerSentence = wordCount / sentenceCount;
+  const avgSyllablesPerWord = syllableCount / wordCount;
+
+  // Flesch-Kincaid Grade Level Formel
+  const gradeLevel = (0.39 * avgWordsPerSentence) + (11.8 * avgSyllablesPerWord) - 15.59;
+  const roundedGrade = Math.round(gradeLevel * 10) / 10;
+
+  let interpretation: string;
+  if (gradeLevel < 1) {
+    interpretation = 'Vorschule';
+  } else if (gradeLevel < 6) {
+    interpretation = `Grundschule (${Math.round(gradeLevel)}. Klasse)`;
+  } else if (gradeLevel < 9) {
+    interpretation = `Mittelstufe (${Math.round(gradeLevel)}. Klasse)`;
+  } else if (gradeLevel < 13) {
+    interpretation = `Oberstufe (${Math.round(gradeLevel)}. Klasse)`;
+  } else {
+    interpretation = 'Universitätsniveau';
+  }
+
+  return {
+    gradeLevel: roundedGrade,
+    interpretation,
   };
 }
 
 /**
  * Wiener Sachtextformel (WSTF) - speziell für deutsche Texte
+ * Entwickelt von Richard Bamberger und Erich Vanecek
  * Formel: 0.1935 × MS + 0.1672 × SL + 0.1297 × IW - 0.0327 × ES - 0.875
  * MS = Prozent Wörter mit 3+ Silben
  * SL = durchschnittliche Satzlänge
@@ -235,7 +325,7 @@ export function calculateWiener(text: string): WienerResult {
   const ES = (oneSyllable / wordCount) * 100;
 
   const score = 0.1935 * MS + 0.1672 * SL + 0.1297 * IW - 0.0327 * ES - 0.875;
-  const schoolYear = Math.max(1, Math.min(13, Math.round(score)));
+  const schoolYear = Math.max(1, Math.min(15, Math.round(score)));
 
   let interpretation: string;
   if (schoolYear <= 4) {
@@ -259,6 +349,7 @@ export function calculateWiener(text: string): WienerResult {
 
 /**
  * Gunning-Fog-Index
+ * Entwickelt von Robert Gunning (1952)
  * Formel: 0.4 × (ASL + PHW)
  * ASL = durchschnittliche Satzlänge
  * PHW = Prozent "harter" Wörter (3+ Silben)
@@ -351,9 +442,9 @@ export function calculateLix(text: string): LixResult {
 
 /**
  * Extrahiert und analysiert einzelne Sätze
+ * Verwendet die deutsche Amstad-Formel für die Satzanalyse
  */
 export function analyzeSentences(text: string): SentenceAnalysis[] {
-  const normalized = normalizeAbbreviations(text);
   // Sätze aufteilen, aber Satzzeichen für Anzeige behalten
   const sentenceTexts = text.split(/(?<=[.!?])\s+/).filter(s => s.trim().length > 0);
 
@@ -369,11 +460,10 @@ export function analyzeSentences(text: string): SentenceAnalysis[] {
 
     const avgSyllablesPerWord = wordCount > 0 ? syllableCount / wordCount : 0;
 
-    // Mini-Flesch für einzelnen Satz (vereinfacht)
-    // Basiert hauptsächlich auf Wortlänge und Silben
-    const score = 206.835 - (1.015 * wordCount) - (84.6 * avgSyllablesPerWord);
+    // Deutsche Amstad-Formel für einzelnen Satz
+    const score = 180 - wordCount - (58.5 * avgSyllablesPerWord);
 
-    const { difficulty } = interpretFleschScore(score);
+    const { difficulty } = interpretAmstadScore(score);
 
     return {
       text: sentenceText,
@@ -392,6 +482,7 @@ export function analyzeSentences(text: string): SentenceAnalysis[] {
 export function analyzeText(text: string): FullAnalysisResult {
   return {
     flesch: calculateFlesch(text),
+    fleschKincaid: calculateFleschKincaid(text),
     wiener: calculateWiener(text),
     gunningFog: calculateGunningFog(text),
     lix: calculateLix(text),

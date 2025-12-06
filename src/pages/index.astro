@@ -18,16 +18,57 @@ import FleschAnalyzer from '../components/FleschAnalyzer.astro';
   </section>
 
   <section id="formel" class="mb-12 scroll-mt-20">
-    <h2 class="mb-4 text-2xl font-bold">Die Flesch-Formel</h2>
-    <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-      <p class="mb-4 dark:text-gray-300">
-        Die Flesch-Lesbarkeitsformel wurde 1948 von Rudolf Flesch entwickelt und berechnet die Lesbarkeit eines Textes anhand von Satzlänge und Silbenanzahl:
-      </p>
-      <div class="mb-4 rounded-lg bg-gray-100 p-4 font-mono text-sm dark:bg-gray-700 dark:text-gray-200">
-        Flesch-Wert = 206.835 - (1.015 × Wörter/Sätze) - (84.6 × Silben/Wörter)
+    <h2 class="mb-4 text-2xl font-bold">Die Lesbarkeitsformeln</h2>
+    <div class="space-y-4">
+      <!-- Flesch Original -->
+      <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+        <h3 class="mb-3 text-lg font-semibold dark:text-white">Flesch Reading Ease (Original)</h3>
+        <p class="mb-3 text-sm text-gray-500 dark:text-gray-400">Entwickelt von Rudolf Flesch (1948) für englische Texte</p>
+        <div class="mb-4 rounded-lg bg-gray-100 p-4 font-mono text-sm dark:bg-gray-700 dark:text-gray-200">
+          FRE = 206.835 - (1.015 × Wörter/Sätze) - (84.6 × Silben/Wörter)
+        </div>
       </div>
-      <p class="dark:text-gray-300">
-        Je höher der Wert, desto leichter ist der Text zu lesen. Ein Wert von 60-70 entspricht etwa dem Niveau einer Tageszeitung.
+
+      <!-- Amstad Deutsche Formel -->
+      <div class="rounded-xl border border-blue-200 bg-blue-50 p-6 shadow-sm dark:border-blue-800 dark:bg-blue-900/20">
+        <div class="mb-2 flex items-center gap-2">
+          <h3 class="text-lg font-semibold text-blue-900 dark:text-blue-100">Flesch-Index nach Amstad (Deutsch)</h3>
+          <span class="rounded bg-blue-200 px-2 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-800 dark:text-blue-200">Empfohlen</span>
+        </div>
+        <p class="mb-3 text-sm text-blue-700 dark:text-blue-300">Angepasst von Toni Amstad (1978) für deutsche Texte</p>
+        <div class="mb-4 rounded-lg bg-white p-4 font-mono text-sm dark:bg-gray-800 dark:text-gray-200">
+          FRE<sub>deutsch</sub> = 180 - Wörter/Sätze - (58.5 × Silben/Wörter)
+        </div>
+        <p class="text-sm text-blue-800 dark:text-blue-200">
+          Diese Formel berücksichtigt, dass deutsche Wörter im Schnitt länger sind als englische.
+        </p>
+      </div>
+
+      <!-- Weitere Formeln -->
+      <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+        <h3 class="mb-4 text-lg font-semibold dark:text-white">Weitere Indizes</h3>
+        <div class="grid gap-4 md:grid-cols-2">
+          <div>
+            <h4 class="font-medium dark:text-white">Wiener Sachtextformel</h4>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Richard Bamberger & Erich Vanecek - speziell für deutsche Sachtexte</p>
+          </div>
+          <div>
+            <h4 class="font-medium dark:text-white">Flesch-Kincaid Grade Level</h4>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Gibt die benötigten Schuljahre an</p>
+          </div>
+          <div>
+            <h4 class="font-medium dark:text-white">Gunning-Fog-Index</h4>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Robert Gunning (1952) - basiert auf komplexen Wörtern</p>
+          </div>
+          <div>
+            <h4 class="font-medium dark:text-white">LIX Lesbarkeitsindex</h4>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Schwedische Formel, sprachübergreifend einsetzbar</p>
+          </div>
+        </div>
+      </div>
+
+      <p class="text-sm text-gray-500 dark:text-gray-400">
+        Mehr zu Lesbarkeitsindizes auf <a href="https://de.wikipedia.org/wiki/Lesbarkeitsindex" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline dark:text-blue-400">Wikipedia</a>.
       </p>
     </div>
   </section>
@@ -66,6 +107,7 @@ import FleschAnalyzer from '../components/FleschAnalyzer.astro';
           <tr>
             <th class="px-4 py-3 text-left dark:text-gray-200">Flesch-Wert</th>
             <th class="px-4 py-3 text-left dark:text-gray-200">Schwierigkeit</th>
+            <th class="px-4 py-3 text-left dark:text-gray-200">Zielgruppe</th>
             <th class="px-4 py-3 text-left dark:text-gray-200">Beispiel</th>
           </tr>
         </thead>
@@ -73,36 +115,43 @@ import FleschAnalyzer from '../components/FleschAnalyzer.astro';
           <tr>
             <td class="px-4 py-3 dark:text-gray-300">0-30</td>
             <td class="px-4 py-3 font-medium text-red-600 dark:text-red-400">Sehr schwer</td>
-            <td class="px-4 py-3 text-gray-600 dark:text-gray-400">Akademische Texte</td>
+            <td class="px-4 py-3 text-gray-600 dark:text-gray-400">Akademiker</td>
+            <td class="px-4 py-3 text-gray-600 dark:text-gray-400">Wissenschaftliche Arbeiten</td>
           </tr>
           <tr>
             <td class="px-4 py-3 dark:text-gray-300">30-50</td>
             <td class="px-4 py-3 font-medium text-orange-600 dark:text-orange-400">Schwer</td>
-            <td class="px-4 py-3 text-gray-600 dark:text-gray-400">Wissenschaftliche Texte</td>
+            <td class="px-4 py-3 text-gray-600 dark:text-gray-400">Studium / Matura</td>
+            <td class="px-4 py-3 text-gray-600 dark:text-gray-400">Fachbücher</td>
           </tr>
           <tr>
             <td class="px-4 py-3 dark:text-gray-300">50-60</td>
             <td class="px-4 py-3 font-medium text-yellow-600 dark:text-yellow-400">Mittelschwer</td>
+            <td class="px-4 py-3 text-gray-600 dark:text-gray-400">16+ Jahre</td>
             <td class="px-4 py-3 text-gray-600 dark:text-gray-400">Qualitätszeitungen</td>
           </tr>
           <tr>
             <td class="px-4 py-3 dark:text-gray-300">60-70</td>
             <td class="px-4 py-3 font-medium text-lime-600 dark:text-lime-400">Mittel</td>
+            <td class="px-4 py-3 text-gray-600 dark:text-gray-400">13-15 Jahre</td>
             <td class="px-4 py-3 text-gray-600 dark:text-gray-400">Boulevardzeitungen</td>
           </tr>
           <tr>
             <td class="px-4 py-3 dark:text-gray-300">70-80</td>
             <td class="px-4 py-3 font-medium text-green-600 dark:text-green-400">Leicht</td>
+            <td class="px-4 py-3 text-gray-600 dark:text-gray-400">12 Jahre</td>
             <td class="px-4 py-3 text-gray-600 dark:text-gray-400">Werbetexte</td>
           </tr>
           <tr>
             <td class="px-4 py-3 dark:text-gray-300">80-90</td>
             <td class="px-4 py-3 font-medium text-emerald-600 dark:text-emerald-400">Sehr leicht</td>
-            <td class="px-4 py-3 text-gray-600 dark:text-gray-400">Comics</td>
+            <td class="px-4 py-3 text-gray-600 dark:text-gray-400">11 Jahre</td>
+            <td class="px-4 py-3 text-gray-600 dark:text-gray-400">Comics, Unterhaltung</td>
           </tr>
           <tr>
             <td class="px-4 py-3 dark:text-gray-300">90-100</td>
             <td class="px-4 py-3 font-medium text-teal-600 dark:text-teal-400">Extrem leicht</td>
+            <td class="px-4 py-3 text-gray-600 dark:text-gray-400">10 Jahre</td>
             <td class="px-4 py-3 text-gray-600 dark:text-gray-400">Grundschulniveau</td>
           </tr>
         </tbody>

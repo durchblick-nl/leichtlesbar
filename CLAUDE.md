@@ -1,6 +1,6 @@
 # Leichtlesbar.ch
 
-Webseite zur Messung der Lesbarkeit von Texten mittels Flesch-Formel.
+Webseite zur Messung der Lesbarkeit von Texten mittels verschiedener Lesbarkeitsformeln.
 
 ## Tech Stack
 
@@ -14,10 +14,15 @@ Webseite zur Messung der Lesbarkeit von Texten mittels Flesch-Formel.
 ```
 src/
 ├── components/     # Wiederverwendbare Astro/UI-Komponenten
+│   └── FleschAnalyzer.astro  # Hauptkomponente für Textanalyse
 ├── layouts/        # Seiten-Layouts
+│   └── Layout.astro          # Basis-Layout mit Navigation und Dark Mode
 ├── pages/          # Astro-Seiten (File-based Routing)
+│   └── index.astro           # Hauptseite mit allen Inhalten
 ├── styles/         # Globale CSS-Dateien
-└── utils/          # TypeScript Utilities (Flesch-Berechnung etc.)
+│   └── global.css            # Tailwind-Import und Dark Mode Variant
+└── utils/          # TypeScript Utilities
+    └── flesch.ts             # Alle Lesbarkeitsberechnungen
 ```
 
 ## Entwicklung
@@ -28,21 +33,60 @@ npm run build    # Produktion-Build erstellen
 npm run preview  # Produktion-Build lokal testen
 ```
 
-## Kernfunktionalität
+## Implementierte Lesbarkeitsformeln
 
-Die Flesch-Lesbarkeitsformel berechnet sich wie folgt:
+### Flesch-Amstad (Deutsche Formel, Hauptmetrik)
+Entwickelt von Toni Amstad 1978 für deutsche Texte:
 ```
-Flesch-Wert = 206.835 - (1.015 × Wörter/Sätze) - (84.6 × Silben/Wörter)
+FRE = 180 - ASL - (58.5 × ASW)
+```
+- ASL = durchschnittliche Satzlänge (Wörter pro Satz)
+- ASW = durchschnittliche Silben pro Wort
+
+### Flesch-Kincaid Grade Level
+US-Schulklassenstufe (J.P. Kincaid, 1975):
+```
+FKGL = (0.39 × ASL) + (11.8 × ASW) - 15.59
 ```
 
-### Flesch-Wert Interpretation
-- 0-30: Sehr schwer (Akademische Texte)
-- 30-50: Schwer (Wissenschaftliche Texte)
-- 50-60: Mittelschwer (Qualitätszeitungen)
-- 60-70: Mittel (Boulevardzeitungen)
-- 70-80: Leicht (Werbetexte)
-- 80-90: Sehr leicht (Comics)
-- 90-100: Extrem leicht (Grundschulniveau)
+### Wiener Sachtextformel
+Für deutsche Sachtexte entwickelt (Bamberger & Vanecek, 1984):
+```
+WSTF = 0.1935 × MS + 0.1672 × SL + 0.1297 × IW - 0.0327 × ES - 0.875
+```
+
+### Gunning-Fog-Index
+Von Robert Gunning (1952):
+```
+FOG = 0.4 × (ASL + (komplexe Wörter / Wörter × 100))
+```
+
+### LIX Lesbarkeitsindex
+Schwedischer Index von Carl-Hugo Björnsson (1968):
+```
+LIX = (Wörter / Sätze) + (lange Wörter × 100 / Wörter)
+```
+
+## Flesch-Wert Interpretation
+
+| Score | Schwierigkeit | Beispiel | Zielgruppe |
+|-------|---------------|----------|------------|
+| 0-30 | Sehr schwer | Akademische Texte | Akademiker |
+| 30-50 | Schwer | Wissenschaftliche Texte | Studenten |
+| 50-60 | Mittelschwer | Qualitätszeitungen | 16+ Jahre |
+| 60-70 | Mittel | Boulevardzeitungen | 13-15 Jahre |
+| 70-80 | Leicht | Werbetexte | 11-12 Jahre |
+| 80-90 | Sehr leicht | Comics | 10-11 Jahre |
+| 90-100 | Extrem leicht | Grundschulniveau | Unter 10 Jahre |
+
+## Features
+
+- **Echtzeit-Analyse**: Automatische Berechnung während der Texteingabe (debounced)
+- **Multi-Metrik**: 5 verschiedene Lesbarkeitsindizes
+- **Satzanalyse**: Farbliche Markierung einzelner Sätze nach Schwierigkeit
+- **Dark Mode**: System-Präferenz mit Toggle und localStorage-Persistenz
+- **Datenschutz**: Alle Berechnungen erfolgen client-seitig im Browser
+- **Responsive**: Mobile-first Design
 
 ## Design-Prinzipien
 
@@ -50,6 +94,7 @@ Flesch-Wert = 206.835 - (1.015 × Wörter/Sätze) - (84.6 × Silben/Wörter)
 - Minimalistisch und benutzerfreundlich
 - Barrierefreiheit (WCAG 2.1 AA)
 - Deutsche Sprache als Primärsprache
+- Client-seitige Verarbeitung (keine Server-Übertragung)
 
 ## Cloudflare Pages Deployment
 
