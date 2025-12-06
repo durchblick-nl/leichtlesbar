@@ -90,21 +90,22 @@ const examples = getExamples(lang);
             <svg viewBox="0 0 200 120" class="w-full" role="img" aria-label="Lesbarkeits-Anzeige">
               <title>Lesbarkeits-Gauge</title>
               <defs>
-                <!-- Skala: -100 bis 100, Mitte (0) bei 50% -->
+                <!-- Skala: 0 bis 100, angepasst an Flesch-Interpretation -->
                 <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
                   <stop offset="0%" stop-color="#7f1d1d" />
-                  <stop offset="25%" stop-color="#dc2626" />
-                  <stop offset="40%" stop-color="#ea580c" />
+                  <stop offset="20%" stop-color="#dc2626" />
+                  <stop offset="35%" stop-color="#ea580c" />
                   <stop offset="50%" stop-color="#eab308" />
                   <stop offset="65%" stop-color="#84cc16" />
-                  <stop offset="100%" stop-color="#22c55e" />
+                  <stop offset="80%" stop-color="#22c55e" />
+                  <stop offset="100%" stop-color="#15803d" />
                 </linearGradient>
               </defs>
               <path d="M 20 90 A 80 80 0 0 1 180 90" fill="none" stroke="#e5e7eb" stroke-width="14" stroke-linecap="round" class="dark:stroke-gray-700" />
               <path d="M 20 90 A 80 80 0 0 1 180 90" fill="none" stroke="url(#gaugeGradient)" stroke-width="12" stroke-linecap="round" />
               <g class="text-gray-400 dark:text-gray-500" fill="currentColor" font-size="8">
-                <text x="15" y="98" text-anchor="middle">-100</text>
-                <text x="100" y="8" text-anchor="middle">0</text>
+                <text x="15" y="98" text-anchor="middle">0</text>
+                <text x="100" y="8" text-anchor="middle">50</text>
                 <text x="185" y="98" text-anchor="middle">100</text>
               </g>
               <g id="gauge-needle-group" transform="rotate(-90, 100, 90)">
@@ -458,10 +459,10 @@ const examples = getExamples(lang);
   function updateGaugeNeedle(score: number) {
     const needleGroup = document.getElementById('gauge-needle-group');
     if (!needleGroup) return;
-    // Skala von -100 bis 100 (200 Einheiten Spanne)
-    const clampedScore = Math.max(-100, Math.min(100, score));
-    // -100 = -90° (links), 100 = 90° (rechts)
-    const angle = -90 + ((clampedScore + 100) / 200) * 180;
+    // Skala von 0 bis 100 (negative Werte bei 0)
+    const clampedScore = Math.max(0, Math.min(100, score));
+    // 0 = -90° (links), 100 = 90° (rechts)
+    const angle = -90 + (clampedScore / 100) * 180;
     needleGroup.setAttribute('transform', `rotate(${angle}, 100, 90)`);
   }
 
