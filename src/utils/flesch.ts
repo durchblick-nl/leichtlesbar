@@ -1024,32 +1024,42 @@ export interface ParagraphAnalysis {
 
 /**
  * Berechnet die Schwierigkeit eines einzelnen Satzes
- * Verwendet einfache Heuristiken basierend auf Satzlänge und Wortkomiplexität
+ * Verwendet einfache Heuristiken basierend auf Satzlänge und Wortkomplexität
+ * Kurze Sätze werden nie als "schwer" eingestuft, da sie schnell erfassbar sind
  */
 function getSentenceDifficulty(wordCount: number, avgSyllablesPerWord: number): Difficulty {
-  // Einfache Heuristik:
-  // - Kurze Sätze (≤ 8 Wörter) mit einfachen Wörtern (< 1.6 Silben) = leicht
-  // - Mittlere Sätze (≤ 15 Wörter) oder mittlere Wörter = mittel
-  // - Lange Sätze (> 15 Wörter) oder komplexe Wörter (> 2 Silben) = schwer
-
-  const isShort = wordCount <= 8;
-  const isMedium = wordCount <= 15;
-  const isSimpleWords = avgSyllablesPerWord < 1.6;
+  const isVeryShort = wordCount <= 5;
+  const isShort = wordCount <= 10;
+  const isMedium = wordCount <= 18;
+  const isSimpleWords = avgSyllablesPerWord < 1.5;
   const isMediumWords = avgSyllablesPerWord < 2.0;
+  const isComplexWords = avgSyllablesPerWord >= 2.0;
 
-  if (isShort && isSimpleWords) {
-    return 'sehr-leicht';
-  } else if (isShort && isMediumWords) {
-    return 'leicht';
-  } else if (isMedium && isSimpleWords) {
-    return 'leicht';
-  } else if (isMedium && isMediumWords) {
-    return 'mittel';
-  } else if (!isMediumWords) {
-    return 'schwer';
-  } else {
-    return 'mittelschwer';
+  // Sehr kurze Sätze (≤5 Wörter) sind maximal "mittel"
+  if (isVeryShort) {
+    if (isSimpleWords) return 'sehr-leicht';
+    if (isMediumWords) return 'leicht';
+    return 'mittel'; // auch bei komplexen Wörtern max "mittel"
   }
+
+  // Kurze Sätze (6-10 Wörter)
+  if (isShort) {
+    if (isSimpleWords) return 'sehr-leicht';
+    if (isMediumWords) return 'leicht';
+    return 'mittelschwer'; // komplexe Wörter = mittelschwer, nicht schwer
+  }
+
+  // Mittlere Sätze (11-18 Wörter)
+  if (isMedium) {
+    if (isSimpleWords) return 'leicht';
+    if (isMediumWords) return 'mittel';
+    return 'schwer';
+  }
+
+  // Lange Sätze (>18 Wörter)
+  if (isSimpleWords) return 'mittel';
+  if (isMediumWords) return 'mittelschwer';
+  return 'sehr-schwer';
 }
 
 /**
