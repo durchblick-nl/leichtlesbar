@@ -277,13 +277,16 @@ export function countSentences(text: string): number {
  * Teilt Text in Sätze auf, unter Berücksichtigung von Abkürzungen und Zahlen
  */
 export function splitIntoSentences(text: string): string[] {
+  // Normalisiere Whitespace (inkl. non-breaking spaces, etc.)
+  let normalized = text.replace(/[\s\u00A0\u2000-\u200B\u202F\u205F\u3000]+/g, ' ');
+
   // Schütze Abkürzungen und Zahlen vor dem Splitting
-  let protected_text = protectAbbreviations(text);
+  let protected_text = protectAbbreviations(normalized);
   protected_text = protectNumbers(protected_text);
   // Schütze auch "..." (Ellipsis)
   protected_text = protected_text.replace(/\.\.\./g, '###ELLIPSIS###');
 
-  // Teile an Satzenden
+  // Teile an Satzenden (. ! ?) gefolgt von Leerzeichen
   const sentences = protected_text.split(/(?<=[.!?])\s+/).filter(s => s.trim().length > 0);
 
   // Stelle alles wieder her
