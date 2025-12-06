@@ -15,19 +15,22 @@ export function countSyllables(word: string): number {
 
   let syllables = matches.length;
 
-  // Doppelvokale zählen als eine Silbe
+  // Doppelvokale/Diphthonge zählen als eine Silbe
+  // z.B. "oiseaux" hat "oi" (2 Vokale) + "eau" (3 Vokale) = 2 Silben, nicht 5
   const diphthongs = /[aeiouyäöüàâéèêëïîôùûÿáíóúìò]{2,}/gi;
   const diphthongMatches = cleanWord.match(diphthongs);
   if (diphthongMatches) {
-    syllables -= diphthongMatches.length;
-    syllables += diphthongMatches.length; // Jeder Doppelvokal = 1 Silbe
+    for (const d of diphthongMatches) {
+      // Jeder Diphthong zählt als 1 Silbe, nicht als d.length Silben
+      syllables -= (d.length - 1);
+    }
   }
 
-  // Stummes 'e' am Ende (für Deutsch und Französisch)
+  // Stummes 'e' am Ende (für Französisch: "belle" = 1 Silbe, nicht 2)
   if (cleanWord.endsWith('e') && cleanWord.length > 2) {
     const beforeE = cleanWord.charAt(cleanWord.length - 2);
     if (!/[aeiouyäöüàâéèêëïîôùûÿáíóúìò]/.test(beforeE)) {
-      // Behalte Silbe für -le, -ne, -re etc.
+      syllables -= 1;
     }
   }
 
