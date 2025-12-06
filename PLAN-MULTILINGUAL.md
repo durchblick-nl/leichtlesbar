@@ -12,16 +12,48 @@ Erweiterung der Webseite um vollständige Unterstützung für mehrere Sprachen, 
 
 ---
 
+## URL-Struktur
+
+```
+readability.ch/           → Startseite (Sprachauswahl oder Auto-Redirect)
+readability.ch/de/        → Deutsch
+readability.ch/en/        → English
+readability.ch/fr/        → Français
+readability.ch/it/        → Italiano
+readability.ch/es/        → Español
+readability.ch/nl/        → Nederlands
+```
+
 ## Unterstützte Sprachen
 
 | Sprache | Code | URL | Priorität |
 |---------|------|-----|-----------|
-| Deutsch | `de` | `/` (Standard) | ✅ Existiert |
+| Startseite | - | `/` | Sprachauswahl oder Auto-Redirect |
+| Deutsch | `de` | `/de/` | ✅ Existiert (verschieben) |
 | Englisch | `en` | `/en/` | 1 - Höchste |
 | Französisch | `fr` | `/fr/` | 2 - Hoch |
 | Italienisch | `it` | `/it/` | 3 - Mittel |
 | Spanisch | `es` | `/es/` | 4 - Mittel |
 | Niederländisch | `nl` | `/nl/` | 5 - Optional |
+
+## Startseite (readability.ch/)
+
+Zwei Optionen:
+
+### Option A: Sprachauswahl-Seite
+Einfache, schöne Seite mit:
+- Logo
+- "Choose your language / Sprache wählen"
+- Flaggen oder Buttons für jede Sprache
+- Auto-Detection Hinweis ("Based on your browser: Deutsch")
+
+### Option B: Auto-Redirect
+- Browser-Sprache erkennen (`navigator.language`)
+- Automatisch zur passenden Sprache weiterleiten
+- Fallback: Englisch (internationale Standardsprache)
+- Cookie speichern für spätere Besuche
+
+**Empfehlung:** Option A (Sprachauswahl) - transparenter und SEO-freundlicher
 
 ---
 
@@ -205,7 +237,9 @@ src/
 │   └── Layout.astro          # Angepasst mit lang-Attribut & hreflang
 │
 └── pages/
-    ├── index.astro           # Deutsch (Standard)
+    ├── index.astro           # Startseite: Sprachauswahl oder Auto-Redirect
+    ├── de/
+    │   └── index.astro       # Deutsch
     ├── en/
     │   └── index.astro       # Englisch
     ├── fr/
@@ -528,7 +562,7 @@ const ABBREVIATIONS_NL = {
 
 ### Hreflang-Tags
 ```html
-<link rel="alternate" hreflang="de" href="https://readability.ch/" />
+<link rel="alternate" hreflang="de" href="https://readability.ch/de/" />
 <link rel="alternate" hreflang="en" href="https://readability.ch/en/" />
 <link rel="alternate" hreflang="fr" href="https://readability.ch/fr/" />
 <link rel="alternate" hreflang="it" href="https://readability.ch/it/" />
@@ -544,15 +578,20 @@ const ABBREVIATIONS_NL = {
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://readability.ch/</loc>
-    <xhtml:link rel="alternate" hreflang="de" href="https://readability.ch/"/>
+    <lastmod>2025-12-06</lastmod>
+  </url>
+  <url>
+    <loc>https://readability.ch/de/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://readability.ch/de/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://readability.ch/en/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://readability.ch/fr/"/>
     <xhtml:link rel="alternate" hreflang="it" href="https://readability.ch/it/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://readability.ch/es/"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://readability.ch/nl/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://readability.ch/"/>
     <lastmod>2025-12-06</lastmod>
   </url>
-  <!-- Repeat for each language URL -->
+  <!-- Repeat for /en/, /fr/, /it/, /es/, /nl/ -->
 </urlset>
 ```
 
