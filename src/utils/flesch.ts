@@ -1,46 +1,65 @@
 /**
  * Zählt die Silben in einem Wort
  * Unterstützt alle europäischen Sprachen (DE, EN, FR, IT, ES, NL)
+ * Verwendet Vokalgruppen-Ansatz: aufeinanderfolgende Vokale = 1 Silbe
  */
 export function countSyllables(word: string): number {
   const cleanWord = word.toLowerCase().replace(/[^a-zäöüßàâéèêëïîôùûüÿçáíóúñìò]/g, '');
   if (cleanWord.length === 0) return 0;
   if (cleanWord.length <= 3) return 1;
 
-  // Vokale inkl. Umlaute und Akzente (alle europäischen Sprachen)
-  const vowels = /[aeiouyäöüàâéèêëïîôùûÿáíóúìò]/gi;
-  const matches = cleanWord.match(vowels);
+  // Zähle Vokalgruppen - aufeinanderfolgende Vokale zählen als 1 Silbe
+  // Dies behandelt automatisch Diphthonge wie "ea", "ou", "ie", etc.
+  const vowelGroups = cleanWord.match(/[aeiouyäöüàâéèêëïîôùûÿáíóúìò]+/gi) || [];
+  let syllables = vowelGroups.length;
 
-  if (!matches) return 1;
+  if (syllables === 0) return 1;
 
-  let syllables = matches.length;
-
-  // Doppelvokale/Diphthonge zählen als eine Silbe
-  // z.B. "oiseaux" hat "oi" (2 Vokale) + "eau" (3 Vokale) = 2 Silben, nicht 5
-  const diphthongs = /[aeiouyäöüàâéèêëïîôùûÿáíóúìò]{2,}/gi;
-  const diphthongMatches = cleanWord.match(diphthongs);
-  if (diphthongMatches) {
-    for (const d of diphthongMatches) {
-      // Jeder Diphthong zählt als 1 Silbe, nicht als d.length Silben
-      syllables -= (d.length - 1);
+  // Stummes 'e' vor finalem 's' (wie "makes", "times", "temperatures")
+  if (cleanWord.endsWith('es') && cleanWord.length > 3 && syllables > 1) {
+    const beforeE = cleanWord.charAt(cleanWord.length - 3);
+    if (!/[aeiouyäöüàâéèêëïîôùûÿáíóúìò]/.test(beforeE)) {
+      // -les nach Konsonant: prüfen ob syllabisch
+      if (beforeE === 'l' && cleanWord.length > 4) {
+        const twoBeforeE = cleanWord.charAt(cleanWord.length - 4);
+        if (/[aeiouyäöüàâéèêëïîôùûÿáíóúìò]/.test(twoBeforeE)) {
+          syllables -= 1; // "files", "smiles" → subtrahieren
+        }
+        // sonst: "tables", "apples" → nicht subtrahieren (syllabisches -les)
+      } else if (!/[sxzgc]/.test(beforeE) && !cleanWord.endsWith('ches') && !cleanWord.endsWith('shes')) {
+        // Nicht subtrahieren wenn -es eine Silbe hinzufügt (Zischlaute)
+        // s, x, z: "buses", "boxes", "fizzes"
+        // g, c: "changes", "places" (weiches g/c vor e)
+        // ch, sh: "churches", "wishes"
+        syllables -= 1;
+      }
+    }
+  }
+  // Stummes 'e' am Ende (wie "make", "time", "climate")
+  else if (cleanWord.endsWith('e') && cleanWord.length > 2 && syllables > 1) {
+    const beforeE = cleanWord.charAt(cleanWord.length - 2);
+    if (!/[aeiouyäöüàâéèêëïîôùûÿáíóúìò]/.test(beforeE)) {
+      // -le nach Konsonant: prüfen ob syllabisch
+      if (beforeE === 'l' && cleanWord.length > 3) {
+        const twoBeforeE = cleanWord.charAt(cleanWord.length - 3);
+        if (/[aeiouyäöüàâéèêëïîôùûÿáíóúìò]/.test(twoBeforeE)) {
+          syllables -= 1; // "file", "smile" → subtrahieren
+        }
+        // sonst: "table", "apple" → nicht subtrahieren (syllabisches -le)
+      } else {
+        syllables -= 1; // "make", "time", "change" → subtrahieren
+      }
     }
   }
 
-  // Stummes 'e' am Ende (aber nicht bei syllabischen -le Endungen wie "table", "apple")
-  if (cleanWord.endsWith('e') && cleanWord.length > 2) {
-    const beforeE = cleanWord.charAt(cleanWord.length - 2);
-    if (!/[aeiouyäöüàâéèêëïîôùûÿáíóúìò]/.test(beforeE)) {
-      // Bei -le Endungen prüfen ob syllabisch (Konsonant + le = eigene Silbe)
-      if (cleanWord.length > 3 && beforeE === 'l') {
-        const twoBeforeE = cleanWord.charAt(cleanWord.length - 3);
-        // Nur subtrahieren wenn vor 'l' ein Vokal steht (wie in "file")
-        // NICHT subtrahieren wenn Konsonant (wie in "table", "apple")
-        if (/[aeiouyäöüàâéèêëïîôùûÿáíóúìò]/.test(twoBeforeE)) {
-          syllables -= 1;
-        }
-      } else {
-        syllables -= 1;
-      }
+  // Spezielle englische Endungen die oft überzählt werden
+  // -ed Endung ist oft stumm (außer nach t/d)
+  if (cleanWord.endsWith('ed') && cleanWord.length > 4 && syllables > 1) {
+    const beforeEd = cleanWord.charAt(cleanWord.length - 3);
+    if (!/[td]/.test(beforeEd) && !/[aeiouyäöüàâéèêëïîôùûÿáíóúìò]/.test(beforeEd)) {
+      // "changed", "walked" → 1 Silbe, nicht 2
+      // aber "wanted", "needed" → 2 Silben (nach t/d)
+      syllables -= 1;
     }
   }
 
