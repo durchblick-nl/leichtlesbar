@@ -113,11 +113,12 @@
           </g>
 
           <!-- Needle -->
-          <g id="gauge-needle-group" style="transform-origin: 100px 90px;" class="transition-transform duration-700 ease-out">
+          <g id="gauge-needle-group" transform="rotate(-90, 100, 90)">
             <line x1="100" y1="90" x2="100" y2="20" stroke="#1f2937" stroke-width="3" stroke-linecap="round" class="dark:stroke-white" filter="url(#glow)" />
-            <circle cx="100" cy="90" r="8" fill="#1f2937" class="dark:fill-white" />
-            <circle cx="100" cy="90" r="4" fill="#3b82f6" />
           </g>
+          <!-- Needle center (always visible) -->
+          <circle cx="100" cy="90" r="8" fill="#1f2937" class="dark:fill-white" />
+          <circle cx="100" cy="90" r="4" fill="#3b82f6" />
 
           <!-- Score display inside SVG -->
           <text id="score-display-svg" x="100" y="115" text-anchor="middle" font-size="24" font-weight="bold" class="fill-gray-900 dark:fill-white">--</text>
@@ -256,7 +257,7 @@
     // Score von 0-100 auf Winkel -90 bis 90 Grad mappen
     const clampedScore = Math.max(0, Math.min(100, score));
     const angle = -90 + (clampedScore / 100) * 180;
-    needleGroup.style.transform = `rotate(${angle}deg)`;
+    needleGroup.setAttribute('transform', `rotate(${angle}, 100, 90)`);
   }
 
   function countWords(text: string): number {
