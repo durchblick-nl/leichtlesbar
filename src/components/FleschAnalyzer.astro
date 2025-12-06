@@ -77,13 +77,6 @@
               <stop offset="75%" stop-color="#84cc16" />
               <stop offset="100%" stop-color="#22c55e" />
             </linearGradient>
-            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-              <feMerge>
-                <feMergeNode in="coloredBlur"/>
-                <feMergeNode in="SourceGraphic"/>
-              </feMerge>
-            </filter>
           </defs>
 
           <!-- Background arc -->
@@ -114,11 +107,15 @@
 
           <!-- Needle -->
           <g id="gauge-needle-group" transform="rotate(-90, 100, 90)">
-            <line x1="100" y1="90" x2="100" y2="20" stroke="#1f2937" stroke-width="3" stroke-linecap="round" class="dark:stroke-white" filter="url(#glow)" />
+            <!-- Needle shadow -->
+            <line x1="100" y1="90" x2="100" y2="22" stroke="rgba(0,0,0,0.3)" stroke-width="5" stroke-linecap="round" />
+            <!-- Needle line -->
+            <line x1="100" y1="90" x2="100" y2="20" stroke="#1e40af" stroke-width="4" stroke-linecap="round" />
           </g>
-          <!-- Needle center (always visible) -->
-          <circle cx="100" cy="90" r="8" fill="#1f2937" class="dark:fill-white" />
-          <circle cx="100" cy="90" r="4" fill="#3b82f6" />
+          <!-- Needle center -->
+          <circle cx="100" cy="90" r="10" fill="#1e3a8a" />
+          <circle cx="100" cy="90" r="6" fill="#3b82f6" />
+          <circle cx="100" cy="90" r="3" fill="#93c5fd" />
 
           <!-- Score display inside SVG -->
           <text id="score-display-svg" x="100" y="115" text-anchor="middle" font-size="24" font-weight="bold" class="fill-gray-900 dark:fill-white">--</text>
