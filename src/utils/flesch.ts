@@ -737,8 +737,15 @@ export function interpretAmstadScore(score: number, lang: SupportedLanguage = 'd
 }
 
 /**
- * Berechnet den Flesch-Lesbarkeitsindex
- * Enthält sowohl die englische Originalformel als auch die deutsche Amstad-Formel
+ * Berechnet den sprachspezifischen Flesch-Lesbarkeitsindex
+ *
+ * Formeln nach Sprache:
+ * - EN: Original Flesch (1948): 206.835 - 1.015×ASL - 84.6×ASW
+ * - DE: Amstad (1978): 180 - ASL - 58.5×ASW
+ * - NL: Douma: 206.835 - 0.93×ASL - 77×ASW
+ * - FR: Kandel-Moles: 207 - 1.015×ASL - 73.6×ASW
+ * - ES: Fernández Huerta: 206.84 - 1.02×ASL - 60×ASW
+ * - IT: Franchina-Vacca: 217 - 1.3×ASL - 60×ASW
  */
 export function calculateFlesch(text: string, lang: SupportedLanguage = 'de'): FleschResult {
   const normalizedText = normalizeAbbreviations(text);
@@ -757,13 +764,46 @@ export function calculateFlesch(text: string, lang: SupportedLanguage = 'de'): F
   const avgWordsPerSentence = wordCount / sentenceCount;
   const avgSyllablesPerWord = syllableCount / wordCount;
 
-  // Englische Flesch-Formel (Rudolf Flesch, 1948)
-  // FRE = 206.835 - (1.015 × ASL) - (84.6 × ASW)
-  const score = 206.835 - (1.015 * avgWordsPerSentence) - (84.6 * avgSyllablesPerWord);
+  // Sprachspezifische Formeln
+  let score: number;
+  let scoreAmstad: number;
 
-  // Deutsche Amstad-Formel (Toni Amstad, 1978)
-  // FRE_deutsch = 180 - ASL - (58.5 × ASW)
-  const scoreAmstad = 180 - avgWordsPerSentence - (58.5 * avgSyllablesPerWord);
+  switch (lang) {
+    case 'en':
+      // Englische Flesch-Formel (Rudolf Flesch, 1948)
+      score = 206.835 - (1.015 * avgWordsPerSentence) - (84.6 * avgSyllablesPerWord);
+      scoreAmstad = score; // Für EN ist Flesch = primäre Formel
+      break;
+    case 'de':
+      // Deutsche Amstad-Formel (Toni Amstad, 1978)
+      score = 180 - avgWordsPerSentence - (58.5 * avgSyllablesPerWord);
+      scoreAmstad = score;
+      break;
+    case 'nl':
+      // Niederländische Flesch-Douma-Formel (Wouter Douma)
+      score = 206.835 - (0.93 * avgWordsPerSentence) - (77 * avgSyllablesPerWord);
+      scoreAmstad = score;
+      break;
+    case 'fr':
+      // Französische Kandel-Moles-Formel
+      score = 207 - (1.015 * avgWordsPerSentence) - (73.6 * avgSyllablesPerWord);
+      scoreAmstad = score;
+      break;
+    case 'es':
+      // Spanische Fernández-Huerta-Formel
+      score = 206.84 - (1.02 * avgWordsPerSentence) - (60 * avgSyllablesPerWord);
+      scoreAmstad = score;
+      break;
+    case 'it':
+      // Italienische Franchina-Vacca-Formel
+      score = 217 - (1.3 * avgWordsPerSentence) - (60 * avgSyllablesPerWord);
+      scoreAmstad = score;
+      break;
+    default:
+      // Fallback auf englische Formel
+      score = 206.835 - (1.015 * avgWordsPerSentence) - (84.6 * avgSyllablesPerWord);
+      scoreAmstad = score;
+  }
 
   const { interpretation, difficulty } = interpretFleschScore(score, lang);
   const { interpretation: interpretationAmstad, difficulty: difficultyAmstad } = interpretAmstadScore(scoreAmstad, lang);
