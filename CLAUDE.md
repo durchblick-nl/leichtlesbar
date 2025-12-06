@@ -1,6 +1,7 @@
 # Leichtlesbar.ch
 
 Webseite zur Messung der Lesbarkeit von Texten mittels verschiedener Lesbarkeitsformeln.
+Online seit 2003, erstellt von Christian Bachmann und Roger Gösele.
 
 ## Tech Stack
 
@@ -16,13 +17,19 @@ src/
 ├── components/     # Wiederverwendbare Astro/UI-Komponenten
 │   └── FleschAnalyzer.astro  # Hauptkomponente für Textanalyse
 ├── layouts/        # Seiten-Layouts
-│   └── Layout.astro          # Basis-Layout mit Navigation und Dark Mode
+│   └── Layout.astro          # Basis-Layout mit Navigation, SEO und Dark Mode
 ├── pages/          # Astro-Seiten (File-based Routing)
 │   └── index.astro           # Hauptseite mit allen Inhalten
 ├── styles/         # Globale CSS-Dateien
 │   └── global.css            # Tailwind-Import und Dark Mode Variant
 └── utils/          # TypeScript Utilities
     └── flesch.ts             # Alle Lesbarkeitsberechnungen
+
+public/
+├── favicon.svg     # Logo (Feder-Symbol)
+├── og-image.svg    # Open Graph Bild für Social Sharing
+├── robots.txt      # Suchmaschinen-Anweisungen
+└── sitemap.xml     # Sitemap für SEO
 ```
 
 ## Entwicklung
@@ -81,20 +88,32 @@ LIX = (Wörter / Sätze) + (lange Wörter × 100 / Wörter)
 
 ## Features
 
-- **Echtzeit-Analyse**: Automatische Berechnung während der Texteingabe (debounced)
+- **Echtzeit-Analyse**: Automatische Berechnung während der Texteingabe (debounced, 300ms)
 - **Multi-Metrik**: 5 verschiedene Lesbarkeitsindizes
-- **Satzanalyse**: Farbliche Markierung einzelner Sätze nach Schwierigkeit
+- **Satzanalyse**: Farbliche Markierung einzelner Sätze nach Schwierigkeit (mit Absatzerhaltung)
+- **Beispieltexte**: Dropdown mit 3 Schwierigkeitsstufen (leicht/mittel/schwer)
+- **URL-Parameter**: Text kann via `?text=...` übergeben werden
 - **Dark Mode**: System-Präferenz mit Toggle und localStorage-Persistenz
 - **Datenschutz**: Alle Berechnungen erfolgen client-seitig im Browser
 - **Responsive**: Mobile-first Design
+- **Gauge-Visualisierung**: SVG-Gauge mit Farbverlauf von Rot nach Grün
+
+## SEO
+
+- Open Graph und Twitter Card Meta-Tags
+- Schema.org JSON-LD (WebApplication, FAQPage)
+- Sitemap.xml und robots.txt
+- Canonical URL
+- FAQ-Sektion für Featured Snippets
 
 ## Design-Prinzipien
 
 - Mobile-first responsive Design
 - Minimalistisch und benutzerfreundlich
-- Barrierefreiheit (WCAG 2.1 AA)
+- Barrierefreiheit (WCAG 2.1 AA, ARIA-Labels)
 - Deutsche Sprache als Primärsprache
 - Client-seitige Verarbeitung (keine Server-Übertragung)
+- System-Fonts für optimale Performance
 
 ## Cloudflare Pages Deployment
 

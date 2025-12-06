@@ -2,16 +2,20 @@
 
 Kostenloser Online-Lesbarkeitstest für deutsche Texte. Analysieren Sie die Verständlichkeit Ihrer Texte mit der Flesch-Formel und weiteren Lesbarkeitsindizes.
 
-**Live-Demo:** [leichtlesbar.ch](https://leichtlesbar.ch)
+**Live:** [leichtlesbar.ch](https://leichtlesbar.ch)
+
+Online seit 2003. Ein Projekt von Christian Bachmann und Roger Gösele.
 
 ## Features
 
-- **Echtzeit-Analyse** - Sofortige Berechnung während der Texteingabe
-- **Mehrere Lesbarkeitsindizes** - Flesch-Amstad, Flesch-Kincaid, Wiener Sachtextformel, Gunning-Fog, LIX
-- **Satzanalyse** - Farbliche Markierung einzelner Sätze nach Schwierigkeit
-- **Datenschutz** - Alle Berechnungen erfolgen lokal im Browser
-- **Dark Mode** - Automatische Erkennung der Systemeinstellung
-- **Responsive** - Optimiert für Desktop und Mobile
+- **Echtzeit-Analyse** – Sofortige Berechnung während der Texteingabe
+- **5 Lesbarkeitsindizes** – Flesch-Amstad, Flesch-Kincaid, Wiener Sachtextformel, Gunning-Fog, LIX
+- **Satzanalyse** – Farbliche Markierung einzelner Sätze nach Schwierigkeit
+- **Beispieltexte** – Vordefinierte Texte in 3 Schwierigkeitsstufen
+- **URL-Parameter** – Text via `?text=...` übergeben für Integrationen
+- **Datenschutz** – 100% client-seitig, keine Datenübertragung
+- **Dark Mode** – Automatische Erkennung der Systemeinstellung
+- **Responsive** – Optimiert für Desktop und Mobile
 
 ## Implementierte Formeln
 
@@ -25,10 +29,10 @@ Kostenloser Online-Lesbarkeitstest für deutsche Texte. Analysieren Sie die Vers
 
 ## Tech Stack
 
-- [Astro](https://astro.build/) 5.x - Static Site Generator
-- [Tailwind CSS](https://tailwindcss.com/) 4.x - Utility-first CSS
-- TypeScript - Typsicherheit
-- Cloudflare Pages - Hosting
+- [Astro](https://astro.build/) 5.x – Static Site Generator
+- [Tailwind CSS](https://tailwindcss.com/) 4.x – Utility-first CSS
+- TypeScript – Typsicherheit
+- Cloudflare Pages – Hosting
 
 ## Entwicklung
 
@@ -46,6 +50,13 @@ npm run build
 npm run preview
 ```
 
+## SEO
+
+- Open Graph und Twitter Card Meta-Tags
+- Schema.org JSON-LD (WebApplication, FAQPage)
+- Sitemap.xml und robots.txt
+- FAQ-Sektion
+
 ## Deployment
 
 Das Projekt ist für Cloudflare Pages konfiguriert:
@@ -57,3 +68,8 @@ Das Projekt ist für Cloudflare Pages konfiguriert:
 ## Lizenz
 
 MIT
+
+## Autoren
+
+- Christian Bachmann
+- Roger Gösele
