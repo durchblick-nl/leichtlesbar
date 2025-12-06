@@ -662,8 +662,38 @@ export interface ParagraphAnalysis {
 }
 
 /**
+ * Berechnet die Schwierigkeit eines einzelnen Satzes
+ * Verwendet einfache Heuristiken basierend auf Satzlänge und Wortkomiplexität
+ */
+function getSentenceDifficulty(wordCount: number, avgSyllablesPerWord: number): Difficulty {
+  // Einfache Heuristik:
+  // - Kurze Sätze (≤ 8 Wörter) mit einfachen Wörtern (< 1.6 Silben) = leicht
+  // - Mittlere Sätze (≤ 15 Wörter) oder mittlere Wörter = mittel
+  // - Lange Sätze (> 15 Wörter) oder komplexe Wörter (> 2 Silben) = schwer
+
+  const isShort = wordCount <= 8;
+  const isMedium = wordCount <= 15;
+  const isSimpleWords = avgSyllablesPerWord < 1.6;
+  const isMediumWords = avgSyllablesPerWord < 2.0;
+
+  if (isShort && isSimpleWords) {
+    return 'sehr-leicht';
+  } else if (isShort && isMediumWords) {
+    return 'leicht';
+  } else if (isMedium && isSimpleWords) {
+    return 'leicht';
+  } else if (isMedium && isMediumWords) {
+    return 'mittel';
+  } else if (!isMediumWords) {
+    return 'schwer';
+  } else {
+    return 'mittelschwer';
+  }
+}
+
+/**
  * Extrahiert und analysiert einzelne Sätze
- * Verwendet die deutsche Amstad-Formel für die Satzanalyse
+ * Verwendet einfache Heuristiken für die Satzanalyse
  * Berücksichtigt Abkürzungen beim Satz-Splitting
  */
 export function analyzeSentences(text: string): SentenceAnalysis[] {
@@ -682,10 +712,11 @@ export function analyzeSentences(text: string): SentenceAnalysis[] {
 
     const avgSyllablesPerWord = wordCount > 0 ? syllableCount / wordCount : 0;
 
-    // Deutsche Amstad-Formel für einzelnen Satz
-    const score = 180 - wordCount - (58.5 * avgSyllablesPerWord);
+    // Einfache Heuristik statt Flesch-Formel
+    const difficulty = getSentenceDifficulty(wordCount, avgSyllablesPerWord);
 
-    const { difficulty } = interpretAmstadScore(score);
+    // Score nur zur Anzeige (100 = sehr leicht, 0 = sehr schwer)
+    const score = Math.max(0, Math.min(100, 100 - (wordCount * 2) - ((avgSyllablesPerWord - 1) * 30)));
 
     return {
       text: sentenceText,
@@ -722,8 +753,12 @@ export function analyzeByParagraphs(text: string): ParagraphAnalysis[] {
       }
 
       const avgSyllablesPerWord = wordCount > 0 ? syllableCount / wordCount : 0;
-      const score = 180 - wordCount - (58.5 * avgSyllablesPerWord);
-      const { difficulty } = interpretAmstadScore(score);
+
+      // Einfache Heuristik statt Flesch-Formel
+      const difficulty = getSentenceDifficulty(wordCount, avgSyllablesPerWord);
+
+      // Score nur zur Anzeige (100 = sehr leicht, 0 = sehr schwer)
+      const score = Math.max(0, Math.min(100, 100 - (wordCount * 2) - ((avgSyllablesPerWord - 1) * 30)));
 
       return {
         text: sentenceText,
