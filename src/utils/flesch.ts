@@ -26,11 +26,21 @@ export function countSyllables(word: string): number {
     }
   }
 
-  // Stummes 'e' am Ende (für Französisch: "belle" = 1 Silbe, nicht 2)
+  // Stummes 'e' am Ende (aber nicht bei syllabischen -le Endungen wie "table", "apple")
   if (cleanWord.endsWith('e') && cleanWord.length > 2) {
     const beforeE = cleanWord.charAt(cleanWord.length - 2);
     if (!/[aeiouyäöüàâéèêëïîôùûÿáíóúìò]/.test(beforeE)) {
-      syllables -= 1;
+      // Bei -le Endungen prüfen ob syllabisch (Konsonant + le = eigene Silbe)
+      if (cleanWord.length > 3 && beforeE === 'l') {
+        const twoBeforeE = cleanWord.charAt(cleanWord.length - 3);
+        // Nur subtrahieren wenn vor 'l' ein Vokal steht (wie in "file")
+        // NICHT subtrahieren wenn Konsonant (wie in "table", "apple")
+        if (/[aeiouyäöüàâéèêëïîôùûÿáíóúìò]/.test(twoBeforeE)) {
+          syllables -= 1;
+        }
+      } else {
+        syllables -= 1;
+      }
     }
   }
 
