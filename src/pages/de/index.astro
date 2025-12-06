@@ -489,7 +489,7 @@ const examples = getExamples(lang);
     if (scoreDisplaySvg) {
       scoreDisplaySvg.textContent = analysis.flesch.scoreAmstad.toString();
     }
-    updateGaugeNeedle(Math.max(0, analysis.flesch.scoreAmstad));
+    updateGaugeNeedle(analysis.flesch.scoreAmstad);
 
     const interpretation = document.getElementById('interpretation');
     if (interpretation) {

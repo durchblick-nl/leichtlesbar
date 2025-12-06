@@ -1,46 +1,73 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <!-- Feder in warmem Gold/Orange -->
-  <g fill="none" stroke="#D97706" stroke-linecap="round">
-    <!-- Hauptstiel der Feder (Kiel) -->
-    <path d="M58 92 Q54 65, 50 45 Q47 25, 52 8" stroke-width="1.8" stroke="#B45309"/>
+  <defs>
+    <!-- Gradient für die Feder -->
+    <linearGradient id="featherGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F59E0B"/>
+      <stop offset="50%" stop-color="#D97706"/>
+      <stop offset="100%" stop-color="#B45309"/>
+    </linearGradient>
+    <!-- Gradient für den Kiel -->
+    <linearGradient id="quillGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#92400E"/>
+      <stop offset="100%" stop-color="#78350F"/>
+    </linearGradient>
+  </defs>
 
-    <!-- Feine Federhärchen links - oberer Bereich -->
-    <path d="M51 18 Q44 14, 38 12" stroke-width="0.6"/>
-    <path d="M50.5 20 Q43 16, 36 15" stroke-width="0.6"/>
-    <path d="M50 22 Q42 18, 34 18" stroke-width="0.6"/>
-    <path d="M49.5 24 Q41 20, 32 21" stroke-width="0.6"/>
-    <path d="M49 26 Q40 22, 30 24" stroke-width="0.6"/>
-    <path d="M48.5 28 Q39 24, 28 27" stroke-width="0.6"/>
-    <path d="M48 30 Q38 26, 26 30" stroke-width="0.6"/>
-    <path d="M47.5 32 Q37 28, 24 33" stroke-width="0.6"/>
-    <path d="M47 34 Q36 30, 23 36" stroke-width="0.6"/>
-    <path d="M46.5 36 Q35 32, 22 39" stroke-width="0.6"/>
-    <path d="M46 38 Q34 34, 21 42" stroke-width="0.6"/>
-    <path d="M45.5 40 Q33 36, 20 45" stroke-width="0.6"/>
-    <path d="M45 42 Q32 38, 20 48" stroke-width="0.6"/>
-    <path d="M44.5 44 Q31 40, 20 51" stroke-width="0.6"/>
-    <path d="M44 46 Q30 42, 21 54" stroke-width="0.6"/>
+  <!-- Federkörper - elegante gefüllte Form -->
+  <path d="M52 5
+           Q48 15, 44 25
+           Q38 35, 30 42
+           Q22 48, 18 52
+           Q22 52, 30 50
+           Q38 48, 44 44
+           Q48 42, 50 40
+           Q48 50, 44 58
+           Q40 65, 38 70
+           Q42 68, 48 62
+           Q52 56, 54 50
+           Q56 60, 58 72
+           Q60 82, 58 92
+           Q56 82, 54 70
+           Q52 58, 52 48
+           Q54 42, 58 38
+           Q64 34, 72 32
+           Q78 30, 82 28
+           Q78 32, 72 36
+           Q64 40, 58 44
+           Q54 48, 52 52
+           Q54 40, 56 30
+           Q58 20, 56 12
+           Q54 8, 52 5Z"
+        fill="url(#featherGradient)"
+        opacity="0.9"/>
 
-    <!-- Feine Federhärchen rechts - oberer Bereich -->
-    <path d="M53 18 Q58 15, 62 14" stroke-width="0.6"/>
-    <path d="M53.5 20 Q59 17, 64 17" stroke-width="0.6"/>
-    <path d="M54 22 Q60 19, 66 20" stroke-width="0.6"/>
-    <path d="M54.5 24 Q61 21, 68 23" stroke-width="0.6"/>
-    <path d="M55 26 Q62 23, 70 26" stroke-width="0.6"/>
-    <path d="M55 28 Q62 25, 71 29" stroke-width="0.6"/>
-    <path d="M55 30 Q62 27, 72 32" stroke-width="0.6"/>
-    <path d="M55 32 Q62 29, 72 35" stroke-width="0.6"/>
-    <path d="M54.5 34 Q61 31, 71 38" stroke-width="0.6"/>
-    <path d="M54 36 Q60 33, 70 41" stroke-width="0.6"/>
-    <path d="M53.5 38 Q59 35, 68 44" stroke-width="0.6"/>
-    <path d="M53 40 Q58 37, 66 46" stroke-width="0.6"/>
-    <path d="M52.5 42 Q57 39, 64 48" stroke-width="0.6"/>
-    <path d="M52 44 Q56 41, 62 50" stroke-width="0.6"/>
+  <!-- Kiel (Mittelstrich) -->
+  <path d="M52 5 Q54 30, 56 50 Q58 70, 58 92"
+        fill="none"
+        stroke="url(#quillGradient)"
+        stroke-width="2"
+        stroke-linecap="round"/>
 
-    <!-- Spitze der Feder -->
-    <path d="M52 8 Q53 5, 54 3" stroke-width="0.8" stroke="#B45309"/>
+  <!-- Feine Federstruktur links -->
+  <g stroke="#B45309" stroke-width="0.4" fill="none" opacity="0.6">
+    <path d="M50 20 Q42 18, 35 20"/>
+    <path d="M48 28 Q38 26, 28 30"/>
+    <path d="M46 36 Q34 34, 24 40"/>
+    <path d="M44 44 Q32 44, 22 50"/>
+  </g>
+
+  <!-- Feine Federstruktur rechts -->
+  <g stroke="#B45309" stroke-width="0.4" fill="none" opacity="0.6">
+    <path d="M54 20 Q62 18, 68 22"/>
+    <path d="M56 28 Q66 26, 74 30"/>
+    <path d="M56 36 Q66 36, 76 34"/>
   </g>
 
   <!-- Buchstabe R in Blau -->
-  <text x="22" y="84" font-family="Georgia, 'Times New Roman', serif" font-size="70" font-weight="500" fill="#2563EB" font-style="italic">R</text>
+  <text x="18" y="86"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="72"
+        font-weight="600"
+        fill="#2563EB"
+        font-style="italic">R</text>
 </svg>
