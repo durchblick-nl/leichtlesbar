@@ -97,6 +97,7 @@ LIX = (Wörter / Sätze) + (lange Wörter × 100 / Wörter)
 - **Datenschutz**: Alle Berechnungen erfolgen client-seitig im Browser
 - **Responsive**: Mobile-first Design
 - **Gauge-Visualisierung**: SVG-Gauge mit Farbverlauf von Rot nach Grün
+- **Intelligente Satz-Erkennung**: Über 100 deutsche Abkürzungen (z. B., d. h., Dr., etc.) und Zahlen (3.14, 1.) werden korrekt behandelt
 
 ## SEO
 

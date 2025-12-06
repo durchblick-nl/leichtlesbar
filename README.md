@@ -10,7 +10,7 @@ Online seit 2003. Ein Projekt von Christian Bachmann und Roger Gösele.
 
 - **Echtzeit-Analyse** – Sofortige Berechnung während der Texteingabe
 - **5 Lesbarkeitsindizes** – Flesch-Amstad, Flesch-Kincaid, Wiener Sachtextformel, Gunning-Fog, LIX
-- **Satzanalyse** – Farbliche Markierung einzelner Sätze nach Schwierigkeit
+- **Satzanalyse** – Farbliche Markierung einzelner Sätze nach Schwierigkeit (mit intelligenter Abkürzungserkennung)
 - **Beispieltexte** – Vordefinierte Texte in 3 Schwierigkeitsstufen
 - **URL-Parameter** – Text via `?text=...` übergeben für Integrationen
 - **Datenschutz** – 100% client-seitig, keine Datenübertragung
