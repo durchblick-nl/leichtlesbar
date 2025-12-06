@@ -1,8 +1,8 @@
-# Leichtlesbar.ch
+# Readability.ch
 
 Kostenloser Online-Lesbarkeitstest für deutsche Texte. Analysieren Sie die Verständlichkeit Ihrer Texte mit der Flesch-Formel und weiteren Lesbarkeitsindizes.
 
-**Live:** [leichtlesbar.ch](https://leichtlesbar.ch)
+**Live:** [readability.ch](https://readability.ch)
 
 Online seit 2003. Ein Projekt von Christian Bachmann und Roger Gösele.
 

@@ -10,10 +10,10 @@ interface Props {
 const {
   title,
   description = 'Kostenloser Lesbarkeitstest für deutsche Texte. Analysieren Sie Ihre Texte mit der Flesch-Formel, Wiener Sachtextformel und weiteren Indizes. Datenschutzfreundlich – alles läuft im Browser.',
-  canonicalUrl = 'https://leichtlesbar.ch'
+  canonicalUrl = 'https://readability.ch'
 } = Astro.props;
 
-const fullTitle = `${title} | Leichtlesbar.ch`;
+const fullTitle = `${title} | Readability.ch`;
 const ogImage = `${canonicalUrl}/og-image.svg`;
 ---
 
@@ -28,7 +28,7 @@ const ogImage = `${canonicalUrl}/og-image.svg`;
     <meta name="title" content={fullTitle} />
     <meta name="description" content={description} />
     <meta name="keywords" content="Lesbarkeit, Flesch, Textanalyse, Lesbarkeitsindex, deutsche Texte, Amstad, Wiener Sachtextformel, Gunning Fog, LIX" />
-    <meta name="author" content="Leichtlesbar.ch" />
+    <meta name="author" content="Readability.ch" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href={canonicalUrl} />
 
@@ -39,7 +39,7 @@ const ogImage = `${canonicalUrl}/og-image.svg`;
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:locale" content="de_CH" />
-    <meta property="og:site_name" content="Leichtlesbar.ch" />
+    <meta property="og:site_name" content="Readability.ch" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -63,7 +63,7 @@ const ogImage = `${canonicalUrl}/og-image.svg`;
     <script type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@type": "WebApplication",
-      "name": "Leichtlesbar.ch",
+      "name": "Readability.ch",
       "description": description,
       "url": canonicalUrl,
       "applicationCategory": "UtilitiesApplication",
@@ -138,9 +138,9 @@ const ogImage = `${canonicalUrl}/og-image.svg`;
     <header class="bg-white shadow-sm dark:bg-gray-800 dark:shadow-gray-900/50">
       <nav class="mx-auto max-w-4xl px-4 py-4" aria-label="Hauptnavigation">
         <div class="flex items-center justify-between">
-          <a href="/" class="flex items-center gap-2 text-xl font-bold text-blue-600 dark:text-blue-400" aria-label="Leichtlesbar - Startseite">
-            <img src="/favicon.svg" alt="Leichtlesbar Logo - Feder-Symbol" class="h-8 w-8" width="32" height="32" />
-            Leichtlesbar
+          <a href="/" class="flex items-center gap-2 text-xl font-bold text-blue-600 dark:text-blue-400" aria-label="Readability - Startseite">
+            <img src="/favicon.svg" alt="Readability Logo - Feder-Symbol" class="h-8 w-8" width="32" height="32" />
+            Readability
           </a>
           <div class="flex items-center gap-4">
             <ul class="hidden gap-6 md:flex">
@@ -187,7 +187,7 @@ const ogImage = `${canonicalUrl}/og-image.svg`;
 
     <footer class="mt-auto border-t border-gray-200 bg-white py-6 dark:border-gray-700 dark:bg-gray-800">
       <div class="mx-auto max-w-4xl px-4 text-center text-sm text-gray-600 dark:text-gray-400">
-        <p>&copy; 2003–{new Date().getFullYear()} Leichtlesbar.ch</p>
+        <p>&copy; 2003–{new Date().getFullYear()} Readability.ch</p>
         <p class="mt-1">Ein Projekt von Christian Bachmann und Roger Gösele</p>
       </div>
     </footer>

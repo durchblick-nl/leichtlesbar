@@ -1,4 +1,4 @@
-# Leichtlesbar.ch
+# Readability.ch
 
 Webseite zur Messung der Lesbarkeit von Texten mittels verschiedener Lesbarkeitsformeln.
 Online seit 2003, erstellt von Christian Bachmann und Roger Gösele.

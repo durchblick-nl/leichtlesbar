@@ -4,4 +4,4 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://leichtlesbar.ch/sitemap.xml
+Sitemap: https://readability.ch/sitemap.xml
