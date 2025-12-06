@@ -1,31 +1,80 @@
 # Readability.ch
 
-Kostenloser Online-Lesbarkeitstest für deutsche Texte. Analysieren Sie die Verständlichkeit Ihrer Texte mit der Flesch-Formel und weiteren Lesbarkeitsindizes.
+Kostenloser Online-Lesbarkeitstest für Texte in 6 Sprachen. Analysieren Sie die Verständlichkeit Ihrer Texte mit sprachspezifischen Lesbarkeitsformeln.
 
 **Live:** [readability.ch](https://readability.ch)
 
 Online seit 2003. Ein Projekt von Christian Bachmann und Roger Gösele.
 
+## Unterstützte Sprachen
+
+| Sprache | URL | Primäre Formel |
+|---------|-----|----------------|
+| Deutsch | [/de/](https://readability.ch/de/) | Flesch-Amstad |
+| English | [/en/](https://readability.ch/en/) | Flesch Reading Ease |
+| Français | [/fr/](https://readability.ch/fr/) | Kandel-Moles |
+| Italiano | [/it/](https://readability.ch/it/) | GULPEASE |
+| Español | [/es/](https://readability.ch/es/) | INFLESZ |
+| Nederlands | [/nl/](https://readability.ch/nl/) | Flesch-Douma |
+
+Die Startseite erkennt automatisch die Browsersprache und leitet entsprechend weiter.
+
 ## Features
 
+- **6 Sprachen** – Sprachspezifische Formeln für optimale Analyse
 - **Echtzeit-Analyse** – Sofortige Berechnung während der Texteingabe
-- **5 Lesbarkeitsindizes** – Flesch-Amstad, Flesch-Kincaid, Wiener Sachtextformel, Gunning-Fog, LIX
-- **Satzanalyse** – Farbliche Markierung einzelner Sätze nach Schwierigkeit (mit intelligenter Abkürzungserkennung)
-- **Beispieltexte** – Vordefinierte Texte in 3 Schwierigkeitsstufen
+- **Mehrere Lesbarkeitsindizes** – Je nach Sprache bis zu 5 verschiedene Formeln
+- **Satzanalyse** – Farbliche Markierung einzelner Sätze nach Schwierigkeit
+- **Beispieltexte** – Vordefinierte Texte in 3 Schwierigkeitsstufen pro Sprache
 - **URL-Parameter** – Text via `?text=...` übergeben für Integrationen
 - **Datenschutz** – 100% client-seitig, keine Datenübertragung
 - **Dark Mode** – Automatische Erkennung der Systemeinstellung
 - **Responsive** – Optimiert für Desktop und Mobile
 
-## Implementierte Formeln
+## Sprachspezifische Formeln
 
-| Formel | Entwickler | Jahr | Optimiert für |
-|--------|-----------|------|---------------|
-| Flesch-Amstad | Toni Amstad | 1978 | Deutsche Texte |
-| Flesch-Kincaid | J.P. Kincaid | 1975 | Englische Texte (Schulklasse) |
-| Wiener Sachtextformel | Bamberger & Vanecek | 1984 | Deutsche Sachtexte |
-| Gunning-Fog | Robert Gunning | 1952 | Englische Texte |
-| LIX | Carl-Hugo Björnsson | 1968 | Sprachunabhängig |
+### Deutsch
+| Formel | Entwickler | Jahr |
+|--------|-----------|------|
+| Flesch-Amstad | Toni Amstad | 1978 |
+| Flesch-Kincaid | J.P. Kincaid | 1975 |
+| Wiener Sachtextformel | Bamberger & Vanecek | 1984 |
+| Gunning-Fog | Robert Gunning | 1952 |
+| LIX | Carl-Hugo Björnsson | 1968 |
+
+### English
+| Formula | Developer | Year |
+|---------|-----------|------|
+| Flesch Reading Ease | Rudolf Flesch | 1948 |
+| Flesch-Kincaid Grade | J.P. Kincaid | 1975 |
+| SMOG | G. Harry McLaughlin | 1969 |
+| Gunning-Fog | Robert Gunning | 1952 |
+| LIX | Carl-Hugo Björnsson | 1968 |
+
+### Français
+| Formule | Développeur | Année |
+|---------|-------------|-------|
+| Kandel-Moles | Kandel & Moles | 1958 |
+| LIX | Carl-Hugo Björnsson | 1968 |
+
+### Italiano
+| Formula | Sviluppatore | Anno |
+|---------|--------------|------|
+| GULPEASE | Gruppo Universitario Linguistico Pedagogico | 1988 |
+| LIX | Carl-Hugo Björnsson | 1968 |
+
+### Español
+| Fórmula | Desarrollador | Año |
+|---------|---------------|-----|
+| INFLESZ | Barrio-Cantalejo | 2008 |
+| Flesch-Szigriszt | Szigriszt | 1993 |
+| LIX | Carl-Hugo Björnsson | 1968 |
+
+### Nederlands
+| Formule | Ontwikkelaar | Jaar |
+|---------|--------------|------|
+| Flesch-Douma | W.H. Douma | 1960 |
+| LIX | Carl-Hugo Björnsson | 1968 |
 
 ## Tech Stack
 
@@ -50,12 +99,33 @@ npm run build
 npm run preview
 ```
 
+## Projektstruktur
+
+```
+src/
+├── pages/
+│   ├── index.astro          # Landing Page mit Spracherkennung
+│   ├── de/index.astro       # Deutsche Version
+│   ├── en/index.astro       # English Version
+│   ├── fr/index.astro       # Version française
+│   ├── it/index.astro       # Versione italiana
+│   ├── es/index.astro       # Versión española
+│   └── nl/index.astro       # Nederlandse versie
+├── components/
+│   └── LanguageSwitcher.astro
+├── i18n/
+│   ├── translations/        # UI-Übersetzungen pro Sprache
+│   └── examples/            # Beispieltexte pro Sprache
+└── layouts/
+    └── Layout.astro
+```
+
 ## SEO
 
 - Open Graph und Twitter Card Meta-Tags
 - Schema.org JSON-LD (WebApplication, FAQPage)
-- Sitemap.xml und robots.txt
-- FAQ-Sektion
+- Sitemap.xml mit hreflang-Tags für alle Sprachen
+- FAQ-Sektion pro Sprache
 
 ## Deployment
 
