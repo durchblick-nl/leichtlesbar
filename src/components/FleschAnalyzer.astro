@@ -1,0 +1,131 @@
+---
+
+---
+
+<div class="space-y-6">
+  <div>
+    <label for="text-input" class="mb-2 block text-lg font-medium">
+      Geben Sie Ihren Text ein:
+    </label>
+    <textarea
+      id="text-input"
+      rows="10"
+      class="w-full rounded-lg border border-gray-300 p-4 text-base focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+      placeholder="Fügen Sie hier Ihren Text ein, um die Lesbarkeit zu analysieren..."
+    ></textarea>
+    <p id="word-hint" class="mt-2 text-sm text-gray-500">
+      Für zuverlässige Ergebnisse empfehlen wir mindestens 30 Wörter.
+    </p>
+  </div>
+
+  <button
+    id="analyze-btn"
+    type="button"
+    class="w-full rounded-lg bg-blue-600 px-6 py-3 text-lg font-medium text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:w-auto"
+  >
+    Text analysieren
+  </button>
+
+  <div id="results" class="hidden">
+    <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <h2 class="mb-4 text-xl font-bold">Ergebnis</h2>
+
+      <div class="mb-6 text-center">
+        <div id="score-display" class="mb-2 text-5xl font-bold"></div>
+        <div id="interpretation" class="text-lg text-gray-600"></div>
+      </div>
+
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="rounded-lg bg-gray-50 p-4">
+          <div class="text-sm text-gray-500">Wörter</div>
+          <div id="word-count" class="text-2xl font-semibold"></div>
+        </div>
+        <div class="rounded-lg bg-gray-50 p-4">
+          <div class="text-sm text-gray-500">Sätze</div>
+          <div id="sentence-count" class="text-2xl font-semibold"></div>
+        </div>
+        <div class="rounded-lg bg-gray-50 p-4">
+          <div class="text-sm text-gray-500">Silben</div>
+          <div id="syllable-count" class="text-2xl font-semibold"></div>
+        </div>
+        <div class="rounded-lg bg-gray-50 p-4">
+          <div class="text-sm text-gray-500">Wörter pro Satz</div>
+          <div id="words-per-sentence" class="text-2xl font-semibold"></div>
+        </div>
+        <div class="rounded-lg bg-gray-50 p-4">
+          <div class="text-sm text-gray-500">Silben pro Wort</div>
+          <div id="syllables-per-word" class="text-2xl font-semibold"></div>
+        </div>
+        <div class="rounded-lg bg-gray-50 p-4">
+          <div class="text-sm text-gray-500">Verschiedene Wörter</div>
+          <div id="unique-words" class="text-2xl font-semibold"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="warning" class="mt-4 hidden rounded-lg border border-yellow-200 bg-yellow-50 p-4 text-yellow-800">
+      Achtung: Für zuverlässigere Ergebnisse empfehlen wir einen längeren Text (mindestens 30 Wörter).
+    </div>
+  </div>
+</div>
+
+<script>
+  import { calculateFlesch } from '../utils/flesch';
+
+  const textInput = document.getElementById('text-input') as HTMLTextAreaElement;
+  const analyzeBtn = document.getElementById('analyze-btn');
+  const results = document.getElementById('results');
+  const warning = document.getElementById('warning');
+
+  const scoreColors: Record<string, string> = {
+    'sehr-schwer': 'text-red-600',
+    'schwer': 'text-orange-600',
+    'mittelschwer': 'text-yellow-600',
+    'mittel': 'text-lime-600',
+    'leicht': 'text-green-600',
+    'sehr-leicht': 'text-emerald-600',
+    'extrem-leicht': 'text-teal-600',
+  };
+
+  analyzeBtn?.addEventListener('click', () => {
+    const text = textInput.value.trim();
+
+    if (text.length === 0) {
+      alert('Bitte geben Sie einen Text ein.');
+      return;
+    }
+
+    const result = calculateFlesch(text);
+
+    // Score anzeigen
+    const scoreDisplay = document.getElementById('score-display');
+    if (scoreDisplay) {
+      scoreDisplay.textContent = result.score.toString();
+      scoreDisplay.className = `mb-2 text-5xl font-bold ${scoreColors[result.difficulty] || 'text-gray-900'}`;
+    }
+
+    // Interpretation
+    const interpretation = document.getElementById('interpretation');
+    if (interpretation) {
+      interpretation.textContent = result.interpretation;
+    }
+
+    // Statistiken
+    document.getElementById('word-count')!.textContent = result.wordCount.toString();
+    document.getElementById('sentence-count')!.textContent = result.sentenceCount.toString();
+    document.getElementById('syllable-count')!.textContent = result.syllableCount.toString();
+    document.getElementById('words-per-sentence')!.textContent = result.avgWordsPerSentence.toString();
+    document.getElementById('syllables-per-word')!.textContent = result.avgSyllablesPerWord.toString();
+    document.getElementById('unique-words')!.textContent = result.uniqueWords.toString();
+
+    // Ergebnisse anzeigen
+    results?.classList.remove('hidden');
+
+    // Warnung bei kurzen Texten
+    if (result.wordCount < 30) {
+      warning?.classList.remove('hidden');
+    } else {
+      warning?.classList.add('hidden');
+    }
+  });
+</script>

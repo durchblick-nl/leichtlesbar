@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Feder -->
+  <g fill="none" stroke="#5B6DAF" stroke-width="1.2" stroke-linecap="round">
+    <!-- Hauptstiel der Feder -->
+    <path d="M55 95 Q52 70, 48 50 Q45 30, 50 10" stroke-width="2"/>
+    <!-- Federäste links -->
+    <path d="M48 50 Q35 48, 25 55"/>
+    <path d="M47 45 Q32 42, 22 48"/>
+    <path d="M46 40 Q30 36, 20 40"/>
+    <path d="M46 35 Q32 30, 22 32"/>
+    <path d="M47 30 Q35 25, 28 25"/>
+    <path d="M48 25 Q38 20, 32 18"/>
+    <path d="M49 20 Q42 15, 38 12"/>
+    <!-- Federäste rechts -->
+    <path d="M52 55 Q62 52, 70 58"/>
+    <path d="M51 50 Q60 46, 68 50"/>
+    <path d="M50 45 Q58 40, 65 42"/>
+    <path d="M50 40 Q57 35, 62 35"/>
+    <path d="M50 35 Q55 30, 58 28"/>
+  </g>
+  <!-- Buchstabe L -->
+  <text x="30" y="82" font-family="Georgia, 'Times New Roman', serif" font-size="72" font-weight="400" fill="#5B6DAF" font-style="italic">L</text>
+</svg>

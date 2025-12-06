@@ -1,0 +1,112 @@
+---
+import Layout from '../layouts/Layout.astro';
+import FleschAnalyzer from '../components/FleschAnalyzer.astro';
+---
+
+<Layout title="Lesbarkeit testen">
+  <section class="mb-12">
+    <h1 class="mb-4 text-3xl font-bold md:text-4xl">
+      Testen Sie die Lesbarkeit Ihrer Texte
+    </h1>
+    <p class="text-lg text-gray-600">
+      Analysieren Sie Ihre Texte mit der Flesch-Formel und erfahren Sie, wie leicht verständlich sie sind.
+    </p>
+  </section>
+
+  <section class="mb-16">
+    <FleschAnalyzer />
+  </section>
+
+  <section id="formel" class="mb-12 scroll-mt-20">
+    <h2 class="mb-4 text-2xl font-bold">Die Flesch-Formel</h2>
+    <div class="rounded-lg bg-white p-6 shadow-sm">
+      <p class="mb-4">
+        Die Flesch-Lesbarkeitsformel wurde 1948 von Rudolf Flesch entwickelt und berechnet die Lesbarkeit eines Textes anhand von Satzlänge und Silbenanzahl:
+      </p>
+      <div class="mb-4 rounded bg-gray-100 p-4 font-mono text-sm">
+        Flesch-Wert = 206.835 - (1.015 × Wörter/Sätze) - (84.6 × Silben/Wörter)
+      </div>
+      <p>
+        Je höher der Wert, desto leichter ist der Text zu lesen. Ein Wert von 60-70 entspricht etwa dem Niveau einer Tageszeitung.
+      </p>
+    </div>
+  </section>
+
+  <section id="vorteile" class="mb-12 scroll-mt-20">
+    <h2 class="mb-4 text-2xl font-bold">Vorteile</h2>
+    <div class="rounded-lg bg-white p-6 shadow-sm">
+      <ul class="list-inside list-disc space-y-2">
+        <li>Einfache und schnelle Berechnung</li>
+        <li>Objektiver Massstab für Textverständlichkeit</li>
+        <li>Hilft beim Schreiben klarer, verständlicher Texte</li>
+        <li>Wissenschaftlich fundiert und weit verbreitet</li>
+        <li>Nützlich für Redakteure, Texter und Übersetzer</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="nachteile" class="mb-12 scroll-mt-20">
+    <h2 class="mb-4 text-2xl font-bold">Nachteile</h2>
+    <div class="rounded-lg bg-white p-6 shadow-sm">
+      <ul class="list-inside list-disc space-y-2">
+        <li>Berücksichtigt nicht den Inhalt oder Kontext des Textes</li>
+        <li>Fachbegriffe werden nicht speziell bewertet</li>
+        <li>Kurze Texte können unzuverlässige Ergebnisse liefern</li>
+        <li>Die Formel wurde ursprünglich für Englisch entwickelt</li>
+        <li>Kein Ersatz für menschliches Lektorat</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="mb-12">
+    <h2 class="mb-4 text-2xl font-bold">Interpretationstabelle</h2>
+    <div class="overflow-x-auto rounded-lg bg-white shadow-sm">
+      <table class="w-full">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-4 py-3 text-left">Flesch-Wert</th>
+            <th class="px-4 py-3 text-left">Schwierigkeit</th>
+            <th class="px-4 py-3 text-left">Beispiel</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y">
+          <tr>
+            <td class="px-4 py-3">0-30</td>
+            <td class="px-4 py-3 font-medium text-red-600">Sehr schwer</td>
+            <td class="px-4 py-3 text-gray-600">Akademische Texte</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3">30-50</td>
+            <td class="px-4 py-3 font-medium text-orange-600">Schwer</td>
+            <td class="px-4 py-3 text-gray-600">Wissenschaftliche Texte</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3">50-60</td>
+            <td class="px-4 py-3 font-medium text-yellow-600">Mittelschwer</td>
+            <td class="px-4 py-3 text-gray-600">Qualitätszeitungen</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3">60-70</td>
+            <td class="px-4 py-3 font-medium text-lime-600">Mittel</td>
+            <td class="px-4 py-3 text-gray-600">Boulevardzeitungen</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3">70-80</td>
+            <td class="px-4 py-3 font-medium text-green-600">Leicht</td>
+            <td class="px-4 py-3 text-gray-600">Werbetexte</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3">80-90</td>
+            <td class="px-4 py-3 font-medium text-emerald-600">Sehr leicht</td>
+            <td class="px-4 py-3 text-gray-600">Comics</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3">90-100</td>
+            <td class="px-4 py-3 font-medium text-teal-600">Extrem leicht</td>
+            <td class="px-4 py-3 text-gray-600">Grundschulniveau</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</Layout>
