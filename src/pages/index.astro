@@ -4,12 +4,65 @@ import FleschAnalyzer from '../components/FleschAnalyzer.astro';
 ---
 
 <Layout title="Lesbarkeit testen">
-  <section class="mb-12">
-    <h1 class="mb-4 text-3xl font-bold md:text-4xl">
-      Testen Sie die Lesbarkeit Ihrer Texte
+  <!-- Hero Section with animated illustration -->
+  <section class="mb-12 text-center">
+    <div class="mb-6 flex justify-center">
+      <!-- Animated reading illustration -->
+      <div class="relative">
+        <svg viewBox="0 0 200 160" class="h-32 w-40 md:h-40 md:w-48" aria-hidden="true">
+          <!-- Book -->
+          <rect x="40" y="80" width="120" height="70" rx="4" fill="#e0e7ff" class="dark:fill-blue-900/50" />
+          <path d="M100 80 L100 150" stroke="#6366f1" stroke-width="2" class="dark:stroke-blue-400" />
+          <rect x="45" y="85" width="50" height="4" rx="2" fill="#a5b4fc" class="dark:fill-blue-700">
+            <animate attributeName="width" values="50;45;50" dur="2s" repeatCount="indefinite" />
+          </rect>
+          <rect x="45" y="95" width="45" height="4" rx="2" fill="#a5b4fc" class="dark:fill-blue-700">
+            <animate attributeName="width" values="45;50;45" dur="2.5s" repeatCount="indefinite" />
+          </rect>
+          <rect x="45" y="105" width="48" height="4" rx="2" fill="#a5b4fc" class="dark:fill-blue-700">
+            <animate attributeName="width" values="48;42;48" dur="1.8s" repeatCount="indefinite" />
+          </rect>
+          <rect x="105" y="85" width="50" height="4" rx="2" fill="#a5b4fc" class="dark:fill-blue-700">
+            <animate attributeName="width" values="50;47;50" dur="2.2s" repeatCount="indefinite" />
+          </rect>
+          <rect x="105" y="95" width="45" height="4" rx="2" fill="#a5b4fc" class="dark:fill-blue-700">
+            <animate attributeName="width" values="45;48;45" dur="1.9s" repeatCount="indefinite" />
+          </rect>
+          <rect x="105" y="105" width="48" height="4" rx="2" fill="#a5b4fc" class="dark:fill-blue-700">
+            <animate attributeName="width" values="48;44;48" dur="2.3s" repeatCount="indefinite" />
+          </rect>
+
+          <!-- Magnifying glass -->
+          <g class="origin-center">
+            <animateTransform attributeName="transform" type="translate" values="0,0; 5,-3; 0,0" dur="3s" repeatCount="indefinite" />
+            <circle cx="140" cy="50" r="25" fill="none" stroke="#2563eb" stroke-width="4" class="dark:stroke-blue-400" />
+            <line x1="158" y1="68" x2="175" y2="85" stroke="#2563eb" stroke-width="6" stroke-linecap="round" class="dark:stroke-blue-400" />
+            <!-- Check mark inside magnifier -->
+            <path d="M128 50 L138 60 L155 40" fill="none" stroke="#22c55e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+              <animate attributeName="stroke-dasharray" values="0,50;50,0" dur="1.5s" repeatCount="indefinite" />
+            </path>
+          </g>
+
+          <!-- Floating sparkles -->
+          <circle cx="30" cy="40" r="3" fill="#fbbf24">
+            <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" />
+          </circle>
+          <circle cx="170" cy="30" r="2" fill="#fbbf24">
+            <animate attributeName="opacity" values="0;1;0" dur="2.5s" repeatCount="indefinite" begin="0.5s" />
+          </circle>
+          <circle cx="50" cy="25" r="2.5" fill="#fbbf24">
+            <animate attributeName="opacity" values="0;1;0" dur="1.8s" repeatCount="indefinite" begin="1s" />
+          </circle>
+        </svg>
+      </div>
+    </div>
+
+    <h1 class="mb-4 text-3xl font-bold md:text-4xl lg:text-5xl">
+      Testen Sie die <span class="text-blue-600 dark:text-blue-400">Lesbarkeit</span> Ihrer Texte
     </h1>
-    <p class="text-lg text-gray-600 dark:text-gray-300">
-      Analysieren Sie Ihre Texte mit der Flesch-Formel und erfahren Sie, wie leicht verständlich sie sind.
+    <p class="mx-auto max-w-2xl text-lg text-gray-600 dark:text-gray-300">
+      Analysieren Sie Ihre Texte mit der Flesch-Formel und weiteren Lesbarkeitsindizes.
+      <span class="font-medium text-green-600 dark:text-green-400">100% kostenlos und datenschutzfreundlich</span> – alles läuft in Ihrem Browser.
     </p>
   </section>
 
@@ -50,7 +103,7 @@ import FleschAnalyzer from '../components/FleschAnalyzer.astro';
         <div class="grid gap-4 md:grid-cols-2">
           <div>
             <h4 class="font-medium dark:text-white">Wiener Sachtextformel</h4>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Richard Bamberger & Erich Vanecek - speziell für deutsche Sachtexte</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Richard Bamberger & Erich Vanecek – speziell für deutsche Sachtexte</p>
           </div>
           <div>
             <h4 class="font-medium dark:text-white">Flesch-Kincaid Grade Level</h4>
@@ -58,7 +111,7 @@ import FleschAnalyzer from '../components/FleschAnalyzer.astro';
           </div>
           <div>
             <h4 class="font-medium dark:text-white">Gunning-Fog-Index</h4>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Robert Gunning (1952) - basiert auf komplexen Wörtern</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Robert Gunning (1952) – basiert auf komplexen Wörtern</p>
           </div>
           <div>
             <h4 class="font-medium dark:text-white">LIX Lesbarkeitsindex</h4>
@@ -156,6 +209,92 @@ import FleschAnalyzer from '../components/FleschAnalyzer.astro';
           </tr>
         </tbody>
       </table>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section id="faq" class="mb-12 scroll-mt-20">
+    <h2 class="mb-4 text-2xl font-bold">Häufige Fragen</h2>
+    <div class="space-y-4">
+      <details class="group rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
+        <summary class="flex cursor-pointer items-center justify-between p-5 font-medium dark:text-white">
+          Was ist der Flesch-Index?
+          <svg class="h-5 w-5 shrink-0 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </summary>
+        <div class="px-5 pb-5 text-gray-600 dark:text-gray-300">
+          Der Flesch-Index (auch Flesch Reading Ease) ist ein Lesbarkeitsindex, der die Verständlichkeit eines Textes misst. Er wurde 1948 von Rudolf Flesch entwickelt und basiert auf der durchschnittlichen Satzlänge und der durchschnittlichen Silbenanzahl pro Wort. Je höher der Wert (0-100), desto leichter ist der Text zu lesen.
+        </div>
+      </details>
+
+      <details class="group rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
+        <summary class="flex cursor-pointer items-center justify-between p-5 font-medium dark:text-white">
+          Welche Formel wird für deutsche Texte verwendet?
+          <svg class="h-5 w-5 shrink-0 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </summary>
+        <div class="px-5 pb-5 text-gray-600 dark:text-gray-300">
+          <p class="mb-2">Für deutsche Texte wird die angepasste Formel nach Toni Amstad (1978) verwendet:</p>
+          <code class="block rounded bg-gray-100 p-2 font-mono text-sm dark:bg-gray-700">FRE = 180 - ASL - (58.5 × ASW)</code>
+          <p class="mt-2">Diese Formel berücksichtigt, dass deutsche Wörter im Durchschnitt länger sind als englische und mehr Silben haben.</p>
+        </div>
+      </details>
+
+      <details class="group rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
+        <summary class="flex cursor-pointer items-center justify-between p-5 font-medium dark:text-white">
+          Werden meine Texte gespeichert?
+          <svg class="h-5 w-5 shrink-0 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </summary>
+        <div class="px-5 pb-5 text-gray-600 dark:text-gray-300">
+          <strong class="text-green-600 dark:text-green-400">Nein, niemals!</strong> Alle Berechnungen finden direkt in Ihrem Browser statt. Ihre Texte werden zu keinem Zeitpunkt an einen Server übertragen oder gespeichert. Die Analyse funktioniert sogar offline, nachdem die Seite einmal geladen wurde.
+        </div>
+      </details>
+
+      <details class="group rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
+        <summary class="flex cursor-pointer items-center justify-between p-5 font-medium dark:text-white">
+          Welcher Flesch-Wert ist optimal?
+          <svg class="h-5 w-5 shrink-0 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </summary>
+        <div class="px-5 pb-5 text-gray-600 dark:text-gray-300">
+          <p>Das hängt von Ihrer Zielgruppe ab:</p>
+          <ul class="mt-2 list-inside list-disc space-y-1">
+            <li><strong>Allgemeine Texte:</strong> 60-70 (Mittel)</li>
+            <li><strong>Werbetexte, Newsletter:</strong> 70-80 (Leicht)</li>
+            <li><strong>Wissenschaftliche Texte:</strong> 30-50 (Schwer)</li>
+            <li><strong>Kindertexte:</strong> 80+ (Sehr leicht)</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="group rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
+        <summary class="flex cursor-pointer items-center justify-between p-5 font-medium dark:text-white">
+          Warum werden mehrere Indizes angezeigt?
+          <svg class="h-5 w-5 shrink-0 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </summary>
+        <div class="px-5 pb-5 text-gray-600 dark:text-gray-300">
+          Verschiedene Lesbarkeitsindizes messen unterschiedliche Aspekte. Die Wiener Sachtextformel ist speziell für deutsche Sachtexte optimiert, der LIX funktioniert sprachübergreifend, und der Gunning-Fog-Index fokussiert auf komplexe Wörter. Die Kombination mehrerer Indizes gibt ein vollständigeres Bild der Textverständlichkeit.
+        </div>
+      </details>
+
+      <details class="group rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
+        <summary class="flex cursor-pointer items-center justify-between p-5 font-medium dark:text-white">
+          Kann ich einen Link zu einer Analyse teilen?
+          <svg class="h-5 w-5 shrink-0 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </summary>
+        <div class="px-5 pb-5 text-gray-600 dark:text-gray-300">
+          Ja! Sie können Text über die URL übergeben. Fügen Sie einfach <code class="rounded bg-gray-100 px-1.5 py-0.5 font-mono text-sm dark:bg-gray-700">?text=Ihr+Text+hier</code> an die URL an. Kurze Texte lassen sich so direkt verlinken. Beispiel: <code class="rounded bg-gray-100 px-1.5 py-0.5 font-mono text-sm dark:bg-gray-700">leichtlesbar.ch/?text=Hallo+Welt</code>
+        </div>
+      </details>
     </div>
   </section>
 
@@ -257,7 +396,7 @@ import FleschAnalyzer from '../components/FleschAnalyzer.astro';
     <div class="rounded-xl border border-green-200 bg-green-50 p-6 shadow-sm dark:border-green-800 dark:bg-green-900/20">
       <div class="mb-4 flex items-center gap-3">
         <div class="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 dark:bg-green-800">
-          <svg class="h-5 w-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="h-5 w-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
           </svg>
         </div>
