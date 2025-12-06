@@ -155,6 +155,7 @@ export interface FullAnalysisResult {
   gunningFog: GunningFogResult;
   lix: LixResult;
   sentences: SentenceAnalysis[];
+  paragraphs: ParagraphAnalysis[];
 }
 
 /**
@@ -440,9 +441,14 @@ export function calculateLix(text: string): LixResult {
   };
 }
 
+export interface ParagraphAnalysis {
+  sentences: SentenceAnalysis[];
+}
+
 /**
  * Extrahiert und analysiert einzelne Sätze
  * Verwendet die deutsche Amstad-Formel für die Satzanalyse
+ * Behält Absätze bei für bessere Darstellung
  */
 export function analyzeSentences(text: string): SentenceAnalysis[] {
   // Sätze aufteilen, aber Satzzeichen für Anzeige behalten
@@ -477,6 +483,46 @@ export function analyzeSentences(text: string): SentenceAnalysis[] {
 }
 
 /**
+ * Analysiert Text absatzweise
+ * Behält die Absatzstruktur für die Darstellung bei
+ */
+export function analyzeByParagraphs(text: string): ParagraphAnalysis[] {
+  // Text in Absätze aufteilen (doppelte Zeilenumbrüche oder einzelne)
+  const paragraphs = text.split(/\n\s*\n|\n/).filter(p => p.trim().length > 0);
+
+  return paragraphs.map(paragraph => {
+    // Sätze im Absatz aufteilen
+    const sentenceTexts = paragraph.split(/(?<=[.!?])\s+/).filter(s => s.trim().length > 0);
+
+    const sentences = sentenceTexts.map(sentenceText => {
+      const normalizedSentence = normalizeAbbreviations(sentenceText);
+      const words = getWords(normalizedSentence);
+      const wordCount = words.length;
+
+      let syllableCount = 0;
+      for (const word of words) {
+        syllableCount += countSyllables(word);
+      }
+
+      const avgSyllablesPerWord = wordCount > 0 ? syllableCount / wordCount : 0;
+      const score = 180 - wordCount - (58.5 * avgSyllablesPerWord);
+      const { difficulty } = interpretAmstadScore(score);
+
+      return {
+        text: sentenceText,
+        wordCount,
+        syllableCount,
+        avgSyllablesPerWord: Math.round(avgSyllablesPerWord * 100) / 100,
+        score: Math.round(score * 10) / 10,
+        difficulty,
+      };
+    });
+
+    return { sentences };
+  });
+}
+
+/**
  * Vollständige Textanalyse mit allen Metriken
  */
 export function analyzeText(text: string): FullAnalysisResult {
@@ -487,5 +533,6 @@ export function analyzeText(text: string): FullAnalysisResult {
     gunningFog: calculateGunningFog(text),
     lix: calculateLix(text),
     sentences: analyzeSentences(text),
+    paragraphs: analyzeByParagraphs(text),
   };
 }

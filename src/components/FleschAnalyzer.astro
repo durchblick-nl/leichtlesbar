@@ -317,13 +317,16 @@
     document.getElementById('syllables-per-word')!.textContent = analysis.flesch.avgSyllablesPerWord.toString();
     document.getElementById('unique-words')!.textContent = analysis.flesch.uniqueWords.toString();
 
-    // Update sentence analysis with colored sentences
+    // Update sentence analysis with colored sentences, preserving paragraphs
     const sentenceContainer = document.getElementById('sentence-analysis');
     if (sentenceContainer) {
-      sentenceContainer.innerHTML = analysis.sentences.map(sentence => {
-        const colors = difficultyColors[sentence.difficulty];
-        return `<span class="inline rounded px-1 py-0.5 ${colors.bg} ${colors.text}" title="Score: ${sentence.score}, Wörter: ${sentence.wordCount}">${sentence.text}</span>`;
-      }).join(' ');
+      sentenceContainer.innerHTML = analysis.paragraphs.map(paragraph => {
+        const sentencesHtml = paragraph.sentences.map(sentence => {
+          const colors = difficultyColors[sentence.difficulty];
+          return `<span class="inline rounded px-1 py-0.5 ${colors.bg} ${colors.text}" title="Score: ${sentence.score}, Wörter: ${sentence.wordCount}">${sentence.text}</span>`;
+        }).join(' ');
+        return `<p class="mb-4 last:mb-0">${sentencesHtml}</p>`;
+      }).join('');
     }
 
     // Warning for short texts
