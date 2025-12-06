@@ -34,33 +34,106 @@ export function countSyllables(word: string): number {
 }
 
 /**
- * Normalisiert Abkürzungen im Text
+ * Liste von deutschen Abkürzungen die nicht als Satzende zählen
+ */
+const ABBREVIATIONS: Record<string, string> = {
+  'z.B.': 'zum Beispiel',
+  'z. B.': 'zum Beispiel',
+  'd.h.': 'das heisst',
+  'd. h.': 'das heisst',
+  'u.a.': 'unter anderem',
+  'u. a.': 'unter anderem',
+  'usw.': 'und so weiter',
+  'etc.': 'et cetera',
+  'Dr.': 'Doktor',
+  'Prof.': 'Professor',
+  'Nr.': 'Nummer',
+  'ca.': 'circa',
+  'bzw.': 'beziehungsweise',
+  'ggf.': 'gegebenenfalls',
+  'evtl.': 'eventuell',
+  'inkl.': 'inklusive',
+  'exkl.': 'exklusive',
+  'max.': 'maximal',
+  'min.': 'minimal',
+  'v.a.': 'vor allem',
+  'o.ä.': 'oder ähnlich',
+  'o. ä.': 'oder ähnlich',
+  'u.v.m.': 'und vieles mehr',
+  'z.T.': 'zum Teil',
+  'z. T.': 'zum Teil',
+  'i.d.R.': 'in der Regel',
+  'i. d. R.': 'in der Regel',
+  'o.g.': 'oben genannt',
+  'o. g.': 'oben genannt',
+  'u.U.': 'unter Umständen',
+  'u. U.': 'unter Umständen',
+  's.o.': 'siehe oben',
+  's. o.': 'siehe oben',
+  's.u.': 'siehe unten',
+  's. u.': 'siehe unten',
+  'Mio.': 'Millionen',
+  'Mrd.': 'Milliarden',
+  'Tsd.': 'Tausend',
+  'Tel.': 'Telefon',
+  'Str.': 'Strasse',
+  'Hr.': 'Herr',
+  'Fr.': 'Frau',
+  'St.': 'Sankt',
+  'Jh.': 'Jahrhundert',
+  'hl.': 'heilig',
+  'sog.': 'sogenannt',
+  'vgl.': 'vergleiche',
+  'Abb.': 'Abbildung',
+  'Abs.': 'Absatz',
+  'Anm.': 'Anmerkung',
+  'Art.': 'Artikel',
+  'Aufl.': 'Auflage',
+  'Bd.': 'Band',
+  'Bsp.': 'Beispiel',
+  'bzgl.': 'bezüglich',
+  'Chr.': 'Christus',
+  'entspr.': 'entsprechend',
+  'geb.': 'geboren',
+  'gest.': 'gestorben',
+  'Kap.': 'Kapitel',
+  'lat.': 'lateinisch',
+  'S.': 'Seite',
+};
+
+/**
+ * Schützt Abkürzungen vor Satz-Splitting durch Ersetzen der Punkte
+ */
+export function protectAbbreviations(text: string): string {
+  let protected_text = text;
+  // Sortiere nach Länge (längste zuerst) um Überlappungen zu vermeiden
+  const sortedAbbrs = Object.keys(ABBREVIATIONS).sort((a, b) => b.length - a.length);
+
+  for (const abbr of sortedAbbrs) {
+    // Ersetze Punkte in Abkürzungen durch Platzhalter
+    const placeholder = abbr.replace(/\./g, '###DOT###');
+    protected_text = protected_text.replace(new RegExp(abbr.replace(/\./g, '\\.'), 'g'), placeholder);
+  }
+  return protected_text;
+}
+
+/**
+ * Stellt die Punkte in Abkürzungen wieder her
+ */
+export function restoreAbbreviations(text: string): string {
+  return text.replace(/###DOT###/g, '.');
+}
+
+/**
+ * Normalisiert Abkürzungen im Text (für Silbenzählung)
  */
 export function normalizeAbbreviations(text: string): string {
-  const abbreviations: Record<string, string> = {
-    'z.B.': 'zum Beispiel',
-    'z. B.': 'zum Beispiel',
-    'd.h.': 'das heisst',
-    'd. h.': 'das heisst',
-    'u.a.': 'unter anderem',
-    'u. a.': 'unter anderem',
-    'usw.': 'und so weiter',
-    'etc.': 'et cetera',
-    'Dr.': 'Doktor',
-    'Prof.': 'Professor',
-    'Nr.': 'Nummer',
-    'ca.': 'circa',
-    'bzw.': 'beziehungsweise',
-    'ggf.': 'gegebenenfalls',
-    'evtl.': 'eventuell',
-    'inkl.': 'inklusive',
-    'exkl.': 'exklusive',
-    'max.': 'maximal',
-    'min.': 'minimal',
-  };
-
   let normalized = text;
-  for (const [abbr, full] of Object.entries(abbreviations)) {
+  // Sortiere nach Länge (längste zuerst)
+  const sortedAbbrs = Object.keys(ABBREVIATIONS).sort((a, b) => b.length - a.length);
+
+  for (const abbr of sortedAbbrs) {
+    const full = ABBREVIATIONS[abbr];
     normalized = normalized.replace(new RegExp(abbr.replace(/\./g, '\\.'), 'gi'), full);
   }
   return normalized;
@@ -70,9 +143,22 @@ export function normalizeAbbreviations(text: string): string {
  * Zählt die Sätze im Text
  */
 export function countSentences(text: string): number {
-  const normalized = normalizeAbbreviations(text);
-  const sentences = normalized.split(/[.!?]+/).filter(s => s.trim().length > 0);
+  // Schütze Abkürzungen vor dem Splitting
+  const protected_text = protectAbbreviations(text);
+  const sentences = protected_text.split(/[.!?]+/).filter(s => s.trim().length > 0);
   return Math.max(1, sentences.length);
+}
+
+/**
+ * Teilt Text in Sätze auf, unter Berücksichtigung von Abkürzungen
+ */
+export function splitIntoSentences(text: string): string[] {
+  // Schütze Abkürzungen vor dem Splitting
+  const protected_text = protectAbbreviations(text);
+  // Teile an Satzenden
+  const sentences = protected_text.split(/(?<=[.!?])\s+/).filter(s => s.trim().length > 0);
+  // Stelle Abkürzungen wieder her
+  return sentences.map(s => restoreAbbreviations(s));
 }
 
 /**
@@ -448,11 +534,11 @@ export interface ParagraphAnalysis {
 /**
  * Extrahiert und analysiert einzelne Sätze
  * Verwendet die deutsche Amstad-Formel für die Satzanalyse
- * Behält Absätze bei für bessere Darstellung
+ * Berücksichtigt Abkürzungen beim Satz-Splitting
  */
 export function analyzeSentences(text: string): SentenceAnalysis[] {
-  // Sätze aufteilen, aber Satzzeichen für Anzeige behalten
-  const sentenceTexts = text.split(/(?<=[.!?])\s+/).filter(s => s.trim().length > 0);
+  // Sätze aufteilen mit Abkürzungs-Schutz
+  const sentenceTexts = splitIntoSentences(text);
 
   return sentenceTexts.map(sentenceText => {
     const normalizedSentence = normalizeAbbreviations(sentenceText);
@@ -485,14 +571,15 @@ export function analyzeSentences(text: string): SentenceAnalysis[] {
 /**
  * Analysiert Text absatzweise
  * Behält die Absatzstruktur für die Darstellung bei
+ * Berücksichtigt Abkürzungen beim Satz-Splitting
  */
 export function analyzeByParagraphs(text: string): ParagraphAnalysis[] {
   // Text in Absätze aufteilen (doppelte Zeilenumbrüche oder einzelne)
   const paragraphs = text.split(/\n\s*\n|\n/).filter(p => p.trim().length > 0);
 
   return paragraphs.map(paragraph => {
-    // Sätze im Absatz aufteilen
-    const sentenceTexts = paragraph.split(/(?<=[.!?])\s+/).filter(s => s.trim().length > 0);
+    // Sätze im Absatz aufteilen mit Abkürzungs-Schutz
+    const sentenceTexts = splitIntoSentences(paragraph);
 
     const sentences = sentenceTexts.map(sentenceText => {
       const normalizedSentence = normalizeAbbreviations(sentenceText);
