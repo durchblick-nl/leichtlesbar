@@ -103,21 +103,29 @@ npm run preview
 
 ```
 src/
+├── components/
+│   └── LanguageSwitcher.astro
+├── data/
+│   ├── abbreviations.ts     # Abkürzungen
+│   └── translations.ts      # Logik-Übersetzungen
+├── i18n/
+│   ├── examples/            # Beispieltexte
+│   ├── translations/        # UI-Übersetzungen
+│   └── index.ts             # Helper
+├── layouts/
+│   └── Layout.astro
 ├── pages/
-│   ├── index.astro          # Landing Page mit Spracherkennung
+│   ├── index.astro          # Landing Page
 │   ├── de/index.astro       # Deutsche Version
 │   ├── en/index.astro       # English Version
 │   ├── fr/index.astro       # Version française
 │   ├── it/index.astro       # Versione italiana
 │   ├── es/index.astro       # Versión española
 │   └── nl/index.astro       # Nederlandse versie
-├── components/
-│   └── LanguageSwitcher.astro
-├── i18n/
-│   ├── translations/        # UI-Übersetzungen pro Sprache
-│   └── examples/            # Beispieltexte pro Sprache
-└── layouts/
-    └── Layout.astro
+├── types.ts                 # Type Definitions
+└── utils/
+    └── flesch.ts            # Algorithmen
+
 ```
 
 ## SEO

@@ -15,21 +15,25 @@ Online seit 2003, erstellt von Christian Bachmann und Roger Gösele.
 ```
 src/
 ├── components/     # Wiederverwendbare Astro/UI-Komponenten
-│   └── FleschAnalyzer.astro  # Hauptkomponente für Textanalyse
+│   └── LanguageSwitcher.astro  # Sprachumschalter
+├── data/           # Daten und Konstanten
+│   ├── abbreviations.ts      # Abkürzungen für Satz-Erkennung
+│   └── translations.ts       # Übersetzungen für Formel-Interpretationen
+├── i18n/           # Internationalisierung
+│   ├── examples/             # Beispieltexte pro Sprache
+│   ├── translations/         # UI-Texte pro Sprache
+│   └── index.ts              # Typsichere i18n-Funktionen
 ├── layouts/        # Seiten-Layouts
 │   └── Layout.astro          # Basis-Layout mit Navigation, SEO und Dark Mode
 ├── pages/          # Astro-Seiten (File-based Routing)
-│   └── index.astro           # Hauptseite mit allen Inhalten
+│   ├── [lang]/index.astro    # Hauptseiten logik (de, en, fr, etc.)
+│   └── index.astro           # Landing Page mit Routing
 ├── styles/         # Globale CSS-Dateien
 │   └── global.css            # Tailwind-Import und Dark Mode Variant
+├── types.ts        # TypeScript Typ-Definitionen
 └── utils/          # TypeScript Utilities
     └── flesch.ts             # Alle Lesbarkeitsberechnungen
 
-public/
-├── favicon.svg     # Logo (Feder-Symbol)
-├── og-image.svg    # Open Graph Bild für Social Sharing
-├── robots.txt      # Suchmaschinen-Anweisungen
-└── sitemap.xml     # Sitemap für SEO
 ```
 
 ## Entwicklung

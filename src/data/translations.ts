@@ -146,9 +146,19 @@ export const translations: Record<SupportedLanguage, {
     fr: {
         tooLittleText: 'Texte trop court',
         preschool: 'Préscolaire',
-        elementary: (grade) => `École primaire (${grade}e année)`,
-        middleSchool: (grade) => `Collège (${grade}e année)`,
-        highSchool: (grade) => `Lycée (${grade}e année)`,
+        elementary: (grade) => {
+            const levels = { 1: 'CP', 2: 'CE1', 3: 'CE2', 4: 'CM1', 5: 'CM2' };
+            return `École primaire (${levels[grade as keyof typeof levels] || `${grade}e année`})`;
+        },
+        middleSchool: (grade) => {
+            const levels = { 6: '6ème', 7: '5ème', 8: '4ème' };
+            return `Collège (${levels[grade as keyof typeof levels] || `${grade}e année`})`;
+        },
+        highSchool: (grade) => {
+            if (grade === 9) return 'Collège (3ème)';
+            const levels = { 10: 'Seconde', 11: 'Première', 12: 'Terminale' };
+            return `Lycée (${levels[grade as keyof typeof levels] || `${grade}e année`})`;
+        },
         university: 'Niveau universitaire',
         academic: 'Niveau académique',
         lowerGrades: (grade) => `Cycle primaire (${grade}e année)`,
@@ -193,8 +203,8 @@ export const translations: Record<SupportedLanguage, {
         tooLittleText: 'Testo troppo breve',
         preschool: 'Prescolare',
         elementary: (grade) => `Scuola elementare (${grade}° anno)`,
-        middleSchool: (grade) => `Scuola media (${grade}° anno)`,
-        highSchool: (grade) => `Scuola superiore (${grade}° anno)`,
+        middleSchool: (grade) => `Scuola media (${grade - 5}° anno)`,
+        highSchool: (grade) => `Scuola superiore (${grade - 8}° anno)`,
         university: 'Livello universitario',
         academic: 'Livello accademico',
         lowerGrades: (grade) => `Ciclo primario (${grade}° anno)`,
@@ -238,12 +248,18 @@ export const translations: Record<SupportedLanguage, {
     es: {
         tooLittleText: 'Texto demasiado corto',
         preschool: 'Preescolar',
-        elementary: (grade) => `Escuela primaria (${grade}° grado)`,
-        middleSchool: (grade) => `Secundaria (${grade}° grado)`,
-        highSchool: (grade) => `Bachillerato (${grade}° grado)`,
+        elementary: (grade) => `Primaria (${grade}º)`,
+        middleSchool: (grade) => {
+            if (grade === 6) return 'Primaria (6º)';
+            return `ESO (${grade - 6}º)`;
+        },
+        highSchool: (grade) => {
+            if (grade <= 10) return `ESO (${grade - 6}º)`;
+            return `Bachillerato (${grade - 10}º)`;
+        },
         university: 'Nivel universitario',
         academic: 'Nivel académico',
-        lowerGrades: (grade) => `Ciclo primario (${grade}° grado)`,
+        lowerGrades: (grade) => `Primaria (${grade}º)`,
         fleschVeryHard: 'Muy difícil - Académico',
         fleschHard: 'Difícil - Universidad',
         fleschFairlyHard: 'Bastante difícil - 16+ años',
@@ -284,12 +300,15 @@ export const translations: Record<SupportedLanguage, {
     nl: {
         tooLittleText: 'Te weinig tekst',
         preschool: 'Kleuterschool',
-        elementary: (grade) => `Basisschool (groep ${grade})`,
-        middleSchool: (grade) => `Middelbare school (klas ${grade})`,
-        highSchool: (grade) => `Bovenbouw (klas ${grade})`,
+        elementary: (grade) => `Basisschool (groep ${grade + 2})`,
+        middleSchool: (grade) => {
+            if (grade === 6) return 'Basisschool (groep 8)';
+            return `Middelbare school (klas ${grade - 6})`;
+        },
+        highSchool: (grade) => `Middelbare school (klas ${grade - 6})`,
         university: 'Universitair niveau',
         academic: 'Academisch niveau',
-        lowerGrades: (grade) => `Onderbouw (groep ${grade})`,
+        lowerGrades: (grade) => `Onderbouw (groep ${grade + 2})`,
         fleschVeryHard: 'Zeer moeilijk - Academisch',
         fleschHard: 'Moeilijk - Universiteit',
         fleschFairlyHard: 'Vrij moeilijk - 16+ jaar',
