@@ -29,9 +29,17 @@ export const fr: Translations = {
     sentenceCount: 'Phrases',
     syllableCount: 'Syllabes',
     avgWordsPerSentence: 'Mots/Phrase',
-    avgSyllablesPerWord: 'Syllabes/Mot',
-    showSentences: 'Afficher les phrases',
-    hideSentences: 'Masquer les phrases',
+    avgSyllablesPerWord: 'Syllables/Mot',
+  },
+  // New UI
+  emptyState: {
+    title: 'Commencez à taper',
+    subtitle: 'Ou choisissez un exemple de texte',
+  },
+  tooltip: {
+    readability: 'Lisibilité',
+    words: 'Mots',
+    syllables: 'Syllabes',
   },
   results: {
     score: 'Score',

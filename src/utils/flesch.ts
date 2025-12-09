@@ -1,3 +1,31 @@
+import { ABBREVIATIONS } from '../data/abbreviations';
+import { translations } from '../data/translations';
+import type {
+  Difficulty,
+  SupportedLanguage,
+  FleschResult,
+  FleschKincaidResult,
+  WienerResult,
+  GunningFogResult,
+  LixResult,
+  SentenceAnalysis,
+  ParagraphAnalysis,
+  FullAnalysisResult
+} from '../types';
+
+export type {
+  Difficulty,
+  SupportedLanguage,
+  FleschResult,
+  FleschKincaidResult,
+  WienerResult,
+  GunningFogResult,
+  LixResult,
+  SentenceAnalysis,
+  ParagraphAnalysis,
+  FullAnalysisResult
+};
+
 /**
  * Zählt die Silben in einem Wort
  * Unterstützt alle europäischen Sprachen (DE, EN, FR, IT, ES, NL)
@@ -67,171 +95,6 @@ export function countSyllables(word: string): number {
 }
 
 /**
- * Liste von deutschen Abkürzungen die nicht als Satzende zählen
- */
-const ABBREVIATIONS: Record<string, string> = {
-  // Häufige Abkürzungen
-  'z.B.': 'zum Beispiel',
-  'z. B.': 'zum Beispiel',
-  'z.b.': 'zum beispiel',
-  'z. b.': 'zum beispiel',
-  'd.h.': 'das heisst',
-  'd. h.': 'das heisst',
-  'u.a.': 'unter anderem',
-  'u. a.': 'unter anderem',
-  'u.A.': 'unter Anderem',
-  'usw.': 'und so weiter',
-  'etc.': 'et cetera',
-  'u.U.': 'unter Umständen',
-  'u. U.': 'unter Umständen',
-  'z.T.': 'zum Teil',
-  'z. T.': 'zum Teil',
-  'z.z.': 'zur zeit',
-  'z. z.': 'zur zeit',
-  'z.Z.': 'zur Zeit',
-  'z. Z.': 'zur Zeit',
-  'i.d.R.': 'in der Regel',
-  'i. d. R.': 'in der Regel',
-  'o.g.': 'oben genannt',
-  'o. g.': 'oben genannt',
-  'o.ä.': 'oder ähnlich',
-  'o. ä.': 'oder ähnlich',
-  'u.v.m.': 'und vieles mehr',
-  's.o.': 'siehe oben',
-  's. o.': 'siehe oben',
-  's.u.': 'siehe unten',
-  's. u.': 'siehe unten',
-  'v.a.': 'vor allem',
-
-  // Titel und Anreden
-  'Dr.': 'Doktor',
-  'dr.': 'doktor',
-  'Prof.': 'Professor',
-  'prof.': 'professor',
-  'Hr.': 'Herr',
-  'Fr.': 'Frau',
-  'Dipl.': 'Diplomiert',
-  'dipl.': 'diplomiert',
-
-  // Allgemeine Abkürzungen
-  'Nr.': 'Nummer',
-  'ca.': 'circa',
-  'bzw.': 'beziehungsweise',
-  'ggf.': 'gegebenenfalls',
-  'evtl.': 'eventuell',
-  'ev.': 'eventuell',
-  'inkl.': 'inklusive',
-  'exkl.': 'exklusive',
-  'max.': 'maximal',
-  'min.': 'minimal',
-  'vgl.': 'vergleiche',
-  'sog.': 'sogenannt',
-  'bes.': 'besonders',
-  'allg.': 'allgemein',
-  'eigentl.': 'eigentlich',
-  'ehem.': 'ehemalig',
-  'entspr.': 'entsprechend',
-  'etw.': 'etwas',
-  'spez.': 'spezial',
-
-  // Orte und Richtungen
-  'St.': 'Sankt',
-  'st.': 'sankt',
-  'Sta.': 'Santa',
-  'Str.': 'Strasse',
-
-  // Masseinheiten und Zahlen
-  'Mio.': 'Millionen',
-  'Mrd.': 'Milliarden',
-  'Tsd.': 'Tausend',
-  't.': 'tonne',
-  'c.': 'cent',
-
-  // Kommunikation
-  'Tel.': 'Telefon',
-  'Fax.': 'Fax',
-  'Fa.': 'Firma',
-  'fa.': 'firma',
-
-  // Akademisch
-  'Abs.': 'Absatz',
-  'Abb.': 'Abbildung',
-  'Abk.': 'Abkürzung',
-  'abk.': 'abkurzung',
-  'Anm.': 'Anmerkung',
-  'anm.': 'anmerkung',
-  'Art.': 'Artikel',
-  'Aufl.': 'Auflage',
-  'Bd.': 'Band',
-  'Bsp.': 'Beispiel',
-  'bzgl.': 'bezüglich',
-  'Kap.': 'Kapitel',
-  'S.': 'Seite',
-  's.': 'seite',
-  'Sp.': 'Spalte',
-  'sp.': 'spalte',
-  'f.': 'folgend',
-  'ff.': 'fortfolgend',
-
-  // Sprachen und Herkunft
-  'dt.': 'deutsch',
-  'lat.': 'lateinisch',
-  'franz.': 'französisch',
-  'ital.': 'italienisch',
-  'amer.': 'amerikanisch',
-  'europ.': 'europäisch',
-  'schweiz.': 'schweizerisch',
-  'eidg.': 'eidgenössisch',
-
-  // Wissenschaft
-  'med.': 'medizinisch',
-  'Med.': 'Medizin',
-  'phil.': 'philosophisch',
-  'iur.': 'iuris',
-  'jur.': 'juris',
-  'stud.': 'studiosus',
-  'h.c.': 'honoris causa',
-
-  // Religion und Zeit
-  'Chr.': 'Christus',
-  'hl.': 'heilig',
-  'Jh.': 'Jahrhundert',
-  'geb.': 'geboren',
-  'gest.': 'gestorben',
-  'Fam.': 'Familie',
-  'fam.': 'familie',
-
-  // Internationale
-  'U.S.': 'United States',
-  'L.P.': 'Limited Partnership',
-
-  // Einbuchstabige mit Punkt (Vorsicht!)
-  ' a.': ' am',
-  ' b.': ' bei',
-  ' d.': ' dies',
-  ' e.': ' ein',
-  ' f.': ' folgend',
-  ' g.': ' gegen',
-  ' i.': ' in',
-  ' l.': ' links',
-  ' m.': ' mit',
-  ' n.': ' nicht',
-  ' o.': ' oder',
-  ' p.': ' per',
-  ' q.': ' quod',
-  ' r.': ' rechts',
-  ' s.': ' sieh',
-  ' t.': ' tonne',
-  ' u.': ' und',
-  ' v.': ' von',
-  ' w.': ' wie',
-  ' z.': ' zu',
-  'od.': 'oder',
-  'gg.': 'gegen',
-  'ggs.': 'gegensatz',
-};
-
-/**
  * Ersetzt Zahlen mit Punkten (z.B. "1." oder ".5") um sie vor Satz-Splitting zu schützen
  */
 export function protectNumbers(text: string): string {
@@ -265,7 +128,15 @@ export function protectAbbreviations(text: string): string {
   for (const abbr of sortedAbbrs) {
     // Ersetze Punkte in Abkürzungen durch Platzhalter
     const placeholder = abbr.replace(/\./g, '###DOT###');
-    protected_text = protected_text.replace(new RegExp(abbr.replace(/\./g, '\\.'), 'g'), placeholder);
+    let pattern = abbr.replace(/\./g, '\\.');
+
+    // Wenn die Abkürzung mit einem Wort-Zeichen beginnt, erzwinge Wortgrenze davor
+    // Dies verhindert falsche Matches wie "st." in "Dienst."
+    if (/^[\w]/.test(abbr)) {
+      pattern = '\\b' + pattern;
+    }
+
+    protected_text = protected_text.replace(new RegExp(pattern, 'g'), placeholder);
   }
   return protected_text;
 }
@@ -315,8 +186,9 @@ export function splitIntoSentences(text: string): string[] {
   // Schütze auch "..." (Ellipsis)
   protected_text = protected_text.replace(/\.\.\./g, '###ELLIPSIS###');
 
-  // Teile an Satzenden (. ! ?) gefolgt von Leerzeichen
-  const sentences = protected_text.split(/(?<=[.!?])\s+/).filter(s => s.trim().length > 0);
+  // Teile an Satzenden (. ! ?) gefolgt von Leerzeichen UND einem Großbuchstaben/Zahl.
+  // Das schützt unbekannte Abkürzungen, die klein weitergehen (z.B. "usw. und so").
+  const sentences = protected_text.split(/(?<=[.!?])\s+(?=[A-ZÄÖÜ0-9])/).filter(s => s.trim().length > 0);
 
   // Stelle alles wieder her
   return sentences.map(s => {
@@ -353,340 +225,11 @@ export function countComplexWords(words: string[]): number {
   return words.filter(word => countSyllables(word) >= 3).length;
 }
 
-export type Difficulty = 'sehr-schwer' | 'schwer' | 'mittelschwer' | 'mittel' | 'leicht' | 'sehr-leicht' | 'extrem-leicht';
-
-export type SupportedLanguage = 'de' | 'en' | 'fr' | 'it' | 'es' | 'nl';
-
-/**
- * Übersetzungen für alle unterstützten Sprachen
- */
-const translations: Record<SupportedLanguage, {
-  tooLittleText: string;
-  preschool: string;
-  elementary: (grade: number) => string;
-  middleSchool: (grade: number) => string;
-  highSchool: (grade: number) => string;
-  university: string;
-  academic: string;
-  lowerGrades: (grade: number) => string;
-  // Flesch interpretations
-  fleschVeryHard: string;
-  fleschHard: string;
-  fleschFairlyHard: string;
-  fleschMedium: string;
-  fleschEasy: string;
-  fleschVeryEasy: string;
-  fleschExtremelyEasy: string;
-  // Amstad interpretations
-  amstadExtremelyHard: string;
-  amstadVeryHard: string;
-  amstadHard: string;
-  amstadFairlyHard: string;
-  amstadMedium: string;
-  amstadEasy: string;
-  amstadVeryEasy: string;
-  amstadExtremelyEasy: string;
-  // Gunning Fog interpretations
-  fogVerySimple: string;
-  fogSimple: string;
-  fogStandard: string;
-  fogDemanding: string;
-  fogDifficult: string;
-  fogVeryDifficult: string;
-  // LIX interpretations
-  lixVerySimple: string;
-  lixSimple: string;
-  lixMedium: string;
-  lixDifficult: string;
-  lixVeryDifficult: string;
-  lixExtremelyDifficult: string;
-}> = {
-  de: {
-    tooLittleText: 'Zu wenig Text',
-    preschool: 'Vorschule',
-    elementary: (grade) => `Grundschule (${grade}. Klasse)`,
-    middleSchool: (grade) => `Mittelstufe (${grade}. Klasse)`,
-    highSchool: (grade) => `Oberstufe (${grade}. Klasse)`,
-    university: 'Universitätsniveau',
-    academic: 'Akademisches Niveau',
-    lowerGrades: (grade) => `Unterstufe (${grade}. Klasse)`,
-    fleschVeryHard: 'Sehr schwer - Akademiker',
-    fleschHard: 'Schwer - Studium',
-    fleschFairlyHard: 'Mittelschwer - 16+ Jahre',
-    fleschMedium: 'Mittel - 13-15 Jahre',
-    fleschEasy: 'Leicht - 12 Jahre',
-    fleschVeryEasy: 'Sehr leicht - 11 Jahre',
-    fleschExtremelyEasy: 'Extrem leicht - 10 Jahre',
-    amstadExtremelyHard: 'Extrem schwer - Akademiker',
-    amstadVeryHard: 'Sehr schwer - Studium',
-    amstadHard: 'Schwer - Matura/Abitur',
-    amstadFairlyHard: 'Mittelschwer - 16+ Jahre',
-    amstadMedium: 'Mittel - 13-15 Jahre',
-    amstadEasy: 'Leicht - 12 Jahre',
-    amstadVeryEasy: 'Sehr leicht - 11 Jahre',
-    amstadExtremelyEasy: 'Extrem leicht - 10 Jahre',
-    fogVerySimple: 'Sehr einfach - für jeden verständlich',
-    fogSimple: 'Einfach - Alltagssprache',
-    fogStandard: 'Standard - Zeitungsniveau',
-    fogDemanding: 'Anspruchsvoll - Fachliteratur',
-    fogDifficult: 'Schwierig - Wissenschaftliche Texte',
-    fogVeryDifficult: 'Sehr schwierig - Expertenniveau',
-    lixVerySimple: 'Sehr einfach - Kinderbücher',
-    lixSimple: 'Einfach - Belletristik',
-    lixMedium: 'Mittel - Zeitungen',
-    lixDifficult: 'Schwierig - Fachliteratur',
-    lixVeryDifficult: 'Sehr schwierig - Wissenschaft',
-    lixExtremelyDifficult: 'Extrem schwierig - Bürokratie',
-  },
-  en: {
-    tooLittleText: 'Too little text',
-    preschool: 'Preschool',
-    elementary: (grade) => `Elementary school (Grade ${grade})`,
-    middleSchool: (grade) => `Middle school (Grade ${grade})`,
-    highSchool: (grade) => `High school (Grade ${grade})`,
-    university: 'University level',
-    academic: 'Academic level',
-    lowerGrades: (grade) => `Lower grades (Grade ${grade})`,
-    fleschVeryHard: 'Very hard - Academic',
-    fleschHard: 'Hard - University',
-    fleschFairlyHard: 'Fairly hard - 16+ years',
-    fleschMedium: 'Medium - 13-15 years',
-    fleschEasy: 'Easy - 12 years',
-    fleschVeryEasy: 'Very easy - 11 years',
-    fleschExtremelyEasy: 'Extremely easy - 10 years',
-    amstadExtremelyHard: 'Extremely hard - Academic',
-    amstadVeryHard: 'Very hard - University',
-    amstadHard: 'Hard - High school diploma',
-    amstadFairlyHard: 'Fairly hard - 16+ years',
-    amstadMedium: 'Medium - 13-15 years',
-    amstadEasy: 'Easy - 12 years',
-    amstadVeryEasy: 'Very easy - 11 years',
-    amstadExtremelyEasy: 'Extremely easy - 10 years',
-    fogVerySimple: 'Very simple - Understandable by everyone',
-    fogSimple: 'Simple - Everyday language',
-    fogStandard: 'Standard - Newspaper level',
-    fogDemanding: 'Demanding - Technical literature',
-    fogDifficult: 'Difficult - Scientific texts',
-    fogVeryDifficult: 'Very difficult - Expert level',
-    lixVerySimple: 'Very simple - Children\'s books',
-    lixSimple: 'Simple - Fiction',
-    lixMedium: 'Medium - Newspapers',
-    lixDifficult: 'Difficult - Technical literature',
-    lixVeryDifficult: 'Very difficult - Scientific',
-    lixExtremelyDifficult: 'Extremely difficult - Bureaucracy',
-  },
-  fr: {
-    tooLittleText: 'Texte trop court',
-    preschool: 'Préscolaire',
-    elementary: (grade) => `École primaire (${grade}e année)`,
-    middleSchool: (grade) => `Collège (${grade}e année)`,
-    highSchool: (grade) => `Lycée (${grade}e année)`,
-    university: 'Niveau universitaire',
-    academic: 'Niveau académique',
-    lowerGrades: (grade) => `Cycle primaire (${grade}e année)`,
-    fleschVeryHard: 'Très difficile - Académique',
-    fleschHard: 'Difficile - Université',
-    fleschFairlyHard: 'Assez difficile - 16+ ans',
-    fleschMedium: 'Moyen - 13-15 ans',
-    fleschEasy: 'Facile - 12 ans',
-    fleschVeryEasy: 'Très facile - 11 ans',
-    fleschExtremelyEasy: 'Extrêmement facile - 10 ans',
-    amstadExtremelyHard: 'Extrêmement difficile - Académique',
-    amstadVeryHard: 'Très difficile - Université',
-    amstadHard: 'Difficile - Baccalauréat',
-    amstadFairlyHard: 'Assez difficile - 16+ ans',
-    amstadMedium: 'Moyen - 13-15 ans',
-    amstadEasy: 'Facile - 12 ans',
-    amstadVeryEasy: 'Très facile - 11 ans',
-    amstadExtremelyEasy: 'Extrêmement facile - 10 ans',
-    fogVerySimple: 'Très simple - Compréhensible par tous',
-    fogSimple: 'Simple - Langage courant',
-    fogStandard: 'Standard - Niveau journal',
-    fogDemanding: 'Exigeant - Littérature technique',
-    fogDifficult: 'Difficile - Textes scientifiques',
-    fogVeryDifficult: 'Très difficile - Niveau expert',
-    lixVerySimple: 'Très simple - Livres pour enfants',
-    lixSimple: 'Simple - Fiction',
-    lixMedium: 'Moyen - Journaux',
-    lixDifficult: 'Difficile - Littérature technique',
-    lixVeryDifficult: 'Très difficile - Scientifique',
-    lixExtremelyDifficult: 'Extrêmement difficile - Bureaucratie',
-  },
-  it: {
-    tooLittleText: 'Testo troppo breve',
-    preschool: 'Prescolare',
-    elementary: (grade) => `Scuola elementare (${grade}° anno)`,
-    middleSchool: (grade) => `Scuola media (${grade}° anno)`,
-    highSchool: (grade) => `Scuola superiore (${grade}° anno)`,
-    university: 'Livello universitario',
-    academic: 'Livello accademico',
-    lowerGrades: (grade) => `Ciclo primario (${grade}° anno)`,
-    fleschVeryHard: 'Molto difficile - Accademico',
-    fleschHard: 'Difficile - Università',
-    fleschFairlyHard: 'Abbastanza difficile - 16+ anni',
-    fleschMedium: 'Medio - 13-15 anni',
-    fleschEasy: 'Facile - 12 anni',
-    fleschVeryEasy: 'Molto facile - 11 anni',
-    fleschExtremelyEasy: 'Estremamente facile - 10 anni',
-    amstadExtremelyHard: 'Estremamente difficile - Accademico',
-    amstadVeryHard: 'Molto difficile - Università',
-    amstadHard: 'Difficile - Diploma superiore',
-    amstadFairlyHard: 'Abbastanza difficile - 16+ anni',
-    amstadMedium: 'Medio - 13-15 anni',
-    amstadEasy: 'Facile - 12 anni',
-    amstadVeryEasy: 'Molto facile - 11 anni',
-    amstadExtremelyEasy: 'Estremamente facile - 10 anni',
-    fogVerySimple: 'Molto semplice - Comprensibile a tutti',
-    fogSimple: 'Semplice - Linguaggio quotidiano',
-    fogStandard: 'Standard - Livello giornale',
-    fogDemanding: 'Impegnativo - Letteratura tecnica',
-    fogDifficult: 'Difficile - Testi scientifici',
-    fogVeryDifficult: 'Molto difficile - Livello esperto',
-    lixVerySimple: 'Molto semplice - Libri per bambini',
-    lixSimple: 'Semplice - Narrativa',
-    lixMedium: 'Medio - Giornali',
-    lixDifficult: 'Difficile - Letteratura tecnica',
-    lixVeryDifficult: 'Molto difficile - Scientifico',
-    lixExtremelyDifficult: 'Estremamente difficile - Burocrazia',
-  },
-  es: {
-    tooLittleText: 'Texto demasiado corto',
-    preschool: 'Preescolar',
-    elementary: (grade) => `Escuela primaria (${grade}° grado)`,
-    middleSchool: (grade) => `Secundaria (${grade}° grado)`,
-    highSchool: (grade) => `Bachillerato (${grade}° grado)`,
-    university: 'Nivel universitario',
-    academic: 'Nivel académico',
-    lowerGrades: (grade) => `Ciclo primario (${grade}° grado)`,
-    fleschVeryHard: 'Muy difícil - Académico',
-    fleschHard: 'Difícil - Universidad',
-    fleschFairlyHard: 'Bastante difícil - 16+ años',
-    fleschMedium: 'Medio - 13-15 años',
-    fleschEasy: 'Fácil - 12 años',
-    fleschVeryEasy: 'Muy fácil - 11 años',
-    fleschExtremelyEasy: 'Extremadamente fácil - 10 años',
-    amstadExtremelyHard: 'Extremadamente difícil - Académico',
-    amstadVeryHard: 'Muy difícil - Universidad',
-    amstadHard: 'Difícil - Bachillerato',
-    amstadFairlyHard: 'Bastante difícil - 16+ años',
-    amstadMedium: 'Medio - 13-15 años',
-    amstadEasy: 'Fácil - 12 años',
-    amstadVeryEasy: 'Muy fácil - 11 años',
-    amstadExtremelyEasy: 'Extremadamente fácil - 10 años',
-    fogVerySimple: 'Muy simple - Comprensible por todos',
-    fogSimple: 'Simple - Lenguaje cotidiano',
-    fogStandard: 'Estándar - Nivel periódico',
-    fogDemanding: 'Exigente - Literatura técnica',
-    fogDifficult: 'Difícil - Textos científicos',
-    fogVeryDifficult: 'Muy difícil - Nivel experto',
-    lixVerySimple: 'Muy simple - Libros infantiles',
-    lixSimple: 'Simple - Ficción',
-    lixMedium: 'Medio - Periódicos',
-    lixDifficult: 'Difícil - Literatura técnica',
-    lixVeryDifficult: 'Muy difícil - Científico',
-    lixExtremelyDifficult: 'Extremadamente difícil - Burocracia',
-  },
-  nl: {
-    tooLittleText: 'Te weinig tekst',
-    preschool: 'Kleuterschool',
-    elementary: (grade) => `Basisschool (groep ${grade})`,
-    middleSchool: (grade) => `Middelbare school (klas ${grade})`,
-    highSchool: (grade) => `Bovenbouw (klas ${grade})`,
-    university: 'Universitair niveau',
-    academic: 'Academisch niveau',
-    lowerGrades: (grade) => `Onderbouw (groep ${grade})`,
-    fleschVeryHard: 'Zeer moeilijk - Academisch',
-    fleschHard: 'Moeilijk - Universiteit',
-    fleschFairlyHard: 'Vrij moeilijk - 16+ jaar',
-    fleschMedium: 'Gemiddeld - 13-15 jaar',
-    fleschEasy: 'Makkelijk - 12 jaar',
-    fleschVeryEasy: 'Zeer makkelijk - 11 jaar',
-    fleschExtremelyEasy: 'Extreem makkelijk - 10 jaar',
-    amstadExtremelyHard: 'Extreem moeilijk - Academisch',
-    amstadVeryHard: 'Zeer moeilijk - Universiteit',
-    amstadHard: 'Moeilijk - VWO/Gymnasium',
-    amstadFairlyHard: 'Vrij moeilijk - 16+ jaar',
-    amstadMedium: 'Gemiddeld - 13-15 jaar',
-    amstadEasy: 'Makkelijk - 12 jaar',
-    amstadVeryEasy: 'Zeer makkelijk - 11 jaar',
-    amstadExtremelyEasy: 'Extreem makkelijk - 10 jaar',
-    fogVerySimple: 'Zeer eenvoudig - Begrijpelijk voor iedereen',
-    fogSimple: 'Eenvoudig - Alledaagse taal',
-    fogStandard: 'Standaard - Krantenniveau',
-    fogDemanding: 'Veeleisend - Vakliteratuur',
-    fogDifficult: 'Moeilijk - Wetenschappelijke teksten',
-    fogVeryDifficult: 'Zeer moeilijk - Expertniveau',
-    lixVerySimple: 'Zeer eenvoudig - Kinderboeken',
-    lixSimple: 'Eenvoudig - Fictie',
-    lixMedium: 'Gemiddeld - Kranten',
-    lixDifficult: 'Moeilijk - Vakliteratuur',
-    lixVeryDifficult: 'Zeer moeilijk - Wetenschappelijk',
-    lixExtremelyDifficult: 'Extreem moeilijk - Bureaucratie',
-  },
-};
-
 /**
  * Holt Übersetzungen für eine Sprache
  */
 export function getTranslations(lang: SupportedLanguage) {
   return translations[lang] || translations.de;
-}
-
-export interface SentenceAnalysis {
-  text: string;
-  wordCount: number;
-  syllableCount: number;
-  avgSyllablesPerWord: number;
-  score: number;
-  difficulty: Difficulty;
-}
-
-export interface FleschResult {
-  score: number;
-  scoreAmstad: number;
-  wordCount: number;
-  sentenceCount: number;
-  syllableCount: number;
-  avgWordsPerSentence: number;
-  avgSyllablesPerWord: number;
-  uniqueWords: number;
-  interpretation: string;
-  interpretationAmstad: string;
-  difficulty: Difficulty;
-  difficultyAmstad: Difficulty;
-}
-
-export interface FleschKincaidResult {
-  gradeLevel: number;
-  interpretation: string;
-}
-
-export interface WienerResult {
-  score: number;
-  schoolYear: number;
-  interpretation: string;
-}
-
-export interface GunningFogResult {
-  score: number;
-  schoolYears: number;
-  interpretation: string;
-}
-
-export interface LixResult {
-  score: number;
-  interpretation: string;
-  difficulty: Difficulty;
-}
-
-export interface FullAnalysisResult {
-  flesch: FleschResult;
-  fleschKincaid: FleschKincaidResult;
-  wiener: WienerResult;
-  gunningFog: GunningFogResult;
-  lix: LixResult;
-  sentences: SentenceAnalysis[];
-  paragraphs: ParagraphAnalysis[];
 }
 
 /**
@@ -1016,10 +559,6 @@ export function calculateLix(text: string, lang: SupportedLanguage = 'de'): LixR
     interpretation,
     difficulty,
   };
-}
-
-export interface ParagraphAnalysis {
-  sentences: SentenceAnalysis[];
 }
 
 /**

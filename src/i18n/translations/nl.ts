@@ -30,8 +30,16 @@ export const nl: Translations = {
     syllableCount: 'Lettergrepen',
     avgWordsPerSentence: 'Woorden/Zin',
     avgSyllablesPerWord: 'Lettergrepen/Woord',
-    showSentences: 'Zinnen tonen',
-    hideSentences: 'Zinnen verbergen',
+  },
+  // New UI
+  emptyState: {
+    title: 'Begin met typen',
+    subtitle: 'Of kies een voorbeeldtekst',
+  },
+  tooltip: {
+    readability: 'Leesbaarheid',
+    words: 'Woorden',
+    syllables: 'Lettergrepen',
   },
   results: {
     score: 'Score',

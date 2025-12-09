@@ -30,8 +30,16 @@ export const en: Translations = {
     syllableCount: 'Syllables',
     avgWordsPerSentence: 'Words/Sentence',
     avgSyllablesPerWord: 'Syllables/Word',
-    showSentences: 'Show sentences',
-    hideSentences: 'Hide sentences',
+  },
+  // New UI
+  emptyState: {
+    title: 'Start typing',
+    subtitle: 'Or choose an example text',
+  },
+  tooltip: {
+    readability: 'Readability',
+    words: 'Words',
+    syllables: 'Syllables',
   },
   results: {
     score: 'Score',

@@ -1,9 +1,9 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import { it } from '../../i18n/translations/it';
-import { getExamples } from '../../i18n/examples/index';
+import Layout from "../../layouts/Layout.astro";
+import { it } from "../../i18n/translations/it";
+import { getExamples } from "../../i18n/examples/index";
 
-const lang = 'it';
+const lang = "it";
 const t = it;
 const examples = getExamples(lang);
 ---
@@ -11,10 +11,17 @@ const examples = getExamples(lang);
 <Layout lang={lang} t={t}>
   <!-- Hero Section -->
   <section class="mb-12 text-center">
-    <h1 class="mb-4 text-4xl font-bold text-gray-900 dark:text-white md:text-5xl">
-      {t.hero.title} <span class="text-blue-600 dark:text-blue-400">{t.hero.titleHighlight}</span>
+    <h1
+      class="mb-4 text-4xl font-bold text-gray-900 dark:text-white md:text-5xl"
+    >
+      {t.hero.title}
+      <span class="text-blue-600 dark:text-blue-400"
+        >{t.hero.titleHighlight}</span
+      >
     </h1>
-    <p class="mb-2 text-xl text-gray-600 dark:text-gray-300">{t.hero.subtitle}</p>
+    <p class="mb-2 text-xl text-gray-600 dark:text-gray-300">
+      {t.hero.subtitle}
+    </p>
     <p class="text-sm text-gray-500 dark:text-gray-400">{t.hero.privacy}</p>
   </section>
 
@@ -22,24 +29,118 @@ const examples = getExamples(lang);
   <section class="mb-12">
     <div class="space-y-6">
       <div>
-        <label for="text-input" class="mb-2 block text-lg font-medium dark:text-white">Inserisci il tuo testo:</label>
-        <textarea id="text-input" rows="8" class="w-full rounded-lg border border-gray-300 bg-white p-4 text-base focus:border-blue-500 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400" placeholder={t.analyzer.placeholder}></textarea>
-        <div class="mt-2 flex flex-wrap items-center justify-between gap-2 text-sm text-gray-500 dark:text-gray-400">
+        <label
+          for="text-input"
+          class="mb-2 block text-lg font-medium dark:text-white"
+          >Inserisci il tuo testo:</label
+        >
+        <textarea
+          id="text-input"
+          rows="8"
+          class="w-full rounded-lg border border-gray-300 bg-white p-4 text-base focus:border-blue-500 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400"
+          placeholder={t.analyzer.placeholder}></textarea>
+
+        <!-- Empty State -->
+        <div
+          id="empty-state"
+          class="mt-8 rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 py-12 text-center dark:border-gray-700 dark:bg-gray-800/50"
+        >
+          <svg
+            class="mx-auto h-12 w-12 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+            ></path>
+          </svg>
+          <p class="mt-2 text-lg font-medium text-gray-900 dark:text-white">
+            {t.emptyState.title}
+          </p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">
+            {t.emptyState.subtitle}
+          </p>
+        </div>
+        <div
+          class="mt-2 flex flex-wrap items-center justify-between gap-2 text-sm text-gray-500 dark:text-gray-400"
+        >
           <div class="flex items-center gap-2">
             <span id="word-hint">Almeno 30 parole consigliate.</span>
-            <span id="live-word-count" class="font-medium">0 {t.analyzer.wordCount}</span>
+            <span id="live-word-count" class="font-medium"
+              >0 {t.analyzer.wordCount}</span
+            >
           </div>
           <div class="relative">
-            <button id="example-toggle" type="button" class="flex items-center gap-1 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600" aria-expanded="false" aria-haspopup="true">
-              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+            <button
+              id="example-toggle"
+              type="button"
+              class="flex items-center gap-1 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+              aria-expanded="false"
+              aria-haspopup="true"
+            >
+              <svg
+                class="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                ><path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                ></path></svg
+              >
               {t.analyzer.exampleTexts}
-              <svg class="h-4 w-4 transition-transform" id="example-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+              <svg
+                class="h-4 w-4 transition-transform"
+                id="example-chevron"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                ><path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"></path></svg
+              >
             </button>
-            <div id="example-menu" class="absolute left-0 z-50 mt-1 hidden w-64 rounded-lg border border-gray-200 bg-white shadow-lg sm:left-auto sm:right-0 dark:border-gray-700 dark:bg-gray-800">
+            <div
+              id="example-menu"
+              class="absolute left-0 z-50 mt-1 hidden w-64 rounded-lg border border-gray-200 bg-white shadow-lg sm:left-auto sm:right-0 dark:border-gray-700 dark:bg-gray-800"
+            >
               <div class="py-1">
-                <button class="example-btn w-full px-4 py-4 text-left hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-gray-700 dark:active:bg-gray-600" data-level="easy"><span class="font-medium text-green-600 dark:text-green-400">{t.analyzer.exampleEasy}</span><span class="text-gray-500 dark:text-gray-400"> – Libro per bambini</span></button>
-                <button class="example-btn w-full px-4 py-4 text-left hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-gray-700 dark:active:bg-gray-600" data-level="medium"><span class="font-medium text-yellow-600 dark:text-yellow-400">{t.analyzer.exampleMedium}</span><span class="text-gray-500 dark:text-gray-400"> – Articolo di giornale</span></button>
-                <button class="example-btn w-full px-4 py-4 text-left hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-gray-700 dark:active:bg-gray-600" data-level="hard"><span class="font-medium text-red-600 dark:text-red-400">{t.analyzer.exampleHard}</span><span class="text-gray-500 dark:text-gray-400"> – Accademico</span></button>
+                <button
+                  class="example-btn w-full px-4 py-4 text-left hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-gray-700 dark:active:bg-gray-600"
+                  data-level="easy"
+                  ><span class="font-medium text-green-600 dark:text-green-400"
+                    >{t.analyzer.exampleEasy}</span
+                  ><span class="text-gray-500 dark:text-gray-400">
+                    – Libro per bambini</span
+                  ></button
+                >
+                <button
+                  class="example-btn w-full px-4 py-4 text-left hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-gray-700 dark:active:bg-gray-600"
+                  data-level="medium"
+                  ><span
+                    class="font-medium text-yellow-600 dark:text-yellow-400"
+                    >{t.analyzer.exampleMedium}</span
+                  ><span class="text-gray-500 dark:text-gray-400">
+                    – Articolo di giornale</span
+                  ></button
+                >
+                <button
+                  class="example-btn w-full px-4 py-4 text-left hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-gray-700 dark:active:bg-gray-600"
+                  data-level="hard"
+                  ><span class="font-medium text-red-600 dark:text-red-400"
+                    >{t.analyzer.exampleHard}</span
+                  ><span class="text-gray-500 dark:text-gray-400">
+                    – Accademico</span
+                  ></button
+                >
               </div>
             </div>
           </div>
@@ -47,50 +148,286 @@ const examples = getExamples(lang);
       </div>
 
       <div id="results" class="hidden space-y-6">
-        <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-          <h2 class="mb-2 text-center text-xl font-bold dark:text-white">{t.formulas.fleschAmstad}</h2>
-          <p class="mb-4 text-center text-sm text-gray-500 dark:text-gray-400">{t.formulas.fleschAmstadDesc}</p>
+        <div
+          class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800"
+        >
+          <h2 class="mb-2 text-center text-xl font-bold dark:text-white">
+            {t.formulas.fleschAmstad}
+          </h2>
+          <p class="mb-4 text-center text-sm text-gray-500 dark:text-gray-400">
+            {t.formulas.fleschAmstadDesc}
+          </p>
           <div class="relative mx-auto mb-8 h-36 w-64">
-            <svg viewBox="0 0 200 120" class="w-full" role="img" aria-label="Indicatore di leggibilità">
+            <svg
+              viewBox="0 0 200 120"
+              class="w-full"
+              role="img"
+              aria-label="Indicatore di leggibilità"
+            >
               <title>Indicatore GULPEASE</title>
-              <defs><linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#dc2626" /><stop offset="25%" stop-color="#ea580c" /><stop offset="50%" stop-color="#eab308" /><stop offset="75%" stop-color="#84cc16" /><stop offset="100%" stop-color="#22c55e" /></linearGradient></defs>
-              <path d="M 20 90 A 80 80 0 0 1 180 90" fill="none" stroke="#e5e7eb" stroke-width="14" stroke-linecap="round" class="dark:stroke-gray-700" />
-              <path d="M 20 90 A 80 80 0 0 1 180 90" fill="none" stroke="url(#gaugeGradient)" stroke-width="12" stroke-linecap="round" />
-              <g class="text-gray-400 dark:text-gray-500" fill="currentColor" font-size="8"><text x="15" y="98" text-anchor="middle">0</text><text x="100" y="8" text-anchor="middle">50</text><text x="185" y="98" text-anchor="middle">100</text></g>
-              <g id="gauge-needle-group" transform="rotate(-90, 100, 90)"><line x1="100" y1="90" x2="100" y2="22" stroke="rgba(0,0,0,0.3)" stroke-width="5" stroke-linecap="round" /><line x1="100" y1="90" x2="100" y2="20" stroke="#1e40af" stroke-width="4" stroke-linecap="round" /></g>
-              <circle cx="100" cy="90" r="10" fill="#1e3a8a" /><circle cx="100" cy="90" r="6" fill="#3b82f6" /><circle cx="100" cy="90" r="3" fill="#93c5fd" />
-              <text id="score-display-svg" x="100" y="115" text-anchor="middle" font-size="24" font-weight="bold" class="fill-gray-900 dark:fill-white">--</text>
+              <defs
+                ><linearGradient
+                  id="gaugeGradient"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="0%"
+                  ><stop offset="0%" stop-color="#dc2626"></stop><stop
+                    offset="25%"
+                    stop-color="#ea580c"></stop><stop
+                    offset="50%"
+                    stop-color="#eab308"></stop><stop
+                    offset="75%"
+                    stop-color="#84cc16"></stop><stop
+                    offset="100%"
+                    stop-color="#22c55e"></stop></linearGradient
+                ></defs
+              >
+              <path
+                d="M 20 90 A 80 80 0 0 1 180 90"
+                fill="none"
+                stroke="#e5e7eb"
+                stroke-width="14"
+                stroke-linecap="round"
+                class="dark:stroke-gray-700"></path>
+              <path
+                d="M 20 90 A 80 80 0 0 1 180 90"
+                fill="none"
+                stroke="url(#gaugeGradient)"
+                stroke-width="12"
+                stroke-linecap="round"></path>
+              <g
+                class="text-gray-400 dark:text-gray-500"
+                fill="currentColor"
+                font-size="8"
+                ><text x="15" y="98" text-anchor="middle">0</text><text
+                  x="100"
+                  y="8"
+                  text-anchor="middle">50</text
+                ><text x="185" y="98" text-anchor="middle">100</text></g
+              >
+              <g
+                id="gauge-needle-group"
+                class="transition-transform duration-700 ease-out"
+                transform="rotate(-90, 100, 90)"
+                ><line
+                  x1="100"
+                  y1="90"
+                  x2="100"
+                  y2="22"
+                  stroke="rgba(0,0,0,0.3)"
+                  stroke-width="5"
+                  stroke-linecap="round"></line><line
+                  x1="100"
+                  y1="90"
+                  x2="100"
+                  y2="20"
+                  stroke="#1e40af"
+                  stroke-width="4"
+                  stroke-linecap="round"></line></g
+              >
+              <circle cx="100" cy="90" r="10" fill="#1e3a8a"></circle><circle
+                cx="100"
+                cy="90"
+                r="6"
+                fill="#3b82f6"></circle><circle
+                cx="100"
+                cy="90"
+                r="3"
+                fill="#93c5fd"></circle>
+              <text
+                id="score-display-svg"
+                x="100"
+                y="115"
+                text-anchor="middle"
+                font-size="24"
+                font-weight="bold"
+                class="fill-gray-900 dark:fill-white">--</text
+              >
             </svg>
           </div>
-          <p id="interpretation" class="text-center text-lg text-gray-600 dark:text-gray-300">--</p>
+          <p
+            id="interpretation"
+            class="text-center text-lg text-gray-600 dark:text-gray-300"
+          >
+            --
+          </p>
         </div>
 
         <div class="grid gap-4 sm:grid-cols-2">
-          <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800"><h3 class="mb-2 text-sm font-medium text-gray-500 dark:text-gray-400">{t.formulas.fleschKincaid}</h3><div id="kincaid-score" class="text-2xl font-bold dark:text-white">--</div><p id="kincaid-interpretation" class="text-sm text-gray-600 dark:text-gray-300">--</p></div>
-          <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800"><h3 class="mb-2 text-sm font-medium text-gray-500 dark:text-gray-400">{t.formulas.gunningFog}</h3><div id="fog-score" class="text-2xl font-bold dark:text-white">--</div><p id="fog-interpretation" class="text-sm text-gray-600 dark:text-gray-300">--</p></div>
-          <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800"><h3 class="mb-2 text-sm font-medium text-gray-500 dark:text-gray-400">{t.formulas.lix}</h3><div id="lix-score" class="text-2xl font-bold dark:text-white">--</div><p id="lix-interpretation" class="text-sm text-gray-600 dark:text-gray-300">--</p></div>
-          <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800"><h3 class="mb-2 text-sm font-medium text-gray-500 dark:text-gray-400">Flesch Originale</h3><div id="flesch-original-score" class="text-2xl font-bold dark:text-white">--</div><p id="flesch-original-interpretation" class="text-sm text-gray-600 dark:text-gray-300">--</p></div>
-        </div>
-
-        <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-          <h3 class="mb-4 font-medium dark:text-white">Statistiche del testo</h3>
-          <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <div class="rounded-lg bg-gray-50 p-3 dark:bg-gray-700"><div class="text-xs text-gray-500 dark:text-gray-400">{t.analyzer.wordCount}</div><div id="word-count" class="text-xl font-semibold dark:text-white">--</div></div>
-            <div class="rounded-lg bg-gray-50 p-3 dark:bg-gray-700"><div class="text-xs text-gray-500 dark:text-gray-400">{t.analyzer.sentenceCount}</div><div id="sentence-count" class="text-xl font-semibold dark:text-white">--</div></div>
-            <div class="rounded-lg bg-gray-50 p-3 dark:bg-gray-700"><div class="text-xs text-gray-500 dark:text-gray-400">Lettere</div><div id="letter-count" class="text-xl font-semibold dark:text-white">--</div></div>
-            <div class="rounded-lg bg-gray-50 p-3 dark:bg-gray-700"><div class="text-xs text-gray-500 dark:text-gray-400">{t.analyzer.avgWordsPerSentence}</div><div id="words-per-sentence" class="text-xl font-semibold dark:text-white">--</div></div>
-            <div class="rounded-lg bg-gray-50 p-3 dark:bg-gray-700"><div class="text-xs text-gray-500 dark:text-gray-400">{t.analyzer.avgSyllablesPerWord}</div><div id="syllables-per-word" class="text-xl font-semibold dark:text-white">--</div></div>
-            <div class="rounded-lg bg-gray-50 p-3 dark:bg-gray-700"><div class="text-xs text-gray-500 dark:text-gray-400">Parole uniche</div><div id="unique-words" class="text-xl font-semibold dark:text-white">--</div></div>
+          <div
+            class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800"
+          >
+            <h3
+              class="mb-2 text-sm font-medium text-gray-500 dark:text-gray-400"
+            >
+              {t.formulas.fleschKincaid}
+            </h3><div
+              id="kincaid-score"
+              class="text-2xl font-bold dark:text-white"
+            >
+              --
+            </div><p
+              id="kincaid-interpretation"
+              class="text-sm text-gray-600 dark:text-gray-300"
+            >
+              --
+            </p>
+          </div>
+          <div
+            class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800"
+          >
+            <h3
+              class="mb-2 text-sm font-medium text-gray-500 dark:text-gray-400"
+            >
+              {t.formulas.gunningFog}
+            </h3><div id="fog-score" class="text-2xl font-bold dark:text-white">
+              --
+            </div><p
+              id="fog-interpretation"
+              class="text-sm text-gray-600 dark:text-gray-300"
+            >
+              --
+            </p>
+          </div>
+          <div
+            class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800"
+          >
+            <h3
+              class="mb-2 text-sm font-medium text-gray-500 dark:text-gray-400"
+            >
+              {t.formulas.lix}
+            </h3><div id="lix-score" class="text-2xl font-bold dark:text-white">
+              --
+            </div><p
+              id="lix-interpretation"
+              class="text-sm text-gray-600 dark:text-gray-300"
+            >
+              --
+            </p>
+          </div>
+          <div
+            class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800"
+          >
+            <h3
+              class="mb-2 text-sm font-medium text-gray-500 dark:text-gray-400"
+            >
+              Flesch Originale
+            </h3><div
+              id="flesch-original-score"
+              class="text-2xl font-bold dark:text-white"
+            >
+              --
+            </div><p
+              id="flesch-original-interpretation"
+              class="text-sm text-gray-600 dark:text-gray-300"
+            >
+              --
+            </p>
           </div>
         </div>
 
-        <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-          <h3 class="mb-4 font-medium dark:text-white">Analisi delle frasi</h3>
-          <p class="mb-4 text-sm text-gray-500 dark:text-gray-400">Frasi colorate per leggibilità: <span class="inline-block rounded bg-green-100 px-2 py-0.5 text-green-800 dark:bg-green-900 dark:text-green-200">{t.results.difficulty.easy}</span> <span class="inline-block rounded bg-yellow-100 px-2 py-0.5 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">{t.results.difficulty.medium}</span> <span class="inline-block rounded bg-red-100 px-2 py-0.5 text-red-800 dark:bg-red-900 dark:text-red-200">{t.results.difficulty.hard}</span></p>
-          <div id="sentence-analysis" class="leading-relaxed dark:text-gray-200"></div>
+        <div
+          class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800"
+        >
+          <h3 class="mb-4 font-medium dark:text-white">
+            Statistiche del testo
+          </h3>
+          <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div class="rounded-lg bg-gray-50 p-3 dark:bg-gray-700">
+              <div class="text-xs text-gray-500 dark:text-gray-400">
+                {t.analyzer.wordCount}
+              </div><div
+                id="word-count"
+                class="text-xl font-semibold dark:text-white"
+              >
+                --
+              </div>
+            </div>
+            <div class="rounded-lg bg-gray-50 p-3 dark:bg-gray-700">
+              <div class="text-xs text-gray-500 dark:text-gray-400">
+                {t.analyzer.sentenceCount}
+              </div><div
+                id="sentence-count"
+                class="text-xl font-semibold dark:text-white"
+              >
+                --
+              </div>
+            </div>
+            <div class="rounded-lg bg-gray-50 p-3 dark:bg-gray-700">
+              <div class="text-xs text-gray-500 dark:text-gray-400">
+                Lettere
+              </div><div
+                id="letter-count"
+                class="text-xl font-semibold dark:text-white"
+              >
+                --
+              </div>
+            </div>
+            <div class="rounded-lg bg-gray-50 p-3 dark:bg-gray-700">
+              <div class="text-xs text-gray-500 dark:text-gray-400">
+                {t.analyzer.avgWordsPerSentence}
+              </div><div
+                id="words-per-sentence"
+                class="text-xl font-semibold dark:text-white"
+              >
+                --
+              </div>
+            </div>
+            <div class="rounded-lg bg-gray-50 p-3 dark:bg-gray-700">
+              <div class="text-xs text-gray-500 dark:text-gray-400">
+                {t.analyzer.avgSyllablesPerWord}
+              </div><div
+                id="syllables-per-word"
+                class="text-xl font-semibold dark:text-white"
+              >
+                --
+              </div>
+            </div>
+            <div class="rounded-lg bg-gray-50 p-3 dark:bg-gray-700">
+              <div class="text-xs text-gray-500 dark:text-gray-400">
+                Parole uniche
+              </div><div
+                id="unique-words"
+                class="text-xl font-semibold dark:text-white"
+              >
+                --
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div id="warning" class="hidden rounded-lg border border-yellow-200 bg-yellow-50 p-4 text-yellow-800 dark:border-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200">Attenzione: Per risultati più affidabili, consigliamo un testo più lungo (almeno 30 parole).</div>
+        <div
+          class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800"
+        >
+          <h3 class="mb-4 font-medium dark:text-white">Analisi delle frasi</h3>
+          <p class="mb-4 text-sm text-gray-500 dark:text-gray-400">
+            Frasi colorate per leggibilità: <span
+              class="inline-block rounded bg-green-100 px-2 py-0.5 text-green-800 dark:bg-green-900 dark:text-green-200"
+              >{t.results.difficulty.easy}</span
+            >
+            <span
+              class="inline-block rounded bg-yellow-100 px-2 py-0.5 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
+              >{t.results.difficulty.medium}</span
+            >
+            <span
+              class="inline-block rounded bg-red-100 px-2 py-0.5 text-red-800 dark:bg-red-900 dark:text-red-200"
+              >{t.results.difficulty.hard}</span>
+          </p>
+          <div
+            id="sentence-analysis"
+            class="leading-relaxed dark:text-gray-200"
+          >
+          </div>
+        </div>
+
+        <div
+          id="warning"
+          class="hidden rounded-lg border border-yellow-200 bg-yellow-50 p-4 text-yellow-800 dark:border-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200"
+        >
+          Attenzione: Per risultati più affidabili, consigliamo un testo più
+          lungo (almeno 30 parole).
+        </div>
       </div>
     </div>
   </section>
@@ -99,21 +436,89 @@ const examples = getExamples(lang);
   <section id="formel" class="mb-12 scroll-mt-20">
     <h2 class="mb-6 text-2xl font-bold dark:text-white">{t.formulas.title}</h2>
     <div class="space-y-6">
-      <div class="rounded-xl border-2 border-blue-200 bg-blue-50 p-6 dark:border-blue-800 dark:bg-blue-900/20">
-        <div class="mb-2 flex items-center gap-2"><h3 class="text-lg font-bold text-blue-900 dark:text-blue-100">{t.formulas.fleschAmstad}</h3><span class="rounded-full bg-blue-600 px-2 py-0.5 text-xs font-medium text-white">{t.formulas.recommended}</span></div>
-        <p class="mb-4 text-sm text-blue-700 dark:text-blue-300">{t.formulas.fleschAmstadDesc}</p>
-        <div class="rounded-lg bg-white p-4 font-mono text-sm dark:bg-gray-800">GULPEASE = 89 + ((300 × frasi - 10 × lettere) / parole)</div>
-        <p class="mt-2 text-xs text-blue-600 dark:text-blue-400">Utilizza il conteggio delle lettere invece delle sillabe, specifico per l'italiano</p>
+      <div
+        class="rounded-xl border-2 border-blue-200 bg-blue-50 p-6 dark:border-blue-800 dark:bg-blue-900/20"
+      >
+        <div class="mb-2 flex items-center gap-2">
+          <h3 class="text-lg font-bold text-blue-900 dark:text-blue-100">
+            {t.formulas.fleschAmstad}
+          </h3><span
+            class="rounded-full bg-blue-600 px-2 py-0.5 text-xs font-medium text-white"
+            >{t.formulas.recommended}</span>
+        </div>
+        <p class="mb-4 text-sm text-blue-700 dark:text-blue-300">
+          {t.formulas.fleschAmstadDesc}
+        </p>
+        <div class="rounded-lg bg-white p-4 font-mono text-sm dark:bg-gray-800">
+          GULPEASE = 89 + ((300 × frasi - 10 × lettere) / parole)
+        </div>
+        <p class="mt-2 text-xs text-blue-600 dark:text-blue-400">
+          Utilizza il conteggio delle lettere invece delle sillabe, specifico
+          per l'italiano
+        </p>
       </div>
-      <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800"><h3 class="mb-2 text-lg font-bold dark:text-white">{t.formulas.fleschOriginal}</h3><p class="mb-4 text-sm text-gray-600 dark:text-gray-400">{t.formulas.fleschOriginalDesc}</p><div class="rounded-lg bg-gray-50 p-4 font-mono text-sm dark:bg-gray-700">FRE = 206.835 - (1.015 × ASL) - (84.6 × ASW)</div></div>
-      <h3 class="mt-8 text-lg font-bold dark:text-white">{t.formulas.otherFormulas}</h3>
+      <div
+        class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800"
+      >
+        <h3 class="mb-2 text-lg font-bold dark:text-white">
+          {t.formulas.fleschOriginal}
+        </h3><p class="mb-4 text-sm text-gray-600 dark:text-gray-400">
+          {t.formulas.fleschOriginalDesc}
+        </p><div
+          class="rounded-lg bg-gray-50 p-4 font-mono text-sm dark:bg-gray-700"
+        >
+          FRE = 206.835 - (1.015 × ASL) - (84.6 × ASW)
+        </div>
+      </div>
+      <h3 class="mt-8 text-lg font-bold dark:text-white">
+        {t.formulas.otherFormulas}
+      </h3>
       <div class="grid gap-4 md:grid-cols-2">
-        <div class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800"><h4 class="font-medium dark:text-white">{t.formulas.fleschKincaid}</h4><p class="text-sm text-gray-600 dark:text-gray-400">{t.formulas.fleschKincaidDesc}</p></div>
-        <div class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800"><h4 class="font-medium dark:text-white">{t.formulas.gunningFog}</h4><p class="text-sm text-gray-600 dark:text-gray-400">{t.formulas.gunningFogDesc}</p></div>
-        <div class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800"><h4 class="font-medium dark:text-white">{t.formulas.lix}</h4><p class="text-sm text-gray-600 dark:text-gray-400">{t.formulas.lixDesc}</p></div>
-        <div class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800"><h4 class="font-medium dark:text-white">{t.formulas.smog}</h4><p class="text-sm text-gray-600 dark:text-gray-400">{t.formulas.smogDesc}</p></div>
+        <div
+          class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800"
+        >
+          <h4 class="font-medium dark:text-white">
+            {t.formulas.fleschKincaid}
+          </h4><p class="text-sm text-gray-600 dark:text-gray-400">
+            {t.formulas.fleschKincaidDesc}
+          </p>
+        </div>
+        <div
+          class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800"
+        >
+          <h4 class="font-medium dark:text-white">{t.formulas.gunningFog}</h4><p
+            class="text-sm text-gray-600 dark:text-gray-400"
+          >
+            {t.formulas.gunningFogDesc}
+          </p>
+        </div>
+        <div
+          class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800"
+        >
+          <h4 class="font-medium dark:text-white">{t.formulas.lix}</h4><p
+            class="text-sm text-gray-600 dark:text-gray-400"
+          >
+            {t.formulas.lixDesc}
+          </p>
+        </div>
+        <div
+          class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800"
+        >
+          <h4 class="font-medium dark:text-white">{t.formulas.smog}</h4><p
+            class="text-sm text-gray-600 dark:text-gray-400"
+          >
+            {t.formulas.smogDesc}
+          </p>
+        </div>
       </div>
-      <p class="text-sm text-gray-500 dark:text-gray-400">{t.formulas.moreInfo} <a href="https://it.wikipedia.org/wiki/Indice_Gulpease" target="_blank" rel="noopener" class="text-blue-600 hover:underline dark:text-blue-400">Wikipedia</a></p>
+      <p class="text-sm text-gray-500 dark:text-gray-400">
+        {t.formulas.moreInfo}
+        <a
+          href="https://it.wikipedia.org/wiki/Indice_Gulpease"
+          target="_blank"
+          rel="noopener"
+          class="text-blue-600 hover:underline dark:text-blue-400">Wikipedia</a>
+      </p>
     </div>
   </section>
 
@@ -121,13 +526,46 @@ const examples = getExamples(lang);
   <section class="mb-12">
     <h2 class="mb-6 text-2xl font-bold dark:text-white">{t.table.title}</h2>
     <div class="overflow-x-auto">
-      <table class="w-full rounded-xl border border-gray-200 bg-white text-sm dark:border-gray-700 dark:bg-gray-800">
-        <thead><tr class="border-b border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-700"><th class="px-4 py-3 text-left font-medium dark:text-white">{t.table.score}</th><th class="px-4 py-3 text-left font-medium dark:text-white">{t.table.difficulty}</th><th class="px-4 py-3 text-left font-medium dark:text-white">Pubblico</th></tr></thead>
+      <table
+        class="w-full rounded-xl border border-gray-200 bg-white text-sm dark:border-gray-700 dark:bg-gray-800"
+      >
+        <thead
+          ><tr
+            class="border-b border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-700"
+            ><th class="px-4 py-3 text-left font-medium dark:text-white"
+              >{t.table.score}</th
+            ><th class="px-4 py-3 text-left font-medium dark:text-white"
+              >{t.table.difficulty}</th
+            ><th class="px-4 py-3 text-left font-medium dark:text-white"
+              >Pubblico</th
+            ></tr
+          ></thead
+        >
         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-          <tr><td class="px-4 py-3 dark:text-gray-300">0–40</td><td class="px-4 py-3 text-red-600 dark:text-red-400">{t.results.difficulty.veryHard}</td><td class="px-4 py-3 dark:text-gray-300">Diploma superiore</td></tr>
-          <tr><td class="px-4 py-3 dark:text-gray-300">40–60</td><td class="px-4 py-3 text-orange-600 dark:text-orange-400">{t.results.difficulty.hard}</td><td class="px-4 py-3 dark:text-gray-300">Scuola media</td></tr>
-          <tr><td class="px-4 py-3 dark:text-gray-300">60–80</td><td class="px-4 py-3 text-yellow-600 dark:text-yellow-400">{t.results.difficulty.medium}</td><td class="px-4 py-3 dark:text-gray-300">Scuola elementare</td></tr>
-          <tr><td class="px-4 py-3 dark:text-gray-300">80–100</td><td class="px-4 py-3 text-green-600 dark:text-green-400">{t.results.difficulty.easy}</td><td class="px-4 py-3 dark:text-gray-300">Tutti</td></tr>
+          <tr
+            ><td class="px-4 py-3 dark:text-gray-300">0–40</td><td
+              class="px-4 py-3 text-red-600 dark:text-red-400"
+              >{t.results.difficulty.veryHard}</td
+            ><td class="px-4 py-3 dark:text-gray-300">Diploma superiore</td></tr
+          >
+          <tr
+            ><td class="px-4 py-3 dark:text-gray-300">40–60</td><td
+              class="px-4 py-3 text-orange-600 dark:text-orange-400"
+              >{t.results.difficulty.hard}</td
+            ><td class="px-4 py-3 dark:text-gray-300">Scuola media</td></tr
+          >
+          <tr
+            ><td class="px-4 py-3 dark:text-gray-300">60–80</td><td
+              class="px-4 py-3 text-yellow-600 dark:text-yellow-400"
+              >{t.results.difficulty.medium}</td
+            ><td class="px-4 py-3 dark:text-gray-300">Scuola elementare</td></tr
+          >
+          <tr
+            ><td class="px-4 py-3 dark:text-gray-300">80–100</td><td
+              class="px-4 py-3 text-green-600 dark:text-green-400"
+              >{t.results.difficulty.easy}</td
+            ><td class="px-4 py-3 dark:text-gray-300">Tutti</td></tr
+          >
         </tbody>
       </table>
     </div>
@@ -137,12 +575,31 @@ const examples = getExamples(lang);
   <section id="faq" class="mb-12 scroll-mt-20">
     <h2 class="mb-6 text-2xl font-bold dark:text-white">{t.faq.title}</h2>
     <div class="space-y-4">
-      {[1, 2, 3, 4, 5, 6].map((i) => (
-        <details class="group rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
-          <summary class="flex cursor-pointer items-center justify-between p-4 font-medium dark:text-white">{t.faq[`q${i}` as keyof typeof t.faq]}<svg class="h-5 w-5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg></summary>
-          <p class="px-4 pb-4 text-gray-600 dark:text-gray-300">{t.faq[`a${i}` as keyof typeof t.faq]}</p>
-        </details>
-      ))}
+      {
+        [1, 2, 3, 4, 5, 6].map((i) => (
+          <details class="group rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+            <summary class="flex cursor-pointer items-center justify-between p-4 font-medium dark:text-white">
+              {t.faq[`q${i}` as keyof typeof t.faq]}
+              <svg
+                class="h-5 w-5 transition-transform group-open:rotate-180"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </summary>
+            <p class="px-4 pb-4 text-gray-600 dark:text-gray-300">
+              {t.faq[`a${i}` as keyof typeof t.faq]}
+            </p>
+          </details>
+        ))
+      }
     </div>
   </section>
 
@@ -150,89 +607,238 @@ const examples = getExamples(lang);
   <section id="tipps" class="mb-12 scroll-mt-20">
     <h2 class="mb-6 text-2xl font-bold dark:text-white">{t.tips.title}</h2>
     <div class="grid gap-4 md:grid-cols-2">
-      {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-        <div class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800"><h3 class="mb-2 font-medium dark:text-white">{t.tips[`tip${i}Title` as keyof typeof t.tips]}</h3><p class="text-sm text-gray-600 dark:text-gray-400">{t.tips[`tip${i}Desc` as keyof typeof t.tips]}</p></div>
-      ))}
+      {
+        [1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+          <div class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+            <>
+              <h3 class="mb-2 font-medium dark:text-white">
+                {t.tips[`tip${i}Title` as keyof typeof t.tips]}
+              </h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                {t.tips[`tip${i}Desc` as keyof typeof t.tips]}
+              </p>
+            </>
+          </div>
+        ))
+      }
     </div>
   </section>
 
   <!-- Advantages/Disadvantages -->
   <section class="mb-12">
     <div class="grid gap-6 md:grid-cols-2">
-      <div class="rounded-xl border border-green-200 bg-green-50 p-6 dark:border-green-800 dark:bg-green-900/20"><h3 class="mb-4 flex items-center gap-2 font-bold text-green-800 dark:text-green-200"><svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>{t.advantages.title}</h3><ul class="space-y-2 text-sm text-green-700 dark:text-green-300">{t.advantages.items.map((item) => (<li class="flex items-start gap-2"><span class="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-green-500"></span>{item}</li>))}</ul></div>
-      <div class="rounded-xl border border-red-200 bg-red-50 p-6 dark:border-red-800 dark:bg-red-900/20"><h3 class="mb-4 flex items-center gap-2 font-bold text-red-800 dark:text-red-200"><svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" /></svg>{t.disadvantages.title}</h3><ul class="space-y-2 text-sm text-red-700 dark:text-red-300">{t.disadvantages.items.map((item) => (<li class="flex items-start gap-2"><span class="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-red-500"></span>{item}</li>))}</ul></div>
+      <div
+        class="rounded-xl border border-green-200 bg-green-50 p-6 dark:border-green-800 dark:bg-green-900/20"
+      >
+        <h3
+          class="mb-4 flex items-center gap-2 font-bold text-green-800 dark:text-green-200"
+        >
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"
+            ><path
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+              clip-rule="evenodd"></path></svg
+          >{t.advantages.title}
+        </h3><ul class="space-y-2 text-sm text-green-700 dark:text-green-300">
+          {
+            t.advantages.items.map((item) => (
+              <li class="flex items-start gap-2">
+                <span class="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-green-500" />
+                {item}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div
+        class="rounded-xl border border-red-200 bg-red-50 p-6 dark:border-red-800 dark:bg-red-900/20"
+      >
+        <h3
+          class="mb-4 flex items-center gap-2 font-bold text-red-800 dark:text-red-200"
+        >
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"
+            ><path
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+              clip-rule="evenodd"></path></svg
+          >{t.disadvantages.title}
+        </h3><ul class="space-y-2 text-sm text-red-700 dark:text-red-300">
+          {
+            t.disadvantages.items.map((item) => (
+              <li class="flex items-start gap-2">
+                <span class="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-red-500" />
+                {item}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
     </div>
   </section>
 
   <!-- Privacy Section -->
   <section id="datenschutz" class="mb-12 scroll-mt-20">
-    <div class="rounded-xl border border-blue-200 bg-blue-50 p-6 dark:border-blue-800 dark:bg-blue-900/20">
-      <h2 class="mb-4 flex items-center gap-2 text-xl font-bold text-blue-900 dark:text-blue-100"><svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>{t.privacy.headline}</h2>
+    <div
+      class="rounded-xl border border-blue-200 bg-blue-50 p-6 dark:border-blue-800 dark:bg-blue-900/20"
+    >
+      <h2
+        class="mb-4 flex items-center gap-2 text-xl font-bold text-blue-900 dark:text-blue-100"
+      >
+        <svg
+          class="h-6 w-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          ><path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+          ></path></svg
+        >{t.privacy.headline}
+      </h2>
       <p class="mb-4 text-blue-800 dark:text-blue-200">{t.privacy.intro}</p>
-      <p class="mb-2 font-medium text-blue-900 dark:text-blue-100">{t.privacy.meaning}</p>
-      <ul class="mb-4 space-y-1 text-blue-700 dark:text-blue-300">{t.privacy.items.map((item) => (<li class="flex items-center gap-2"><svg class="h-4 w-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>{item}</li>))}</ul>
-      <p class="text-sm text-blue-600 dark:text-blue-400">{t.privacy.conclusion}</p>
+      <p class="mb-2 font-medium text-blue-900 dark:text-blue-100">
+        {t.privacy.meaning}
+      </p>
+      <ul class="mb-4 space-y-1 text-blue-700 dark:text-blue-300">
+        {
+          t.privacy.items.map((item) => (
+            <li class="flex items-center gap-2">
+              <svg
+                class="h-4 w-4 flex-shrink-0"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              {item}
+            </li>
+          ))
+        }
+      </ul>
+      <p class="text-sm text-blue-600 dark:text-blue-400">
+        {t.privacy.conclusion}
+      </p>
     </div>
   </section>
 </Layout>
 
-<script define:vars={{ examples, lang }}>
+<!-- Custom Tooltip -->
+<div
+  id="custom-tooltip"
+  class="pointer-events-none fixed z-50 hidden rounded-lg bg-gray-900 px-3 py-2 text-sm text-white shadow-xl dark:bg-white dark:text-gray-900"
+>
+  <div class="font-bold" id="tooltip-score"></div>
+  <div class="text-xs text-gray-300 dark:text-gray-600" id="tooltip-stats">
+  </div>
+</div>
+
+<script define:vars={{ examples, lang, t }}>
   window.exampleTexts = examples;
   window.pageLang = lang;
+  window.translations = t;
 </script>
 
 <script>
-  import { analyzeText, type Difficulty, type SupportedLanguage } from '../../utils/flesch';
+  import {
+    analyzeText,
+    type Difficulty,
+    type SupportedLanguage,
+  } from "../../utils/flesch";
 
-  const textInput = document.getElementById('text-input') as HTMLTextAreaElement;
-  const results = document.getElementById('results');
-  const warning = document.getElementById('warning');
-  const liveWordCount = document.getElementById('live-word-count');
-  const exampleToggle = document.getElementById('example-toggle');
-  const exampleMenu = document.getElementById('example-menu');
-  const exampleChevron = document.getElementById('example-chevron');
-  const exampleButtons = document.querySelectorAll('.example-btn');
+  const textInput = document.getElementById(
+    "text-input",
+  ) as HTMLTextAreaElement;
+  const results = document.getElementById("results");
+  const warning = document.getElementById("warning");
+  const liveWordCount = document.getElementById("live-word-count");
+  const exampleToggle = document.getElementById("example-toggle");
+  const exampleMenu = document.getElementById("example-menu");
+  const exampleChevron = document.getElementById("example-chevron");
+  const exampleButtons = document.querySelectorAll(".example-btn");
+  const emptyState = document.getElementById("empty-state");
+  const customTooltip = document.getElementById("custom-tooltip");
+  const tooltipScore = document.getElementById("tooltip-score");
+  const tooltipStats = document.getElementById("tooltip-stats");
 
-  const exampleTexts = (window as any).exampleTexts || { easy: '', medium: '', hard: '' };
-  const pageLang = ((window as any).pageLang || 'it') as SupportedLanguage;
+  const exampleTexts = (window as any).exampleTexts || {
+    easy: "",
+    medium: "",
+    hard: "",
+  };
+  const pageLang = ((window as any).pageLang || "it") as SupportedLanguage;
+  const t = (window as any).translations || {};
 
   const difficultyColors: Record<Difficulty, { text: string; bg: string }> = {
-    'sehr-schwer': { text: 'text-red-800 dark:text-red-200', bg: 'bg-red-100 dark:bg-red-900/50' },
-    'schwer': { text: 'text-orange-800 dark:text-orange-200', bg: 'bg-orange-100 dark:bg-orange-900/50' },
-    'mittelschwer': { text: 'text-yellow-800 dark:text-yellow-200', bg: 'bg-yellow-100 dark:bg-yellow-900/50' },
-    'mittel': { text: 'text-lime-800 dark:text-lime-200', bg: 'bg-lime-100 dark:bg-lime-900/50' },
-    'leicht': { text: 'text-green-800 dark:text-green-200', bg: 'bg-green-100 dark:bg-green-900/50' },
-    'sehr-leicht': { text: 'text-emerald-800 dark:text-emerald-200', bg: 'bg-emerald-100 dark:bg-emerald-900/50' },
-    'extrem-leicht': { text: 'text-teal-800 dark:text-teal-200', bg: 'bg-teal-100 dark:bg-teal-900/50' },
+    "sehr-schwer": {
+      text: "text-red-800 dark:text-red-200",
+      bg: "bg-red-100 dark:bg-red-900/50",
+    },
+    schwer: {
+      text: "text-orange-800 dark:text-orange-200",
+      bg: "bg-orange-100 dark:bg-orange-900/50",
+    },
+    mittelschwer: {
+      text: "text-yellow-800 dark:text-yellow-200",
+      bg: "bg-yellow-100 dark:bg-yellow-900/50",
+    },
+    mittel: {
+      text: "text-lime-800 dark:text-lime-200",
+      bg: "bg-lime-100 dark:bg-lime-900/50",
+    },
+    leicht: {
+      text: "text-green-800 dark:text-green-200",
+      bg: "bg-green-100 dark:bg-green-900/50",
+    },
+    "sehr-leicht": {
+      text: "text-emerald-800 dark:text-emerald-200",
+      bg: "bg-emerald-100 dark:bg-emerald-900/50",
+    },
+    "extrem-leicht": {
+      text: "text-teal-800 dark:text-teal-200",
+      bg: "bg-teal-100 dark:bg-teal-900/50",
+    },
   };
 
   // GULPEASE formula for Italian (uses letters instead of syllables)
-  function calculateGulpease(words: number, sentences: number, letters: number): number {
+  function calculateGulpease(
+    words: number,
+    sentences: number,
+    letters: number,
+  ): number {
     if (words === 0) return 0;
-    return 89 + ((300 * sentences - 10 * letters) / words);
+    return 89 + (300 * sentences - 10 * letters) / words;
   }
 
   function countLetters(text: string): number {
-    return text.replace(/[^a-zA-ZàèéìòùÀÈÉÌÒÙ]/g, '').length;
+    return text.replace(/[^a-zA-ZàèéìòùÀÈÉÌÒÙ]/g, "").length;
   }
 
   function updateGaugeNeedle(score: number) {
-    const needleGroup = document.getElementById('gauge-needle-group');
+    const needleGroup = document.getElementById("gauge-needle-group");
     if (!needleGroup) return;
     const clampedScore = Math.max(0, Math.min(100, score));
     const angle = -90 + (clampedScore / 100) * 180;
-    needleGroup.setAttribute('transform', `rotate(${angle}, 100, 90)`);
+    needleGroup.setAttribute("transform", `rotate(${angle}, 100, 90)`);
   }
 
   function countWords(text: string): number {
-    return text.trim().split(/\s+/).filter(w => w.length > 0).length;
+    return text
+      .trim()
+      .split(/\s+/)
+      .filter((w) => w.length > 0).length;
   }
 
   function interpretGulpease(score: number): string {
-    if (score < 40) return 'Molto difficile - Diploma superiore';
-    if (score < 60) return 'Difficile - Scuola media';
-    if (score < 80) return 'Medio - Scuola elementare';
-    return 'Facile - Tutti';
+    if (score < 40) return "Molto difficile - Diploma superiore";
+    if (score < 60) return "Difficile - Scuola media";
+    if (score < 80) return "Medio - Scuola elementare";
+    return "Facile - Tutti";
   }
 
   function updateAnalysis() {
@@ -244,60 +850,90 @@ const examples = getExamples(lang);
     }
 
     if (text.length === 0 || wordCount < 3) {
-      results?.classList.add('hidden');
+      results?.classList.add("hidden");
+      emptyState?.classList.remove("hidden");
       return;
     }
 
     const analysis = analyzeText(text, pageLang);
     const letterCount = countLetters(text);
-    results?.classList.remove('hidden');
+    results?.classList.remove("hidden");
+    emptyState?.classList.add("hidden");
 
     // Calculate GULPEASE score for Italian
-    const gulpeaseScore = calculateGulpease(analysis.flesch.wordCount, analysis.flesch.sentenceCount, letterCount);
+    const gulpeaseScore = calculateGulpease(
+      analysis.flesch.wordCount,
+      analysis.flesch.sentenceCount,
+      letterCount,
+    );
     const roundedGulpease = Math.round(gulpeaseScore * 10) / 10;
 
-    const scoreDisplaySvg = document.getElementById('score-display-svg');
+    const scoreDisplaySvg = document.getElementById("score-display-svg");
     if (scoreDisplaySvg) {
       scoreDisplaySvg.textContent = roundedGulpease.toString();
     }
     updateGaugeNeedle(Math.max(0, roundedGulpease));
 
-    const interpretation = document.getElementById('interpretation');
+    const interpretation = document.getElementById("interpretation");
     if (interpretation) {
       interpretation.textContent = interpretGulpease(roundedGulpease);
     }
 
-    document.getElementById('kincaid-score')!.textContent = analysis.fleschKincaid.gradeLevel.toString();
-    document.getElementById('kincaid-interpretation')!.textContent = analysis.fleschKincaid.interpretation;
-    document.getElementById('fog-score')!.textContent = analysis.gunningFog.score.toString();
-    document.getElementById('fog-interpretation')!.textContent = analysis.gunningFog.interpretation;
-    document.getElementById('lix-score')!.textContent = analysis.lix.score.toString();
-    document.getElementById('lix-interpretation')!.textContent = analysis.lix.interpretation;
-    document.getElementById('flesch-original-score')!.textContent = analysis.flesch.score.toString();
-    document.getElementById('flesch-original-interpretation')!.textContent = analysis.flesch.interpretation;
+    document.getElementById("kincaid-score")!.textContent =
+      analysis.fleschKincaid.gradeLevel.toString();
+    document.getElementById("kincaid-interpretation")!.textContent =
+      analysis.fleschKincaid.interpretation;
+    document.getElementById("fog-score")!.textContent =
+      analysis.gunningFog.score.toString();
+    document.getElementById("fog-interpretation")!.textContent =
+      analysis.gunningFog.interpretation;
+    document.getElementById("lix-score")!.textContent =
+      analysis.lix.score.toString();
+    document.getElementById("lix-interpretation")!.textContent =
+      analysis.lix.interpretation;
+    document.getElementById("flesch-original-score")!.textContent =
+      analysis.flesch.score.toString();
+    document.getElementById("flesch-original-interpretation")!.textContent =
+      analysis.flesch.interpretation;
 
-    document.getElementById('word-count')!.textContent = analysis.flesch.wordCount.toString();
-    document.getElementById('sentence-count')!.textContent = analysis.flesch.sentenceCount.toString();
-    document.getElementById('letter-count')!.textContent = letterCount.toString();
-    document.getElementById('words-per-sentence')!.textContent = analysis.flesch.avgWordsPerSentence.toString();
-    document.getElementById('syllables-per-word')!.textContent = analysis.flesch.avgSyllablesPerWord.toString();
-    document.getElementById('unique-words')!.textContent = analysis.flesch.uniqueWords.toString();
+    document.getElementById("word-count")!.textContent =
+      analysis.flesch.wordCount.toString();
+    document.getElementById("sentence-count")!.textContent =
+      analysis.flesch.sentenceCount.toString();
+    document.getElementById("letter-count")!.textContent =
+      letterCount.toString();
+    document.getElementById("words-per-sentence")!.textContent =
+      analysis.flesch.avgWordsPerSentence.toString();
+    document.getElementById("syllables-per-word")!.textContent =
+      analysis.flesch.avgSyllablesPerWord.toString();
+    document.getElementById("unique-words")!.textContent =
+      analysis.flesch.uniqueWords.toString();
 
-    const sentenceContainer = document.getElementById('sentence-analysis');
+    const sentenceContainer = document.getElementById("sentence-analysis");
     if (sentenceContainer) {
-      sentenceContainer.innerHTML = analysis.paragraphs.map(paragraph => {
-        const sentencesHtml = paragraph.sentences.map(sentence => {
-          const colors = difficultyColors[sentence.difficulty];
-          return `<span class="inline rounded px-1 py-0.5 ${colors.bg} ${colors.text}" title="Score: ${sentence.score}, Parole: ${sentence.wordCount}">${sentence.text}</span>`;
-        }).join(' ');
-        return `<p class="mb-4 last:mb-0">${sentencesHtml}</p>`;
-      }).join('');
+      sentenceContainer.innerHTML = analysis.paragraphs
+        .map((paragraph) => {
+          const sentencesHtml = paragraph.sentences
+            .map((sentence) => {
+              const colors = difficultyColors[sentence.difficulty];
+              return `<span class="sentence-span inline cursor-help rounded px-1 py-0.5 ${colors.bg} ${colors.text}" 
+            data-score="${sentence.score}" 
+            data-words="${sentence.wordCount}" 
+            data-syllables="${sentence.syllableCount}"
+            data-difficulty="${sentence.difficulty}">
+            ${sentence.text}
+          </span>`;
+            })
+            .join(" ");
+          return `<p class="mb-4 last:mb-0">${sentencesHtml}</p>`;
+        })
+        .join("");
     }
 
     if (analysis.flesch.wordCount < 30) {
-      warning?.classList.remove('hidden');
+      warning?.classList.remove("hidden");
     } else {
-      warning?.classList.add('hidden');
+      warning?.classList.add("hidden");
     }
   }
 
@@ -307,30 +943,35 @@ const examples = getExamples(lang);
     debounceTimer = setTimeout(func, delay);
   }
 
-  textInput?.addEventListener('input', () => { debounce(updateAnalysis, 300); });
-
-  exampleToggle?.addEventListener('click', () => {
-    const isOpen = exampleMenu?.classList.toggle('hidden') === false;
-    exampleToggle.setAttribute('aria-expanded', String(isOpen));
-    exampleChevron?.classList.toggle('rotate-180', isOpen);
+  textInput?.addEventListener("input", () => {
+    debounce(updateAnalysis, 300);
   });
 
-  document.addEventListener('click', (e) => {
-    if (!exampleToggle?.contains(e.target as Node) && !exampleMenu?.contains(e.target as Node)) {
-      exampleMenu?.classList.add('hidden');
-      exampleToggle?.setAttribute('aria-expanded', 'false');
-      exampleChevron?.classList.remove('rotate-180');
+  exampleToggle?.addEventListener("click", () => {
+    const isOpen = exampleMenu?.classList.toggle("hidden") === false;
+    exampleToggle.setAttribute("aria-expanded", String(isOpen));
+    exampleChevron?.classList.toggle("rotate-180", isOpen);
+  });
+
+  document.addEventListener("click", (e) => {
+    if (
+      !exampleToggle?.contains(e.target as Node) &&
+      !exampleMenu?.contains(e.target as Node)
+    ) {
+      exampleMenu?.classList.add("hidden");
+      exampleToggle?.setAttribute("aria-expanded", "false");
+      exampleChevron?.classList.remove("rotate-180");
     }
   });
 
-  exampleButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
+  exampleButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
       const level = (btn as HTMLElement).dataset.level;
       if (level && exampleTexts[level] && textInput) {
         textInput.value = exampleTexts[level];
-        exampleMenu?.classList.add('hidden');
-        exampleToggle?.setAttribute('aria-expanded', 'false');
-        exampleChevron?.classList.remove('rotate-180');
+        exampleMenu?.classList.add("hidden");
+        exampleToggle?.setAttribute("aria-expanded", "false");
+        exampleChevron?.classList.remove("rotate-180");
         updateAnalysis();
       }
     });
@@ -338,7 +979,7 @@ const examples = getExamples(lang);
 
   function loadFromUrl() {
     const params = new URLSearchParams(window.location.search);
-    const text = params.get('text');
+    const text = params.get("text");
     if (text && textInput) {
       textInput.value = decodeURIComponent(text);
       updateAnalysis();
@@ -346,5 +987,55 @@ const examples = getExamples(lang);
   }
 
   loadFromUrl();
-  if (!window.location.search && textInput?.value.trim()) { updateAnalysis(); }
+  if (!window.location.search && textInput?.value.trim()) {
+    updateAnalysis();
+  }
+
+  // Tooltip Logic
+  document.addEventListener("mouseover", (e) => {
+    const target = e.target as HTMLElement;
+    if (target.classList.contains("sentence-span")) {
+      const score = target.dataset.score;
+      const words = target.dataset.words;
+      const syllables = target.dataset.syllables;
+
+      if (customTooltip && tooltipScore && tooltipStats) {
+        // Use translations or fallbacks
+        const readLabel = t.tooltip?.readability || "Leggibilità";
+        const wordsLabel = t.tooltip?.words || "Parole";
+        const syllLabel = t.tooltip?.syllables || "Sillabe";
+
+        tooltipScore.textContent = `${readLabel}: ${score}/100`;
+        tooltipStats.textContent = `${words} ${wordsLabel} • ${syllables} ${syllLabel}`;
+        customTooltip.classList.remove("hidden");
+      }
+    }
+  });
+
+  document.addEventListener("mousemove", (e) => {
+    if (customTooltip && !customTooltip.classList.contains("hidden")) {
+      const x = e.clientX + 15;
+      const y = e.clientY + 15;
+
+      const rect = customTooltip.getBoundingClientRect();
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+
+      let finalX = x;
+      let finalY = y;
+
+      if (x + rect.width > viewportWidth) finalX = x - rect.width - 15;
+      if (y + rect.height > viewportHeight) finalY = y - rect.height - 15;
+
+      customTooltip.style.left = `${finalX}px`;
+      customTooltip.style.top = `${finalY}px`;
+    }
+  });
+
+  document.addEventListener("mouseout", (e) => {
+    const target = e.target as HTMLElement;
+    if (target.classList.contains("sentence-span")) {
+      customTooltip?.classList.add("hidden");
+    }
+  });
 </script>

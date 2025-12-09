@@ -30,8 +30,16 @@ export const es: Translations = {
     syllableCount: 'Sílabas',
     avgWordsPerSentence: 'Palabras/Oración',
     avgSyllablesPerWord: 'Sílabas/Palabra',
-    showSentences: 'Mostrar oraciones',
-    hideSentences: 'Ocultar oraciones',
+  },
+  // New UI
+  emptyState: {
+    title: 'Empieza a escribir',
+    subtitle: 'O elige un texto de ejemplo',
+  },
+  tooltip: {
+    readability: 'Legibilidad',
+    words: 'Palabras',
+    syllables: 'Sílabas',
   },
   results: {
     score: 'Puntuación',

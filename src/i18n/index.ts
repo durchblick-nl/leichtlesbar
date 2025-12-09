@@ -49,8 +49,16 @@ export interface Translations {
     syllableCount: string;
     avgWordsPerSentence: string;
     avgSyllablesPerWord: string;
-    showSentences: string;
-    hideSentences: string;
+  };
+  // New UI Elements
+  emptyState: {
+    title: string;
+    subtitle: string;
+  };
+  tooltip: {
+    readability: string;
+    words: string;
+    syllables: string;
   };
   // Results
   results: {

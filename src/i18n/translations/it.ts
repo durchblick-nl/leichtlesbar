@@ -30,8 +30,16 @@ export const it: Translations = {
     syllableCount: 'Sillabe',
     avgWordsPerSentence: 'Parole/Frase',
     avgSyllablesPerWord: 'Sillabe/Parola',
-    showSentences: 'Mostra frasi',
-    hideSentences: 'Nascondi frasi',
+  },
+  // New UI
+  emptyState: {
+    title: 'Inizia a scrivere',
+    subtitle: 'O scegli un testo di esempio',
+  },
+  tooltip: {
+    readability: 'Leggibilità',
+    words: 'Parole',
+    syllables: 'Sillabe',
   },
   results: {
     score: 'Punteggio',
