@@ -196,16 +196,7 @@ const examples = getExamples(lang);
                 stroke="url(#gaugeGradient)"
                 stroke-width="12"
                 stroke-linecap="round"></path>
-              <g
-                class="text-gray-400 dark:text-gray-500"
-                fill="currentColor"
-                font-size="8"
-                ><text x="15" y="98" text-anchor="middle">0</text><text
-                  x="100"
-                  y="8"
-                  text-anchor="middle">50</text
-                ><text x="185" y="98" text-anchor="middle">100</text></g
-              >
+
               <g
                 id="gauge-needle-group"
                 class="transition-transform duration-700 ease-out"
@@ -414,7 +405,8 @@ const examples = getExamples(lang);
             >
             <span
               class="inline-block rounded bg-red-100 px-2 py-0.5 text-red-800 dark:bg-red-900 dark:text-red-200"
-              >{t.results.difficulty.hard}</span>
+              >{t.results.difficulty.hard}</span
+            >
           </p>
           <div
             id="sentence-analysis"
@@ -446,7 +438,8 @@ const examples = getExamples(lang);
             {t.formulas.fleschAmstad}
           </h3><span
             class="rounded-full bg-blue-600 px-2 py-0.5 text-xs font-medium text-white"
-            >{t.formulas.recommended}</span>
+            >{t.formulas.recommended}</span
+          >
         </div>
         <p class="mb-4 text-sm text-blue-700 dark:text-blue-300">
           {t.formulas.fleschAmstadDesc}
@@ -519,7 +512,8 @@ const examples = getExamples(lang);
           href="https://es.wikipedia.org/wiki/Legibilidad"
           target="_blank"
           rel="noopener"
-          class="text-blue-600 hover:underline dark:text-blue-400">Wikipedia</a>
+          class="text-blue-600 hover:underline dark:text-blue-400">Wikipedia</a
+        >
       </p>
     </div>
   </section>
