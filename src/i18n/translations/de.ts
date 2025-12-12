@@ -160,6 +160,7 @@ export const de: Translations = {
   footer: {
     copyright: '© 2003–{year} Readability.ch',
     authors: 'Ein Projekt von Christian Bachmann und Roger Gösele',
+    share: 'Teilen',
   },
   languageSelector: {
     choose: 'Sprache wählen',

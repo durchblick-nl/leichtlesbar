@@ -1,0 +1,21 @@
+{
+    "name": "Leesbaarheidstest",
+    "short_name": "Readability",
+    "description": "Gratis leesbaarheidstest voor Nederlandse teksten. Analyseer uw teksten met de Flesch-Douma formule en andere indices.",
+    "start_url": "/nl/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#2563eb",
+    "icons": [
+        {
+            "src": "/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        },
+        {
+            "src": "/apple-touch-icon.png",
+            "sizes": "180x180",
+            "type": "image/png"
+        }
+    ]
+}

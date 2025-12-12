@@ -170,6 +170,7 @@ export interface Translations {
   footer: {
     copyright: string;
     authors: string;
+    share: string;
   };
   // Language selector
   languageSelector: {

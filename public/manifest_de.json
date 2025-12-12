@@ -1,0 +1,21 @@
+{
+    "name": "Lesbarkeitstest",
+    "short_name": "Readability",
+    "description": "Kostenloser Lesbarkeitstest für deutsche Texte. Analysieren Sie Ihre Texte mit der Flesch-Formel, Wiener Sachtextformel und weiteren Indizes.",
+    "start_url": "/de/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#2563eb",
+    "icons": [
+        {
+            "src": "/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        },
+        {
+            "src": "/apple-touch-icon.png",
+            "sizes": "180x180",
+            "type": "image/png"
+        }
+    ]
+}

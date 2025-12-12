@@ -1,7 +1,8 @@
 ---
-import '../styles/global.css';
-import LanguageSwitcher from '../components/LanguageSwitcher.astro';
-import { type Language, type Translations, LANGUAGES } from '../i18n/index';
+import "../styles/global.css";
+import LanguageSwitcher from "../components/LanguageSwitcher.astro";
+import ShareButton from "../components/ShareButton.astro";
+import { type Language, type Translations, LANGUAGES } from "../i18n/index";
 
 interface Props {
   lang: Language;
@@ -9,21 +10,21 @@ interface Props {
   canonicalPath?: string;
 }
 
-const { lang, t, canonicalPath = '' } = Astro.props;
+const { lang, t, canonicalPath = "" } = Astro.props;
 
-const baseUrl = 'https://readability.ch';
+const baseUrl = "https://readability.ch";
 const canonicalUrl = `${baseUrl}/${lang}/${canonicalPath}`;
 const fullTitle = `${t.meta.title} | Readability.ch`;
-const ogImage = `${baseUrl}/og-image.svg`;
+const ogImage = `${baseUrl}/og-image-${lang}.svg`;
 
 // Locale mapping for og:locale
 const localeMap: Record<Language, string> = {
-  de: 'de_CH',
-  en: 'en_US',
-  fr: 'fr_CH',
-  it: 'it_CH',
-  es: 'es_ES',
-  nl: 'nl_NL',
+  de: "de_CH",
+  en: "en_US",
+  fr: "fr_CH",
+  it: "it_CH",
+  es: "es_ES",
+  nl: "nl_NL",
 };
 ---
 
@@ -44,9 +45,11 @@ const localeMap: Record<Language, string> = {
 
     <!-- Hreflang -->
     <link rel="alternate" hreflang="x-default" href={`${baseUrl}/`} />
-    {Object.keys(LANGUAGES).map((code) => (
-      <link rel="alternate" hreflang={code} href={`${baseUrl}/${code}/`} />
-    ))}
+    {
+      Object.keys(LANGUAGES).map((code) => (
+        <link rel="alternate" hreflang={code} href={`${baseUrl}/${code}/`} />
+      ))
+    }
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -67,79 +70,141 @@ const localeMap: Record<Language, string> = {
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href={`/manifest_${lang}.json`} />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content={t.meta.title} />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
     <!-- Theme Color -->
-    <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#1e40af" media="(prefers-color-scheme: dark)" />
+    <meta
+      name="theme-color"
+      content="#2563eb"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#1e40af"
+      media="(prefers-color-scheme: dark)"
+    />
 
     <!-- Structured Data (JSON-LD) -->
-    <script type="application/ld+json" set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Readability.ch",
-      "description": t.meta.description,
-      "url": canonicalUrl,
-      "applicationCategory": "UtilitiesApplication",
-      "operatingSystem": "Web Browser",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "CHF"
-      },
-      "inLanguage": lang
-    })} />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        name: "Readability.ch",
+        description: t.meta.description,
+        url: canonicalUrl,
+        applicationCategory: "UtilitiesApplication",
+        operatingSystem: "Web Browser",
+        offers: {
+          "@type": "Offer",
+          price: "0",
+          priceCurrency: "CHF",
+        },
+        inLanguage: lang,
+      })}
+    />
 
     <!-- FAQ Schema -->
-    <script type="application/ld+json" set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": t.faq.q1,
-          "acceptedAnswer": { "@type": "Answer", "text": t.faq.a1 }
-        },
-        {
-          "@type": "Question",
-          "name": t.faq.q2,
-          "acceptedAnswer": { "@type": "Answer", "text": t.faq.a2 }
-        },
-        {
-          "@type": "Question",
-          "name": t.faq.q3,
-          "acceptedAnswer": { "@type": "Answer", "text": t.faq.a3 }
-        },
-        {
-          "@type": "Question",
-          "name": t.faq.q4,
-          "acceptedAnswer": { "@type": "Answer", "text": t.faq.a4 }
-        }
-      ]
-    })} />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: [
+          {
+            "@type": "Question",
+            name: t.faq.q1,
+            acceptedAnswer: { "@type": "Answer", text: t.faq.a1 },
+          },
+          {
+            "@type": "Question",
+            name: t.faq.q2,
+            acceptedAnswer: { "@type": "Answer", text: t.faq.a2 },
+          },
+          {
+            "@type": "Question",
+            name: t.faq.q3,
+            acceptedAnswer: { "@type": "Answer", text: t.faq.a3 },
+          },
+          {
+            "@type": "Question",
+            name: t.faq.q4,
+            acceptedAnswer: { "@type": "Answer", text: t.faq.a4 },
+          },
+        ],
+      })}
+    />
 
     <!-- Dark mode script (runs before page renders to prevent flash) -->
     <script is:inline>
-      const theme = localStorage.getItem('theme');
-      if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
+      const theme = localStorage.getItem("theme");
+      if (
+        theme === "dark" ||
+        (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ) {
+        document.documentElement.classList.add("dark");
       }
     </script>
   </head>
-  <body class="min-h-screen bg-gray-50 text-gray-900 antialiased transition-colors dark:bg-gray-900 dark:text-gray-100">
+  <body
+    class="min-h-screen bg-gray-50 text-gray-900 antialiased transition-colors dark:bg-gray-900 dark:text-gray-100"
+  >
     <header class="bg-white shadow-sm dark:bg-gray-800 dark:shadow-gray-900/50">
       <nav class="mx-auto max-w-4xl px-4 py-4" aria-label="Main navigation">
         <div class="flex items-center justify-between">
-          <a href={`/${lang}/`} class="flex items-center gap-2 text-xl font-bold text-blue-600 dark:text-blue-400">
-            <img src="/favicon.svg" alt="Readability Logo" class="h-8 w-8" width="32" height="32" />
+          <a
+            href={`/${lang}/`}
+            class="flex items-center gap-2 text-xl font-bold text-blue-600 dark:text-blue-400"
+          >
+            <img
+              src="/favicon.svg"
+              alt="Readability Logo"
+              class="h-8 w-8"
+              width="32"
+              height="32"
+            />
             Readability
           </a>
           <div class="flex items-center gap-2">
             <ul class="hidden gap-4 md:flex">
-              <li><a href={`/${lang}/`} class="hover:text-blue-600 dark:hover:text-blue-400">{t.nav.test}</a></li>
-              <li><a href="#formel" class="hover:text-blue-600 dark:hover:text-blue-400">{t.nav.formula}</a></li>
-              <li><a href="#faq" class="hover:text-blue-600 dark:hover:text-blue-400">{t.nav.faq}</a></li>
-              <li><a href="#tipps" class="hover:text-blue-600 dark:hover:text-blue-400">{t.nav.tips}</a></li>
-              <li><a href="#datenschutz" class="hover:text-blue-600 dark:hover:text-blue-400">{t.nav.privacy}</a></li>
+              <li>
+                <a
+                  href={`/${lang}/`}
+                  class="hover:text-blue-600 dark:hover:text-blue-400"
+                  >{t.nav.test}</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#formel"
+                  class="hover:text-blue-600 dark:hover:text-blue-400"
+                  >{t.nav.formula}</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#faq"
+                  class="hover:text-blue-600 dark:hover:text-blue-400"
+                  >{t.nav.faq}</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#tipps"
+                  class="hover:text-blue-600 dark:hover:text-blue-400"
+                  >{t.nav.tips}</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#datenschutz"
+                  class="hover:text-blue-600 dark:hover:text-blue-400"
+                  >{t.nav.privacy}</a
+                >
+              </li>
             </ul>
 
             <!-- Language Switcher -->
@@ -152,26 +217,89 @@ const localeMap: Record<Language, string> = {
               class="rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-700"
               aria-label="Toggle theme"
             >
-              <svg id="sun-icon" class="hidden h-5 w-5 dark:block" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
+              <svg
+                id="sun-icon"
+                class="hidden h-5 w-5 dark:block"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                  clip-rule="evenodd"></path>
               </svg>
-              <svg id="moon-icon" class="block h-5 w-5 dark:hidden" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+              <svg
+                id="moon-icon"
+                class="block h-5 w-5 dark:hidden"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                aria-hidden="true"
+              >
+                <path
+                  d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"
+                ></path>
               </svg>
             </button>
-            <button id="menu-toggle" class="rounded-lg p-2 hover:bg-gray-100 md:hidden dark:hover:bg-gray-700" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu">
-              <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            <button
+              id="menu-toggle"
+              class="rounded-lg p-2 hover:bg-gray-100 md:hidden dark:hover:bg-gray-700"
+              aria-label="Menu"
+              aria-expanded="false"
+              aria-controls="mobile-menu"
+            >
+              <svg
+                class="h-6 w-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h16"></path>
               </svg>
             </button>
           </div>
         </div>
         <ul id="mobile-menu" class="mt-4 hidden flex-col gap-2 md:hidden">
-          <li><a href={`/${lang}/`} class="block py-2 hover:text-blue-600 dark:hover:text-blue-400">{t.nav.test}</a></li>
-          <li><a href="#formel" class="block py-2 hover:text-blue-600 dark:hover:text-blue-400">{t.nav.formula}</a></li>
-          <li><a href="#faq" class="block py-2 hover:text-blue-600 dark:hover:text-blue-400">{t.nav.faq}</a></li>
-          <li><a href="#tipps" class="block py-2 hover:text-blue-600 dark:hover:text-blue-400">{t.nav.tips}</a></li>
-          <li><a href="#datenschutz" class="block py-2 hover:text-blue-600 dark:hover:text-blue-400">{t.nav.privacy}</a></li>
+          <li>
+            <a
+              href={`/${lang}/`}
+              class="block py-2 hover:text-blue-600 dark:hover:text-blue-400"
+              >{t.nav.test}</a
+            >
+          </li>
+          <li>
+            <a
+              href="#formel"
+              class="block py-2 hover:text-blue-600 dark:hover:text-blue-400"
+              >{t.nav.formula}</a
+            >
+          </li>
+          <li>
+            <a
+              href="#faq"
+              class="block py-2 hover:text-blue-600 dark:hover:text-blue-400"
+              >{t.nav.faq}</a
+            >
+          </li>
+          <li>
+            <a
+              href="#tipps"
+              class="block py-2 hover:text-blue-600 dark:hover:text-blue-400"
+              >{t.nav.tips}</a
+            >
+          </li>
+          <li>
+            <a
+              href="#datenschutz"
+              class="block py-2 hover:text-blue-600 dark:hover:text-blue-400"
+              >{t.nav.privacy}</a
+            >
+          </li>
         </ul>
       </nav>
     </header>
@@ -180,31 +308,51 @@ const localeMap: Record<Language, string> = {
       <slot />
     </main>
 
-    <footer class="mt-auto border-t border-gray-200 bg-white py-6 dark:border-gray-700 dark:bg-gray-800">
-      <div class="mx-auto max-w-4xl px-4 text-center text-sm text-gray-600 dark:text-gray-400">
-        <p>{t.footer.copyright.replace('{year}', new Date().getFullYear().toString())}</p>
+    <footer
+      class="mt-auto border-t border-gray-200 bg-white py-6 dark:border-gray-700 dark:bg-gray-800"
+    >
+      <div
+        class="mx-auto max-w-4xl px-4 text-center text-sm text-gray-600 dark:text-gray-400"
+      >
+        <p>
+          {
+            t.footer.copyright.replace(
+              "{year}",
+              new Date().getFullYear().toString(),
+            )
+          }
+        </p>
         <p class="mt-1">{t.footer.authors}</p>
         <p class="mt-2">
-          <a href="https://durchblick.nl/" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline dark:text-blue-400">durchblick.nl</a>
+          <a
+            href="https://durchblick.nl/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-blue-600 hover:underline dark:text-blue-400"
+            >durchblick.nl</a
+          >
         </p>
+        <div class="mt-4 flex justify-center">
+          <ShareButton text={t.footer.share} title={fullTitle} />
+        </div>
       </div>
     </footer>
 
     <script>
       // Mobile menu toggle
-      const toggle = document.getElementById('menu-toggle');
-      const menu = document.getElementById('mobile-menu');
-      toggle?.addEventListener('click', () => {
-        const isExpanded = menu?.classList.toggle('hidden') === false;
-        menu?.classList.toggle('flex');
-        toggle.setAttribute('aria-expanded', String(isExpanded));
+      const toggle = document.getElementById("menu-toggle");
+      const menu = document.getElementById("mobile-menu");
+      toggle?.addEventListener("click", () => {
+        const isExpanded = menu?.classList.toggle("hidden") === false;
+        menu?.classList.toggle("flex");
+        toggle.setAttribute("aria-expanded", String(isExpanded));
       });
 
       // Theme toggle
-      const themeToggle = document.getElementById('theme-toggle');
-      themeToggle?.addEventListener('click', () => {
-        const isDark = document.documentElement.classList.toggle('dark');
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      const themeToggle = document.getElementById("theme-toggle");
+      themeToggle?.addEventListener("click", () => {
+        const isDark = document.documentElement.classList.toggle("dark");
+        localStorage.setItem("theme", isDark ? "dark" : "light");
       });
     </script>
   </body>

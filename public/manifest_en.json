@@ -1,0 +1,21 @@
+{
+    "name": "Readability Test",
+    "short_name": "Readability",
+    "description": "Free readability test for English texts. Analyze your texts with the Flesch formula, Gunning Fog, SMOG and other readability indexes.",
+    "start_url": "/en/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#2563eb",
+    "icons": [
+        {
+            "src": "/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        },
+        {
+            "src": "/apple-touch-icon.png",
+            "sizes": "180x180",
+            "type": "image/png"
+        }
+    ]
+}
