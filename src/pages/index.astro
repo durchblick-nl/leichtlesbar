@@ -1,5 +1,6 @@
 ---
-import { LANGUAGES } from '../i18n/index';
+import { LANGUAGES } from "../i18n/index";
+import "../styles/global.css";
 ---
 
 <!doctype html>
@@ -8,240 +9,186 @@ import { LANGUAGES } from '../i18n/index';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Readability.ch – Readability Test for Multiple Languages</title>
-    <meta name="description" content="Free readability test for texts in German, English, French, Italian, Spanish, and Dutch. Analyze your texts with Flesch formula and other readability indexes." />
+    <meta
+      name="description"
+      content="Free readability test for texts in German, English, French, Italian, Spanish, and Dutch."
+    />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://readability.ch" />
-
-    <!-- Hreflang -->
-    <link rel="alternate" hreflang="x-default" href="https://readability.ch/" />
-    <link rel="alternate" hreflang="de" href="https://readability.ch/de/" />
-    <link rel="alternate" hreflang="en" href="https://readability.ch/en/" />
-    <link rel="alternate" hreflang="fr" href="https://readability.ch/fr/" />
-    <link rel="alternate" hreflang="it" href="https://readability.ch/it/" />
-    <link rel="alternate" hreflang="es" href="https://readability.ch/es/" />
-    <link rel="alternate" hreflang="nl" href="https://readability.ch/nl/" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://readability.ch" />
-    <meta property="og:title" content="Readability.ch – Multilingual Readability Test" />
-    <meta property="og:description" content="Free readability test for texts in 6 languages. Privacy-friendly – everything runs in your browser." />
+    <meta
+      property="og:title"
+      content="Readability.ch – Multilingual Readability Test"
+    />
+    <meta
+      property="og:description"
+      content="Free readability test for texts in 6 languages."
+    />
     <meta property="og:image" content="https://readability.ch/og-image.svg" />
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-
-    <!-- Theme Color -->
-    <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#1e40af" media="(prefers-color-scheme: dark)" />
-
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      body {
-        font-family: system-ui, -apple-system, sans-serif;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
-        padding: 2rem;
-      }
-
-      @media (prefers-color-scheme: dark) {
-        body {
-          background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-          color: #f1f5f9;
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
       }
 
-      .container {
-        max-width: 600px;
-        text-align: center;
+      .animate-enter {
+        animation: fadeInUp 0.6s ease-out forwards;
+        opacity: 0;
       }
 
-      .logo {
-        width: 80px;
-        height: 80px;
-        margin-bottom: 1.5rem;
+      .delay-100 {
+        animation-delay: 0.1s;
       }
-
-      h1 {
-        font-size: 2.5rem;
-        font-weight: 700;
-        color: #1e3a8a;
-        margin-bottom: 0.5rem;
+      .delay-200 {
+        animation-delay: 0.2s;
       }
-
-      @media (prefers-color-scheme: dark) {
-        h1 {
-          color: #93c5fd;
-        }
-      }
-
-      .tagline {
-        font-size: 1.125rem;
-        color: #64748b;
-        margin-bottom: 2.5rem;
-      }
-
-      @media (prefers-color-scheme: dark) {
-        .tagline {
-          color: #94a3b8;
-        }
-      }
-
-      .choose-label {
-        font-size: 0.875rem;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        color: #94a3b8;
-        margin-bottom: 1rem;
-      }
-
-      .languages {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
-        margin-bottom: 2rem;
-      }
-
-      @media (min-width: 480px) {
-        .languages {
-          grid-template-columns: repeat(3, 1fr);
-        }
-      }
-
-      .lang-btn {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 1.25rem 1rem;
-        background: white;
-        border: 2px solid #e2e8f0;
-        border-radius: 12px;
-        text-decoration: none;
-        color: #334155;
-        transition: all 0.2s;
-        cursor: pointer;
-      }
-
-      @media (prefers-color-scheme: dark) {
-        .lang-btn {
-          background: #1e293b;
-          border-color: #334155;
-          color: #e2e8f0;
-        }
-      }
-
-      .lang-btn:hover {
-        border-color: #3b82f6;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
-      }
-
-      .lang-btn:focus {
-        outline: none;
-        border-color: #3b82f6;
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
-      }
-
-      .flag {
-        font-size: 2rem;
-      }
-
-      .lang-name {
-        font-weight: 500;
-      }
-
-      .detected {
-        margin-top: 1.5rem;
-        padding: 1rem;
-        background: #dbeafe;
-        border-radius: 8px;
-        font-size: 0.875rem;
-        color: #1e40af;
-      }
-
-      @media (prefers-color-scheme: dark) {
-        .detected {
-          background: #1e3a5f;
-          color: #93c5fd;
-        }
-      }
-
-      .detected a {
-        color: inherit;
-        font-weight: 600;
-      }
-
-      footer {
-        margin-top: 3rem;
-        font-size: 0.875rem;
-        color: #94a3b8;
-      }
-
-      footer a {
-        color: inherit;
+      .delay-300 {
+        animation-delay: 0.3s;
       }
     </style>
   </head>
-  <body>
-    <div class="container">
-      <img src="/favicon.svg" alt="Readability.ch Logo" class="logo" />
-
-      <h1>Readability.ch</h1>
-      <p class="tagline">Free readability test for multiple languages</p>
-
-      <p class="choose-label">Choose your language</p>
-
-      <div class="languages">
-        {Object.entries(LANGUAGES).map(([code, { nativeName, flag }]) => (
-          <a href={`/${code}/`} class="lang-btn">
-            <span class="flag">{flag}</span>
-            <span class="lang-name">{nativeName}</span>
-          </a>
-        ))}
+  <body
+    class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 text-slate-800 dark:text-slate-100"
+  >
+    <!-- Background Decor -->
+    <div
+      class="fixed inset-0 overflow-hidden pointer-events-none"
+      aria-hidden="true"
+    >
+      <div
+        class="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-blue-400/10 blur-3xl"
+      >
       </div>
-
-      <div class="detected" id="detected-language" style="display: none;">
-        Based on your browser: <a href="/" id="detected-link">Language</a>
+      <div
+        class="absolute top-[40%] -right-[10%] w-[40%] h-[40%] rounded-full bg-indigo-400/10 blur-3xl"
+      >
       </div>
-
-      <footer>
-        <p>© 2003–{new Date().getFullYear()} Readability.ch</p>
-        <p>A project by Christian Bachmann and Roger Gösele</p>
-        <p style="margin-top: 0.5rem;"><a href="https://durchblick.nl/" target="_blank" rel="noopener noreferrer" style="color: #3b82f6;">durchblick.nl</a></p>
-      </footer>
     </div>
 
-    <script is:inline>
-      // Detect browser language and suggest
-      const browserLang = navigator.language.split('-')[0].toLowerCase();
-      const supportedLangs = ['de', 'en', 'fr', 'it', 'es', 'nl'];
-      const langNames = {
-        de: 'Deutsch',
-        en: 'English',
-        fr: 'Français',
-        it: 'Italiano',
-        es: 'Español',
-        nl: 'Nederlands'
-      };
+    <main class="relative w-full max-w-2xl">
+      <div class="text-center mb-12 animate-enter">
+        <div
+          class="inline-flex items-center justify-center p-3 mb-6 bg-white dark:bg-slate-800 rounded-2xl shadow-sm ring-1 ring-slate-900/5 dark:ring-white/10"
+        >
+          <img
+            src="/favicon.svg"
+            alt="Logo"
+            class="w-12 h-12"
+            width="48"
+            height="48"
+          />
+        </div>
+        <h1
+          class="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-4"
+        >
+          Readability<span class="text-blue-600">.ch</span>
+        </h1>
+        <p
+          class="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-md mx-auto"
+        >
+          Free readability analysis for your texts. <br
+            class="hidden sm:block"
+          />
+          Secure, fast, and 100% in your browser.
+        </p>
+      </div>
 
-      if (supportedLangs.includes(browserLang)) {
-        const detected = document.getElementById('detected-language');
-        const link = document.getElementById('detected-link');
-        if (detected && link) {
-          link.href = `/${browserLang}/`;
-          link.textContent = langNames[browserLang];
-          detected.style.display = 'block';
+      <div
+        class="bg-white/70 dark:bg-slate-800/50 backdrop-blur-xl rounded-3xl shadow-2xl shadow-slate-200/50 dark:shadow-black/50 border border-white/50 dark:border-white/10 p-6 md:p-8 animate-enter delay-100"
+      >
+        <h2
+          class="text-center text-sm font-semibold tracking-wider text-slate-500 dark:text-slate-400 uppercase mb-8"
+        >
+          Select Language
+        </h2>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+          {
+            Object.entries(LANGUAGES).map(([code, { nativeName, flag }]) => (
+              <a
+                href={`/${code}/`}
+                class="group flex flex-col items-center justify-center p-4 rounded-xl bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-lg hover:shadow-blue-500/10 dark:hover:shadow-blue-400/10 transition-all duration-200 hover:-translate-y-1"
+              >
+                <span class="text-3xl mb-2 filter drop-shadow-sm group-hover:scale-110 transition-transform duration-200">
+                  {flag}
+                </span>
+                <span class="font-medium text-slate-700 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                  {nativeName}
+                </span>
+              </a>
+            ))
+          }
+        </div>
+
+        <div id="detected-language" class="hidden mt-8 text-center">
+          <div
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 dark:bg-blue-900/30 text-sm text-blue-700 dark:text-blue-300 border border-blue-100 dark:border-blue-800"
+          >
+            <span>Detected:</span>
+            <a
+              href="/"
+              id="detected-link"
+              class="font-semibold hover:underline"
+            >
+              Language
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <footer
+        class="mt-12 text-center text-slate-500 dark:text-slate-500 text-sm animate-enter delay-200"
+      >
+        <p>&copy; 2003–{new Date().getFullYear()} Readability.ch</p>
+        <p class="mt-2">A project by Christian Bachmann and Roger Gösele</p>
+        <p class="mt-2">
+          <a
+            href="https://durchblick.nl/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            >durchblick.nl</a
+          >
+        </p>
+      </footer>
+    </main>
+
+    <script is:inline>
+      try {
+        const browserLang = navigator.language.split("-")[0].toLowerCase();
+        const supportedLangs = ["de", "en", "fr", "it", "es", "nl"];
+        const langNames = {
+          de: "Deutsch",
+          en: "English",
+          fr: "Français",
+          it: "Italiano",
+          es: "Español",
+          nl: "Nederlands",
+        };
+
+        if (supportedLangs.includes(browserLang)) {
+          const detected = document.getElementById("detected-language");
+          const link = document.getElementById("detected-link");
+          if (detected && link) {
+            link.href = `/${browserLang}/`;
+            link.textContent = langNames[browserLang] + " →";
+            detected.classList.remove("hidden");
+          }
         }
+      } catch (e) {
+        // Ignore detection errors
       }
     </script>
   </body>
